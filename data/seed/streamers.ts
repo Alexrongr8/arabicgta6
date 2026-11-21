@@ -1,10 +1,10 @@
 import { build } from "./helpers";
 
 const SRC_BLOOMBERG: [string, string] = ["BNN Bloomberg — Saudi Arabia once banned GTA; now it has a stake", "https://www.bnnbloomberg.ca/business/international/2026/11/20/saudi-arabia-once-banned-grand-theft-auto-now-its-got-a-stake-in-it/"];
-const SRC_MARKET: [string, string] = ["MarketScreener — Saudi approval of GTA VI is 'an amazing thing'", "https://www.marketscreener.com/news/saudi-approval-of-gta-vi-is-an-amazing-thing-says-content-creator-ce785ed2df81f12c"];
-const SRC_STREAMS: [string, string] = ["Streams Charts — top GTA creators of 2026", "https://streamscharts.com/news/gta-6-streamers-top-gta-creators-2026"];
-const SRC_YT24: [string, string] = ["Streams Charts — YouTube 24-hour launch marathon lineup", "https://streamscharts.com/news/youtube-announces-24-hour-gta-6-launch-marathon-global-creators"];
-const SRC_KLIPPAH: [string, string] = ["Klippah — every streamer playing GTA 6 on launch day", "https://klippah.com/gta6live"];
+const SRC_MARKET: [string, string] = ["Reuters via MarketScreener — Xzit interview", "https://ca.marketscreener.com/news/saudi-approval-of-gta-vi-is-an-amazing-thing-says-content-creator-ce785ed2df81f12c"];
+const SRC_STREAMS: [string, string] = ["Streams Charts — GTA/RP ranking, 16 Nov 2026", "https://streamscharts.com/news/gta-6-streamers-top-gta-creators-2026"];
+const SRC_YT24: [string, string] = ["Streams Charts — announced marathon lineup, 13 Nov 2026", "https://streamscharts.com/news/youtube-announces-24-hour-gta-6-launch-marathon-global-creators"];
+const SRC_KLIPPAH: [string, string] = ["Klippah — earlier launch-stream expectations", "https://klippah.com/gta6live"];
 
 export default build("streamers", [
   {
@@ -13,90 +13,136 @@ export default build("streamers", [
     featured: true,
     en: "Xzit (Thamer Al Dairem)",
     ar: "إكزت — ثامر الديرم (Xzit)",
-    sEn: "Riyadh-based creator who played GTA VI at launch and called the Saudi approval of the game 'an amazing thing'.",
-    sAr: "صانع محتوى من الرياض لعب GTA VI يوم الإطلاق، ووصف فسح اللعبة في السعودية بأنه 'شي رهيب'.",
-    bEn: `Thamer Al Dairem, known as Xzit, streams from Riyadh and was one of the Saudi creators playing GTA VI on launch day — the first new GTA released since Saudi Arabia lifted its ban on the series in 2025.
+    sEn: "Xzit Thamer's own YouTube profile and press reporting on his GTA VI launch activity in Saudi Arabia.",
+    sAr: "قناة Xzit Thamer نفسها، وتغطية صحفية لنشاطه مع إطلاق GTA VI في السعودية.",
+    bEn: `Thamer Al Dairem, known as Xzit, is a Riyadh-based creator. Press coverage reports him playing GTA VI at launch and welcoming Saudi approval of the game.
 
-He told reporters the approval was personal: doors opened for him once the game was cleared, and brands started approaching him. A profile cited by one outlet puts his following above 15 million across platforms, but that figure is second-hand.`,
-    bAr: `ثامر الديرم، المعروف بـ Xzit، يبث من الرياض، وكان من صناع المحتوى السعوديين اللي لعبوا GTA VI يوم الإطلاق — وهي أول لعبة GTA جديدة تنزل بعد ما رفعت السعودية الحظر عن السلسلة في 2025.
+Follow @xzit_thamer on YouTube for his videos, including the linked GTA VI trailer reaction. For the regional background, see the related Saudi Arabia article.`,
+    bAr: `ثامر الديرم، المعروف بـ Xzit، صانع محتوى من الرياض. التغطية الصحفية تذكر لعبه GTA VI مع الإطلاق وترحيبه بفسح اللعبة في السعودية.
 
-قال للصحافة إن فسح اللعبة كان شي شخصي بالنسبة له: انفتحت له أبواب، وصارت العلامات التجارية تتواصل معه. وفيه ملف صحفي يقول إن متابعينه فوق 15 مليون على كل المنصات، لكن الرقم منقول ومو مؤكد.`,
-    aliases: ["Xzit", "ثامر الديرم", "اكزت", "إكزت"],
+تابع قناته @xzit_thamer على يوتيوب لمقاطعه، ومنها ردة فعله على إعلان GTA VI في الرابط أدناه. ولخلفية الخبر المحلي، راجع موضوع السعودية المرتبط.`,
+    aliases: ["Xzit", "ثامر الديرم", "اكزت", "إكزت", "Xzit Thamer", "xzit_thamer"],
     tags: ["Saudi", "YouTube"],
     facts: [
       ["Country", "الدولة", "Saudi Arabia (Riyadh)", "السعودية (الرياض)"],
-      ["Followers", "المتابعين", "15M+ (reported)", "+15 مليون (حسب التقارير)"],
+      ["YouTube", "يوتيوب", "@xzit_thamer", "@xzit_thamer"],
     ],
     related: ["saudi-arabia-gta-ban-lifted"],
-    srcUrls: [SRC_BLOOMBERG, SRC_MARKET],
+    srcUrls: [
+      SRC_MARKET,
+      ["Xzit Thamer — YouTube channel", "https://www.youtube.com/channel/UCUwf9tuytTCVP6SzMaGwDVA"],
+      ["Xzit Thamer — trailer-reaction video listing", "https://www.youtube.com/watch?v=a_sk1rqwcmg"],
+    ],
   },
   {
     slug: "3mr-amr-diab",
     status: "confirmed",
     en: "3mr (Amr Diab)",
-    ar: "عمر — 3mr (Amr Diab)",
-    sEn: "Egyptian streamer ranked among the most-watched GTA creators by Streams Charts.",
-    sAr: "ستريمر مصري من أكثر صناع محتوى GTA مشاهدة حسب Streams Charts.",
-    bEn: `Egyptian streamer Amr "3mr" Diab ranks among the most-watched GTA creators in Streams Charts' 2026 data. The same report notes that Arabic-language creators are especially prominent in GTA streaming, particularly on Kick.`,
-    bAr: `الستريمر المصري عمرو "3mr" دياب من أكثر صناع محتوى GTA مشاهدة في بيانات Streams Charts لسنة 2026. ونفس التقرير يقول إن صناع المحتوى العرب بارزين جداً في بث GTA، خصوصاً على منصة Kick.`,
-    aliases: ["3mr", "Amr Diab", "عمرو دياب ستريمر"],
+    ar: "عمرو — 3mr (Amr Diab)",
+    sEn: "3mr's Kick and YouTube profiles.",
+    sAr: "حسابات 3mr على Kick ويوتيوب.",
+    bEn: `Streams Charts listed 3mr in its 16 November 2026 GTA/RP ranking, before GTA VI launched.
+
+Find his broadcasts at /3mr on Kick and his videos at @3mrdiab on YouTube. The linked Kick archive includes a GTA VI-titled broadcast. These exact profiles help distinguish the streamer from other people sharing his name.`,
+    bAr: `تقرير Streams Charts بتاريخ 16 نوفمبر 2026 أدرج 3mr في ترتيب GTA/RP قبل إطلاق GTA VI.
+
+بثوثه على /3mr في Kick، ومقاطعه على @3mrdiab في يوتيوب. رابط الأرشيف أدناه لبث يحمل عنوان GTA VI. هذه الحسابات تساعدك توصل للستريمر المقصود بعيدًا عن تشابه الأسماء.`,
+    aliases: ["3mr", "Amr Diab", "عمرو دياب ستريمر", "عمرو 3mr", "عمر 3mr", "3mrdiab"],
     tags: ["Egypt", "Kick"],
     facts: [["Country", "الدولة", "Egypt", "مصر"]],
-    srcUrls: [SRC_STREAMS],
+    srcUrls: [
+      SRC_STREAMS,
+      ["3mr — Kick profile", "https://kick.com/3mr"],
+      ["3mr Diab — YouTube channel", "https://www.youtube.com/channel/UC6gTOqPVfx6g6Cmi8Ah80pA"],
+      ["3mr — GTA VI VOD listing", "https://kick.com/3mr/videos/01a1f6f7-1b80-7ca3-ae57-74ae9f39c231"],
+    ],
   },
   {
     slug: "sxb-ahmed-alqahtani",
     status: "confirmed",
     en: "sxb (Ahmed Alqahtani)",
-    ar: "sxb — أحمد القحطاني",
-    sEn: "Saudi creator among the most-watched GTA streamers in Streams Charts' rankings.",
-    sAr: "صانع محتوى سعودي من أكثر ستريمرز GTA مشاهدة في ترتيب Streams Charts.",
-    bEn: `Saudi streamer Ahmed "sxb" Alqahtani appears among the most-watched GTA creators in Streams Charts' 2026 rankings — part of a wave of Arabic creators leading GTA viewership.`,
-    bAr: `الستريمر السعودي أحمد "sxb" القحطاني من ضمن أكثر صناع محتوى GTA مشاهدة في ترتيب Streams Charts لسنة 2026 — جزء من موجة صناع المحتوى العرب اللي يتصدرون مشاهدات GTA.`,
-    aliases: ["sxb", "أحمد القحطاني", "sxb ستريمر"],
-    tags: ["Saudi"],
+    ar: "شونق — أحمد القحطاني (SXB)",
+    sEn: "SXB's Kick profile and linked SHoNgxBoNg channel.",
+    sAr: "حساب شونق على Kick وقناة SHoNgxBoNg المرتبطة.",
+    bEn: `Streams Charts listed SXB in its 16 November 2026 GTA/RP ranking, before GTA VI launched.
+
+Watch SHoNgxBoNg through /SXB on Kick or @SHoNgxxBoNg on YouTube. Check the game and publication date on each broadcast; a GTA/RP ranking is separate from GTA VI coverage.`,
+    bAr: `تقرير Streams Charts بتاريخ 16 نوفمبر 2026 أدرج SXB في ترتيب GTA/RP قبل إطلاق GTA VI.
+
+تابع شونق على /SXB في Kick أو @SHoNgxxBoNg في يوتيوب. راجع اسم اللعبة وتاريخ البث؛ ترتيب GTA/RP منفصل عن تغطية GTA VI.`,
+    aliases: ["sxb", "أحمد القحطاني", "sxb ستريمر", "شونق", "شونق بونق", "SHoNgxBoNg", "SHoNgxxBoNg"],
+    tags: ["Saudi", "Kick", "YouTube"],
     facts: [["Country", "الدولة", "Saudi Arabia", "السعودية"]],
-    srcUrls: [SRC_STREAMS],
+    srcUrls: [
+      SRC_STREAMS,
+      ["SXB — Kick profile", "https://kick.com/SXB"],
+      ["SHoNgxBoNg — YouTube channel linked by SXB", "https://www.youtube.com/channel/UC5hnxbraFmMPxv63U4hCwTQ"],
+    ],
   },
   {
     slug: "drb7h-mofareh-al-asiri",
     status: "confirmed",
     en: "drb7h (Mofareh Al Asiri)",
-    ar: "درب7 — مفرح العسيري (drb7h)",
-    sEn: "Saudi GTA streamer ranked among the most-watched creators.",
-    sAr: "ستريمر GTA سعودي من أكثر صناع المحتوى مشاهدة.",
-    bEn: `Saudi streamer Mofareh "drb7h" Al Asiri is listed among the most-watched GTA creators in Streams Charts' 2026 dataset.`,
-    bAr: `الستريمر السعودي مفرح "drb7h" العسيري من ضمن أكثر صناع محتوى GTA مشاهدة في بيانات Streams Charts لسنة 2026.`,
-    aliases: ["drb7h", "مفرح العسيري", "درب7"],
-    tags: ["Saudi"],
+    ar: "دربحة — مفرح العسيري (drb7h)",
+    sEn: "Drb7h's Kick profile and pre-launch ranking.",
+    sAr: "حساب دربحة على Kick وترتيبه قبل الإطلاق.",
+    bEn: `Streams Charts listed Drb7h in its 16 November 2026 GTA/RP ranking, before GTA VI launched.
+
+Find his broadcasts at /drb7h on Kick. Check each broadcast's game and date, since the earlier GTA/RP ranking covers the wider franchise.`,
+    bAr: `تقرير Streams Charts بتاريخ 16 نوفمبر 2026 أدرج دربحة في ترتيب GTA/RP قبل إطلاق GTA VI.
+
+بثوث دربحة على /drb7h في Kick. راجع اسم اللعبة وتاريخ كل بث، لأن ترتيب GTA/RP السابق يخص السلسلة بشكل أوسع.`,
+    aliases: ["drb7h", "مفرح العسيري", "درب7", "دربحه", "دربحة", "دربح"],
+    tags: ["Saudi", "Kick"],
     facts: [["Country", "الدولة", "Saudi Arabia", "السعودية"]],
-    srcUrls: [SRC_STREAMS],
+    srcUrls: [
+      SRC_STREAMS,
+      ["Drb7h — Kick profile", "https://kick.com/drb7h"],
+    ],
   },
   {
     slug: "youtube-24h-launch-arab-creators",
     status: "confirmed",
-    en: "Arab creators in YouTube's 24-hour GTA VI launch marathon",
-    ar: "صناع محتوى عرب في ماراثون يوتيوب 24 ساعة لإطلاق GTA VI",
-    sEn: "YouTube's global launch livestream included Arabic creators Bilal Fadili and Rima.",
-    sAr: "بث يوتيوب العالمي لإطلاق اللعبة كان فيه صناع محتوى عرب: Bilal Fadili و Rima.",
-    bEn: `For launch, YouTube ran a 24-hour GTA VI livestream marathon with creators from around the world. The lineup went well beyond English-language channels — covering Spanish, Portuguese, French and Arabic audiences — and listed Bilal Fadili and Rima for Arabic, with the UAE among the represented countries.`,
-    bAr: `مع الإطلاق، سوّت يوتيوب ماراثون بث 24 ساعة لـ GTA VI مع صناع محتوى من كل العالم. والقائمة ما كانت إنجليزي بس — شملت جمهور إسباني وبرتغالي وفرنسي وعربي — وكان فيها Bilal Fadili و Rima للعربي، والإمارات من الدول المشاركة.`,
-    aliases: ["Bilal Fadili", "Rima", "YouTube marathon", "بلال فضيلي", "ريما"],
+    en: "Bilal Fadili and Rima in YouTube's announced GTA VI marathon lineup",
+    ar: "بلال فضيلي وريما في القائمة المعلنة لماراثون يوتيوب GTA VI",
+    sEn: "The 13 November announcement listed Bilal Fadili and Rima for Arabic coverage; completed participation is not verified here.",
+    sAr: "إعلان 13 نوفمبر أدرج بلال فضيلي وريما للتغطية العربية؛ المشاركة الفعلية ليست موثقة هنا.",
+    bEn: `Streams Charts reported on 13 November 2026 that YouTube planned a 24-hour GTA VI launch marathon. Its announced Arabic lineup included Bilal Fadili and Rima. This is evidence of the advertised lineup, not a record of their completed appearances.
+
+Their identified YouTube channels are @BilalFadili and @RimaOsta. RimaOsta is the profile intended here. Each channel's own GTA VI uploads are separate from participation in YouTube's official event.`,
+    bAr: `نقل تقرير Streams Charts بتاريخ 13 نوفمبر 2026 خطة يوتيوب لماراثون إطلاق GTA VI مدته 24 ساعة. القائمة العربية المعلنة ضمت بلال فضيلي وريما. هذا توثيق لقائمة الإعلان، وليس سجلًا لظهورهما الفعلي في البث.
+
+قناتاهما المحددتان هما @BilalFadili و@RimaOsta. المقصود بريما هنا حساب RimaOsta. نشر فيديو GTA VI في قناة أي منهما أمر منفصل عن المشاركة في حدث يوتيوب الرسمي.`,
+    aliases: ["Bilal Fadili", "Rima", "YouTube marathon", "بلال فضيلي", "ريما", "RimaOsta", "ريما أوستا", "ماراثون يوتيوب"],
     tags: ["YouTube", "launch"],
-    srcUrls: [SRC_YT24],
+    srcUrls: [
+      SRC_YT24,
+      ["Bilal Fadili — YouTube channel", "https://www.youtube.com/channel/UCw81FIQlzaVxgiQKiqTuCBQ"],
+      ["Rima — YouTube channel @RimaOsta", "https://www.youtube.com/channel/UCFlp8ti7kvEMbiqAE8Zazag"],
+    ],
   },
   {
     slug: "banderitax-aboflah-launch",
     status: "rumor",
-    en: "BanderitaX and AboFlah expected on GTA VI at launch",
-    ar: "بندريتا وأبو فلة: متوقع يلعبون GTA VI مع الإطلاق",
-    sEn: "A fan guide lists Saudi BanderitaX and Kuwait's AboFlah among creators expected to play at launch — single source.",
-    sAr: "دليل للمعجبين يذكر بندريتا من السعودية وأبو فلة من الكويت ضمن اللي متوقع يلعبون مع الإطلاق — مصدر واحد بس.",
-    bEn: `A fan-run tracker of launch-day streams lists BanderitaX (Saudi Arabia) and AboFlah (Kuwait) among Arabic creators expected to play GTA VI. We haven't confirmed their streams from a second source yet — we'll update this page when we do.`,
-    bAr: `موقع معجبين يتابع بثوث يوم الإطلاق يذكر BanderitaX (السعودية) و AboFlah (الكويت) ضمن صناع المحتوى العرب المتوقع يلعبون GTA VI. لسه ما أكدنا بثوثهم من مصدر ثاني — بنحدّث الصفحة أول ما نتأكد.`,
-    aliases: ["BanderitaX", "AboFlah", "بندريتا", "أبو فلة", "ابو فله"],
-    tags: ["Saudi", "Kuwait"],
-    srcUrls: [SRC_KLIPPAH],
+    en: "BanderitaX and AboFlah: channel links and GTA VI launch evidence",
+    ar: "بندريتا وأبو فلة: القنوات وما نعرفه عن نشاط GTA VI",
+    sEn: "BanderitaX has a GTA VI-titled upload on his own channel. AboFlah's launch-day gameplay remains unverified here.",
+    sAr: "قناة بندريتا تعرض فيديو بعنوان GTA VI؛ لعب أبو فلة يوم الإطلاق ما زال غير موثق هنا.",
+    bEn: `BanderitaX: his own channel lists a GTA VI video about exploring the world, and YouTube attributes the linked upload to BanderitaX. The upload title is a useful way to find his coverage; individual gameplay tips still need their own evidence.
+
+AboFlah: the main and gaming channel links are identified below. A GTA VI-related upload alone does not verify launch-day gameplay. The earlier fan tracker expected him to participate; this part remains unconfirmed.`,
+    bAr: `بندريتا: قناته نفسها تعرض فيديو عن التمشية في عالم GTA VI، ويوتيوب ينسب الفيديو المرتبط إلى BanderitaX. عنوان الفيديو يساعدك تلقى تغطيته؛ أما نصائح اللعب داخل المقطع فتحتاج تحققًا مستقلًا.
+
+أبو فلة: روابط القناة الرئيسية وقناة الألعاب محددة أدناه. وجود فيديو متعلق بـ GTA VI وحده ما يثبت لعبه يوم الإطلاق. دليل المعجبين السابق كان يتوقع مشاركته، وهذا الجزء ما زال غير مؤكد.`,
+    aliases: ["BanderitaX", "AboFlah", "بندريتا", "أبو فلة", "ابو فله", "ابوفله", "أبوفلة", "Aboflah_Gaming"],
+    tags: ["Saudi", "Kuwait", "YouTube"],
+    srcUrls: [
+      ["BanderitaX — YouTube channel", "https://www.youtube.com/channel/UCxEGVXh6fi-XYo58NZrbIHQ"],
+      ["BanderitaX — GTA VI upload listing", "https://www.youtube.com/watch?v=jPp-kYppK6M"],
+      ["AboFlah — main YouTube channel", "https://www.youtube.com/channel/UCqq5n-Oe-r1EEHI3yvhVJcA"],
+      ["AboFlah Gaming — YouTube channel", "https://www.youtube.com/channel/UCRu9mro2nPafhMxVy2CRfXA"],
+      SRC_KLIPPAH,
+    ],
   },
   {
     slug: "saudi-arabia-gta-ban-lifted",
@@ -127,9 +173,16 @@ A claim that Saudi pre-orders reached 10 million is attributed to a creator and 
     bEn: `IShowSpeed was the most-watched creator of GTA VI's first 24 hours, with 4.47 million hours watched across YouTube and Twitch. His first broadcast passed about 65.1 million views by 20 November — nearly four times the next most-viewed launch stream. Reports of his peak concurrent viewers disagree (285K vs 392.5K).`,
     bAr: `IShowSpeed كان أكثر صانع محتوى انشاف في أول 24 ساعة من GTA VI، بـ 4.47 مليون ساعة مشاهدة على YouTube و Twitch. وأول بث له عدّى تقريباً 65.1 مليون مشاهدة بحلول 20 نوفمبر — تقريباً أربع أضعاف ثاني أكثر بث. وأرقام ذروة المشاهدين المتزامنين عنده مختلفة بين المصادر (285 ألف مقابل 392.5 ألف).`,
     aliases: ["IShowSpeed", "Speed", "سبيد", "آي شو سبيد"],
-    tags: ["YouTube", "record"],
+    tags: ["YouTube", "record", "global"],
     related: ["livestream-record-7-91-million-viewers"],
-    srcUrls: [["Streams Charts — GTA 6 day-one recap", "https://streamscharts.com/news/gta-6-day1-recap"], ["Streams Charts — most-viewed YouTube launch streams", "https://streamscharts.com/news/gta-6s-most-viewed-youtube-streams"]],
+    facts: [
+      ["Coverage", "نطاق التغطية", "Global creator", "صانع محتوى عالمي"],
+    ],
+    srcUrls: [
+      ["Streams Charts — GTA 6 day-one recap", "https://streamscharts.com/news/gta-6-day1-recap"],
+      ["Streams Charts — most-viewed YouTube launch streams", "https://streamscharts.com/news/gta-6s-most-viewed-youtube-streams"],
+      ["IShowSpeed — YouTube channel", "https://www.youtube.com/channel/UCWsDFcIhY2DBi3GB5uykGXA"],
+    ],
     date: "2026-11-20T21:00:00Z",
   },
 ]);

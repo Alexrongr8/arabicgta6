@@ -1,6 +1,7 @@
 import "server-only";
 import type { User } from "@supabase/supabase-js";
 import { adminClient, adminConfigured } from "./admin";
+import { profilePresentation } from "./profile-presentation";
 
 export function geoFrom(h: Headers) {
   const dec = (v: string | null) => {
@@ -12,9 +13,9 @@ export function geoFrom(h: Headers) {
     }
   };
   return {
-    country: h.get("x-vercel-ip-country"),
-    region: dec(h.get("x-vercel-ip-country-region")),
-    city: dec(h.get("x-vercel-ip-city")),
+    country: h.get("x-vercel-ip-country")?.slice(0, 2) ?? null,
+    region: dec(h.get("x-vercel-ip-country-region"))?.slice(0, 100) ?? null,
+    city: dec(h.get("x-vercel-ip-city"))?.slice(0, 100) ?? null,
   };
 }
 
@@ -81,12 +82,13 @@ export async function recordSignIn(user: User, h: Headers) {
   if (!adminConfigured()) return;
   const db = adminClient();
   const geo = geoFrom(h);
+  const presentation = profilePresentation(user.user_metadata);
   const { data: existing } = await db.from("profiles").select("sign_in_count").eq("id", user.id).maybeSingle();
   await db.from("profiles").upsert({
     id: user.id,
     email: user.email,
-    full_name: (user.user_metadata?.full_name as string) ?? (user.user_metadata?.name as string) ?? null,
-    avatar_url: (user.user_metadata?.avatar_url as string) ?? null,
+    full_name: presentation.name ?? null,
+    avatar_url: presentation.avatar ?? null,
     last_sign_in_at: new Date().toISOString(),
     sign_in_count: (existing?.sign_in_count ?? 0) + 1,
     country: geo.country,
@@ -120,5 +122,6 @@ export async function recordView(
       source: sourceOf(ua.browser, v.utmSource, v.referrer),
       utm_campaign: v.utmCampaign,
       lang: v.lang,
-    });
+    })
+    .abortSignal(AbortSignal.timeout(2000));
 }
