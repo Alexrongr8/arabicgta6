@@ -13,7 +13,7 @@ export default async function Login({ searchParams }: PageProps<"/login">) {
   const [locale, viewer] = await Promise.all([getLocale(), getViewer()]);
   const sp = await searchParams;
   const next = typeof sp.next === "string" && sp.next.startsWith("/") ? sp.next : "/";
-  if (viewer.member && !viewer.demo) redirect(next);
+  if (viewer.signedIn) redirect(next);
   return (
     <main className="mx-auto max-w-md px-4 pt-10">
       {sp.error && <p className="mb-4 rounded-xl border border-red-500/40 bg-red-500/10 px-3 py-2 text-center text-sm text-red-300">{t(locale, "loginError")}</p>}

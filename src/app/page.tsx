@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Bidi } from "@/components/Bidi";
 import { CATEGORY_MAP } from "@/lib/categories";
-import { getCounts, getFeatured, getGuestNews, getLatest } from "@/lib/data";
+import { getCounts, getFeatured, getLatest } from "@/lib/data";
 import { pick, t } from "@/lib/i18n";
 import { getLocale, getViewer } from "@/lib/session";
 import { Hero } from "@/components/Hero";
@@ -16,26 +16,6 @@ export default async function Home() {
   const [locale, viewer] = await Promise.all([getLocale(), getViewer()]);
   const counts = await getCounts();
   const total = Object.values(counts).reduce((a, b) => a + b, 0);
-
-  if (!viewer.member) {
-    const news = await getGuestNews();
-    return (
-      <main>
-        <Hero locale={locale} total={total} />
-        <Section title={t(locale, "latestNews")} locale={locale}>
-          <p className="mb-3 rounded-xl border border-sun/25 bg-sun/5 px-3 py-2 text-xs text-sun">{t(locale, "guestNewsNote")}</p>
-          <div className="grid gap-3 md:grid-cols-2">
-            {news.map((n, i) => (
-              <ItemCard key={n.slug} item={n} locale={locale} showCategory={false} index={i} />
-            ))}
-          </div>
-        </Section>
-        <div className="mt-10 px-4">
-          <SignInGate locale={locale} />
-        </div>
-      </main>
-    );
-  }
 
   const [featured, latest, news] = await Promise.all([getFeatured(), getLatest(10), getLatest(6, "news")]);
   return (
@@ -75,6 +55,22 @@ export default async function Home() {
       <Section title={t(locale, "categories")} href="/explore" linkLabel={t(locale, "viewAll")} locale={locale}>
         <CategoryGrid locale={locale} counts={counts} />
       </Section>
+
+      <section className="mx-auto mt-6 max-w-6xl px-4">
+        <Link href="/trophies" className="card-hover flex items-center gap-4 overflow-hidden rounded-3xl p-4 text-white shadow-lg" style={{ background: "linear-gradient(135deg,#2a1240,#7c3aed 60%,#f0287a)" }}>
+          <span className="grid size-14 shrink-0 place-items-center rounded-2xl bg-white/15 text-3xl">🏆</span>
+          <span className="flex-1">
+            <span className="font-head block text-[20px] leading-tight">{locale === "ar" ? "كل كؤوس GTA 6 — بلايستيشن وإكس بوكس" : "Every GTA 6 trophy — PS5 & Xbox"}</span>
+            <span className="mt-0.5 block text-[12.5px] text-white/85">{locale === "ar" ? "55 كأس بالتفصيل، والكأس الوحيد اللي يفوت" : "All 55 in detail, plus the one you can miss"}</span>
+          </span>
+        </Link>
+      </section>
+
+      {!viewer.signedIn && (
+        <div className="mx-auto mt-8 max-w-6xl px-4">
+          <SignInGate locale={locale} />
+        </div>
+      )}
 
       <div className="mx-auto grid max-w-6xl gap-x-6 md:grid-cols-2">
         <div>

@@ -20,7 +20,7 @@ export function Header({ locale, viewer, labels, theme }: { locale: Locale; view
         <div className="flex items-center gap-2">
           <ThemeToggle initial={theme} label={locale === "ar" ? "الوضع الفاتح / الداكن" : "Light / dark mode"} />
           <LangToggle locale={locale} />
-          {viewer.member && !viewer.demo ? (
+          {viewer.signedIn ? (
             <Link href="/account" className="grid size-9 place-items-center overflow-hidden rounded-full border border-line bg-chip" aria-label={t(locale, "account")}>
               {viewer.avatar ? (
                 // eslint-disable-next-line @next/next/no-img-element
@@ -29,11 +29,11 @@ export function Header({ locale, viewer, labels, theme }: { locale: Locale; view
                 <span className="text-sm font-bold">{(viewer.name ?? viewer.email ?? "?").slice(0, 1).toUpperCase()}</span>
               )}
             </Link>
-          ) : !viewer.member ? (
-            <Link href="/login" className="bg-sunset inline-flex h-9 items-center rounded-full px-4 text-sm font-extrabold text-white shadow-md shadow-pink/30">
-              {t(locale, "signIn")}
+          ) : (
+            <Link href="/login" className="bg-sunset inline-flex h-9 items-center gap-1 rounded-full px-3.5 text-[13px] font-extrabold text-white shadow-md shadow-pink/30">
+              ✉️ {locale === "ar" ? "النشرة" : "Digest"}
             </Link>
-          ) : null}
+          )}
         </div>
       </div>
     </header>

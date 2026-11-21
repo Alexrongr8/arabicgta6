@@ -16,7 +16,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function Account() {
   const [locale, viewer] = await Promise.all([getLocale(), getViewer()]);
-  if (!viewer.member || viewer.demo) {
+  if (!viewer.signedIn) {
     return (
       <main className="mx-auto max-w-md px-4 pt-8">
         <SignInGate locale={locale} next="/account" />

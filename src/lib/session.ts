@@ -11,8 +11,10 @@ export const getLocale = cache(async (): Promise<Locale> => {
 });
 
 export interface Viewer {
-  /** true when the visitor may see everything */
+  /** Content access. The whole site is open to everyone, so this is always true. */
   member: boolean;
+  /** true when signed in with Google (gets the weekly digest) */
+  signedIn: boolean;
   /** true when running without Supabase (local preview with seed data) */
   demo: boolean;
   id?: string;
@@ -22,13 +24,14 @@ export interface Viewer {
 }
 
 export const getViewer = cache(async (): Promise<Viewer> => {
-  if (!supabaseConfigured()) return { member: true, demo: true };
+  if (!supabaseConfigured()) return { member: true, signedIn: false, demo: true };
   const supabase = await createClient();
   const { data } = await supabase.auth.getUser();
   const u = data.user;
-  if (!u) return { member: false, demo: false };
+  if (!u) return { member: true, signedIn: false, demo: false };
   return {
     member: true,
+    signedIn: true,
     demo: false,
     id: u.id,
     email: u.email ?? undefined,

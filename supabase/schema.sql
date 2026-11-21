@@ -38,8 +38,10 @@ create index if not exists items_search_trgm_idx on public.items using gin (sear
 alter table public.items enable row level security;
 
 drop policy if exists "members read items" on public.items;
-create policy "members read items" on public.items
-  for select to authenticated using (true);
+drop policy if exists "everyone reads items" on public.items;
+-- The site is open to everyone (sign-in is only for the weekly digest).
+create policy "everyone reads items" on public.items
+  for select to anon, authenticated using (true);
 -- No insert/update/delete policies: only the service role (update scripts) writes.
 
 -- Guests: the latest 10 news items, nothing else.
@@ -95,8 +97,7 @@ grant execute on function public.guest_news() to anon, authenticated;
 grant execute on function public.guest_news_item(text) to anon, authenticated;
 grant execute on function public.item_teaser(text) to anon, authenticated;
 grant execute on function public.category_counts() to anon, authenticated;
-revoke execute on function public.search_items(text, int) from anon, public;
-grant execute on function public.search_items(text, int) to authenticated;
+grant execute on function public.search_items(text, int) to anon, authenticated;
 
 -- ───────────────────────── profiles ─────────────────────────
 create table if not exists public.profiles (
@@ -178,3 +179,14 @@ create table if not exists public.page_views (
 );
 create index if not exists page_views_created_idx on public.page_views (created_at desc);
 alter table public.page_views enable row level security;
+
+-- Richer visitor analytics (anonymous visitors included)
+alter table public.page_views add column if not exists visitor_id text;
+alter table public.page_views add column if not exists region text;
+alter table public.page_views add column if not exists os text;
+alter table public.page_views add column if not exists browser text;
+alter table public.page_views add column if not exists device_type text;
+alter table public.page_views add column if not exists source text;
+alter table public.page_views add column if not exists utm_campaign text;
+alter table public.page_views add column if not exists lang text;
+create index if not exists page_views_visitor_idx on public.page_views (visitor_id, created_at desc);

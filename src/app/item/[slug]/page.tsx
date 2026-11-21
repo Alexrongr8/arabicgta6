@@ -46,7 +46,7 @@ export default async function ItemPage({ params }: PageProps<"/item/[slug]">) {
   }
 
   const c = CATEGORY_MAP[item.category];
-  const related = viewer.member ? await getBySlugs(item.related) : [];
+  const related = await getBySlugs(item.related);
   const body = pick(item, "body", locale);
 
   return (

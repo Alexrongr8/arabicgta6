@@ -1,21 +1,25 @@
+import Link from "next/link";
 import type { Metadata } from "next";
 import { getCounts } from "@/lib/data";
 import { t } from "@/lib/i18n";
-import { getLocale, getViewer } from "@/lib/session";
+import { getLocale } from "@/lib/session";
 import { CategoryGrid } from "@/components/CategoryGrid";
-import { SignInGate } from "@/components/SignInGate";
 
 export async function generateMetadata(): Promise<Metadata> {
   return { title: t(await getLocale(), "categories") };
 }
 
 export default async function Explore() {
-  const [locale, viewer] = await Promise.all([getLocale(), getViewer()]);
+  const locale = await getLocale();
   return (
     <main className="mx-auto max-w-6xl px-4 pt-6">
       <h1 className="mb-1 text-2xl font-extrabold">{t(locale, "categories")}</h1>
       <p className="mb-5 text-sm text-muted">{t(locale, "tagline")}</p>
-      {viewer.member ? <CategoryGrid locale={locale} counts={await getCounts()} /> : <SignInGate locale={locale} next="/explore" />}
+      <Link href="/trophies" className="card-hover mb-4 flex items-center gap-3 rounded-3xl p-4 text-white shadow-lg" style={{ background: "linear-gradient(135deg,#2a1240,#7c3aed 60%,#f0287a)" }}>
+        <span className="text-3xl">🏆</span>
+        <span className="font-head text-[19px]">{locale === "ar" ? "كل كؤوس GTA 6 (بلايستيشن وإكس بوكس)" : "All GTA 6 trophies (PS5 & Xbox)"}</span>
+      </Link>
+      <CategoryGrid locale={locale} counts={await getCounts()} />
     </main>
   );
 }

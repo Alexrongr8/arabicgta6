@@ -45,42 +45,96 @@ export default async function Admin() {
   const since7 = daysAgo(7);
   const since1 = daysAgo(1);
 
-  const [{ data: profiles }, { data: views }, { count: views24 }, { data: runs }] = await Promise.all([
-    db.from("profiles").select("*").order("last_sign_in_at", { ascending: false, nullsFirst: false }).limit(500),
-    db.from("page_views").select("path,country,city,device,referrer,user_id,created_at").gte("created_at", since7).order("created_at", { ascending: false }).limit(5000),
-    db.from("page_views").select("id", { count: "exact", head: true }).gte("created_at", since1),
+  const since30 = daysAgo(30);
+  const [{ data: profiles }, { data: views }, { data: runs }] = await Promise.all([
+    db.from("profiles").select("*").order("last_sign_in_at", { ascending: false, nullsFirst: false }).limit(1000),
+    db
+      .from("page_views")
+      .select("path,country,region,city,device,device_type,os,browser,source,utm_campaign,referrer,user_id,visitor_id,lang,created_at")
+      .gte("created_at", since30)
+      .order("created_at", { ascending: false })
+      .limit(50000),
     db.from("update_runs").select("*").order("ran_at", { ascending: false }).limit(8),
   ]);
   const users = (profiles ?? []) as Profile[];
   const pv = views ?? [];
+  const pv7 = pv.filter((r) => r.created_at >= since7);
+  const pv1 = pv.filter((r) => r.created_at >= since1);
+  const uniq = (rows: typeof pv) => new Set(rows.map((r) => r.visitor_id ?? `${r.city}-${r.device}`)).size;
   const newUsers7 = users.filter((u) => u.created_at >= since7).length;
 
   const stats = [
-    { k: ar ? "الأعضاء" : "Members", v: users.length },
-    { k: ar ? "أعضاء جدد (7 أيام)" : "New members (7d)", v: newUsers7 },
-    { k: ar ? "مشاهدات (24 ساعة)" : "Views (24h)", v: views24 ?? 0 },
-    { k: ar ? "مشاهدات (7 أيام)" : "Views (7d)", v: pv.length },
+    { k: ar ? "زوار اليوم" : "Visitors today", v: uniq(pv1) },
+    { k: ar ? "زوار 7 أيام" : "Visitors (7d)", v: uniq(pv7) },
+    { k: ar ? "زوار 30 يوم" : "Visitors (30d)", v: uniq(pv) },
+    { k: ar ? "مشاهدات 7 أيام" : "Page views (7d)", v: pv7.length },
+    { k: ar ? "المسجلين" : "Signed-in members", v: users.length },
+    { k: ar ? "مسجلين جدد (7 أيام)" : "New members (7d)", v: newUsers7 },
+    { k: ar ? "مشتركين بالنشرة" : "Digest subscribers", v: users.filter((u) => u.digest_opt_in).length },
+    { k: ar ? "صفحات لكل زائر" : "Pages per visitor", v: uniq(pv7) ? Math.round((pv7.length / uniq(pv7)) * 10) / 10 : 0 },
   ];
+
+  // daily visitors, last 14 days
+  const days = Array.from({ length: 14 }, (_, i) => {
+    const d = daysAgo(13 - i).slice(0, 10);
+    const rows = pv.filter((r) => r.created_at.slice(0, 10) === d);
+    return { d, visitors: uniq(rows), views: rows.length };
+  });
+  const maxDay = Math.max(1, ...days.map((d) => d.visitors));
+  const byVisitor = (rows: typeof pv, key: (r: (typeof pv)[number]) => string | null | undefined) => {
+    const m = new Map<string, Set<string>>();
+    for (const r of rows) {
+      const k = key(r) || "—";
+      if (!m.has(k)) m.set(k, new Set());
+      m.get(k)!.add(r.visitor_id ?? `${r.city}-${r.device}`);
+    }
+    return [...m.entries()].map(([k, set]) => [k, set.size] as [string, number]).sort((a, b) => b[1] - a[1]);
+  };
 
   return (
     <main className="mx-auto max-w-6xl px-4 pt-6">
-      <h1 className="mb-1 text-2xl font-extrabold">{ar ? "لوحة المالك" : "Owner dashboard"}</h1>
-      <p className="mb-5 text-xs text-dim">{ar ? "مرئية لك فقط. الموقع الجغرافي تقريبي من عنوان IP." : "Visible only to you. Location is approximate (from IP)."}</p>
+      <h1 className="mb-1 text-2xl">{ar ? "لوحة المالك — جمهورك" : "Owner dashboard — your audience"}</h1>
+      <p className="mb-5 text-xs text-dim">{ar ? "مرئية لك فقط. الموقع الجغرافي تقريبي من عنوان IP. الزائر = متصفح/جهاز مميز." : "Visible only to you. Location is approximate (IP). A visitor = a distinct browser/device."}</p>
 
       <div className="mb-6 grid grid-cols-2 gap-3 md:grid-cols-4">
         {stats.map((s) => (
           <div key={s.k} className="card p-4">
             <p className="text-xs text-dim">{s.k}</p>
-            <p className="font-display text-3xl text-sunset">{s.v}</p>
+            <p className="font-display text-3xl text-pink">{s.v}</p>
           </div>
         ))}
       </div>
 
-      <div className="mb-6 grid gap-3 md:grid-cols-3">
-        <TopList title={ar ? "أكثر الدول (7 أيام)" : "Top countries (7d)"} rows={countBy(pv, (r) => r.country).slice(0, 8).map(([k, n]) => [`${flag(k)} ${k}`, n])} />
-        <TopList title={ar ? "أكثر الصفحات" : "Top pages"} rows={countBy(pv, (r) => r.path).slice(0, 8)} />
-        <TopList title={ar ? "مصادر الزيارات" : "Referrers"} rows={countBy(pv.filter((r) => r.referrer), (r) => r.referrer).slice(0, 8)} />
+      <div className="card mb-6 p-4">
+        <p className="mb-3 text-sm font-extrabold">{ar ? "الزوار يومياً (آخر 14 يوم)" : "Daily visitors (last 14 days)"}</p>
+        <div className="flex h-36 items-end gap-1.5" dir="ltr">
+          {days.map((d) => (
+            <div key={d.d} className="flex flex-1 flex-col items-center gap-1" title={`${d.d}: ${d.visitors} visitors, ${d.views} views`}>
+              <span className="text-[10px] text-dim">{d.visitors || ""}</span>
+              <div className="w-full rounded-t-md bg-pink/80" style={{ height: `${(d.visitors / maxDay) * 100}%`, minHeight: d.visitors ? 4 : 1 }} />
+              <span className="text-[9px] text-dim">{d.d.slice(8)}</span>
+            </div>
+          ))}
+        </div>
       </div>
+
+      <div className="mb-6 grid gap-3 md:grid-cols-3">
+        <TopList title={ar ? "المدن (30 يوم)" : "Cities (30d)"} rows={byVisitor(pv, (r) => [r.city, r.country].filter(Boolean).join(", ")).slice(0, 10)} />
+        <TopList title={ar ? "الدول" : "Countries"} rows={byVisitor(pv, (r) => r.country).slice(0, 10).map(([k, n]) => [`${flag(k)} ${k}`, n])} />
+        <TopList title={ar ? "من وين جوا؟ (سناب، إنستغرام…)" : "Traffic sources"} rows={byVisitor(pv, (r) => r.source).slice(0, 10)} />
+        <TopList title={ar ? "نوع الجهاز" : "Device type"} rows={byVisitor(pv, (r) => r.device_type).slice(0, 5)} />
+        <TopList title={ar ? "نظام التشغيل" : "Operating system"} rows={byVisitor(pv, (r) => r.os).slice(0, 8)} />
+        <TopList title={ar ? "المتصفح" : "Browser"} rows={byVisitor(pv, (r) => r.browser).slice(0, 8)} />
+        <TopList title={ar ? "أكثر الصفحات (7 أيام)" : "Top pages (7d)"} rows={countBy(pv7, (r) => r.path).slice(0, 10)} />
+        <TopList title={ar ? "الحملات (utm_campaign)" : "Campaigns (utm_campaign)"} rows={byVisitor(pv.filter((r) => r.utm_campaign), (r) => r.utm_campaign).slice(0, 8)} />
+        <TopList title={ar ? "لغة الموقع" : "Site language"} rows={byVisitor(pv, (r) => r.lang).slice(0, 3)} />
+      </div>
+
+      <p className="mb-6 rounded-xl bg-chip px-3 py-2 text-[12.5px] leading-relaxed text-muted">
+        {ar
+          ? "نصيحة للحملات: أضف للرابط في إعلاناتك ?utm_source=snapchat&utm_campaign=اسم_الحملة — وبتطلع لك هنا كل حملة لحالها."
+          : "Campaign tip: add ?utm_source=snapchat&utm_campaign=your_campaign to your ad links to see each campaign here."}
+      </p>
 
       <h2 className="mb-3 text-lg font-extrabold">{ar ? "الأعضاء المسجلين" : "Signed-in members"}</h2>
       <div className="space-y-2 md:hidden">
@@ -135,9 +189,10 @@ export default async function Admin() {
           return (
             <div key={i} className="flex flex-wrap items-center gap-x-3 gap-y-0.5 px-3 py-2 text-[12.5px]">
               <span>{flag(v.country)} {v.city ?? v.country ?? "—"}</span>
+              <span className="text-muted">{v.source}</span>
               <span className="font-bold" dir="ltr">{v.path}</span>
               <span className="text-muted">{u ? u.full_name ?? u.email : ar ? "زائر" : "guest"}</span>
-              <span className="text-dim">{v.device}</span>
+              <span className="text-dim">{v.os} · {v.browser}</span>
               <span className="ms-auto text-dim">{new Date(v.created_at).toLocaleString(ar ? "ar-SA-u-nu-latn-ca-gregory" : "en-GB")}</span>
             </div>
           );

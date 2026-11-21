@@ -12,6 +12,7 @@ import { glitches, strange, tips } from "./misc";
 import controllerTips from "./tips";
 import funny from "./funny";
 import choices from "./choices";
+import batch2 from "./batch2";
 
 export const SEED_ITEMS: Item[] = [
   ...news,
@@ -29,4 +30,5 @@ export const SEED_ITEMS: Item[] = [
   ...controllerTips,
   ...funny,
   ...choices,
+  ...batch2,
 ];

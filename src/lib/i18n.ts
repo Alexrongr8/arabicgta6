@@ -20,14 +20,14 @@ const dict = {
   signIn: { ar: "تسجيل الدخول", en: "Sign in" },
   signInGoogle: { ar: "الدخول بحساب Google", en: "Continue with Google" },
   signOut: { ar: "تسجيل الخروج", en: "Sign out" },
-  gateTitle: { ar: "باقي خطوة وحدة 🔓", en: "One step away 🔓" },
+  gateTitle: { ar: "خلك أول من يعرف 📬", en: "Be the first to know 📬" },
   gateBody: {
-    ar: "سجّل بحساب Google (ثانيتين ومجاناً) وافتح لك كل شي: الأسرار، الخريطة، والبحث.",
-    en: "Sign in free with Google to unlock every category, the interactive map and full search.",
+    ar: "سجّل بحساب Google بضغطة وحدة، ويوصلك كل أسبوع ملخص بأهم أخبار وأسرار GTA 6 على إيميلك — مجاناً.",
+    en: "Sign in with Google in one tap and get a free weekly email with the best GTA 6 news and secrets.",
   },
   gatePerks: {
-    ar: ["كل الأسرار والقلتشات وطرق الفلوس", "خريطة ليونيدا التفاعلية", "بحث كامل مثل الويكيبيديا", "نشرة أسبوعية على إيميلك"],
-    en: ["Every secret, glitch and money method", "The interactive Leonida map", "Wikipedia-style full search", "A weekly digest in your inbox"],
+    ar: ["ملخص أسبوعي كل جمعة بأهم الأخبار", "أول من يعرف بالأسرار والقلتشات الجديدة", "بدون إزعاج — تقدر تلغي بضغطة", "بدون كلمة سر، بس حساب Google"],
+    en: ["A Friday summary of the biggest news", "Be first to hear about new secrets and glitches", "No spam — unsubscribe in one tap", "No password, just your Google account"],
   },
   guestNewsNote: {
     ar: "هذي آخر 10 أخبار للزوار 👀 سجّل دخولك وشوف كل شي.",

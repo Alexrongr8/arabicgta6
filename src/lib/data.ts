@@ -4,6 +4,7 @@ import type { CategorySlug, Item, ItemCard } from "./types";
 import { createClient, supabaseConfigured } from "./supabase/server";
 import { normalize, searchText } from "./normalize";
 import { SEED } from "./seed";
+import { adminClient, adminConfigured } from "./admin";
 
 /**
  * Data access layer. With Supabase configured, reads go through RLS:
@@ -69,11 +70,35 @@ export async function getCategory(category: CategorySlug): Promise<ItemCard[]> {
   return getLatest(500, category);
 }
 
+/**
+ * "Don't miss" row: the most-read articles of the last 3 days (from our own page-view log),
+ * topped up with editor-flagged and the newest items. Changes on its own as people read.
+ */
 export async function getFeatured(): Promise<ItemCard[]> {
-  if (!supabaseConfigured()) return SEED.filter((i) => i.featured).sort(byDate).map(toCard);
+  if (!supabaseConfigured()) {
+    const flagged = SEED.filter((i) => i.featured).sort(byDate);
+    return flagged.slice(0, 10).map(toCard);
+  }
   const supabase = await createClient();
-  const { data } = await supabase.from("items").select(CARD_COLS).eq("featured", true).order("published_at", { ascending: false }).limit(12);
-  return (data ?? []) as ItemCard[];
+  let popular: string[] = [];
+  if (adminConfigured()) {
+    const since = new Date(Date.now() - 3 * 864e5).toISOString();
+    const { data: views } = await adminClient().from("page_views").select("path").like("path", "/item/%").gte("created_at", since).limit(20000);
+    const counts = new Map<string, number>();
+    for (const v of views ?? []) {
+      const slug = String(v.path).slice(6).split(/[?#]/)[0];
+      counts.set(slug, (counts.get(slug) ?? 0) + 1);
+    }
+    popular = [...counts.entries()].sort((a, b) => b[1] - a[1]).slice(0, 6).map(([slug]) => slug);
+  }
+  const [{ data: pop }, { data: flagged }, { data: fresh }] = await Promise.all([
+    popular.length ? supabase.from("items").select(CARD_COLS).in("slug", popular) : Promise.resolve({ data: [] }),
+    supabase.from("items").select(CARD_COLS).eq("featured", true).order("published_at", { ascending: false }).limit(6),
+    supabase.from("items").select(CARD_COLS).order("published_at", { ascending: false }).limit(4),
+  ]);
+  const ordered = [...((pop ?? []) as ItemCard[]).sort((a, b) => popular.indexOf(a.slug) - popular.indexOf(b.slug)), ...((fresh ?? []) as ItemCard[]), ...((flagged ?? []) as ItemCard[])];
+  const seen = new Set<string>();
+  return ordered.filter((i) => !seen.has(i.slug) && seen.add(i.slug)).slice(0, 10);
 }
 
 export async function getCounts(): Promise<Record<string, number>> {
