@@ -1,4 +1,5 @@
 import type { CategorySlug, Item, Status } from "../../src/lib/types";
+import { LOCS } from "./locations";
 
 export interface SeedInput {
   slug: string;
@@ -12,7 +13,6 @@ export interface SeedInput {
   aliases?: string[];
   tags?: string[];
   facts?: [string, string, string, string][]; // [key_en, key_ar, value_en, value_ar]
-  loc?: [number, number];
   region?: string;
   related?: string[];
   src?: (keyof typeof S)[];
@@ -39,6 +39,7 @@ export const S = {
   windowsPrice: { title: "Windows Central — price confirmed", url: "https://www.windowscentral.com/gaming/grand-theft-auto-vi-price-confirmed-at-usd79-99-with-a-feature-locking-ultimate-edition-at-usd99-99-and-the-physical-edition-is-just-a-code-in-a-box" },
   shackPrice: { title: "Shacknews — price and editions", url: "https://www.shacknews.com/article/149778/grand-theft-auto-6-price-standard-ultimate-gta-6" },
   pcgEditions: { title: "PC Gamer — pre-order editions explained", url: "https://pcgamer.com/games/grand-theft-auto/gta-6-pre-order-editions-standard-ultimate/" },
+  rockstarMap: { title: "Rockstar Games — official Leonida map poster", url: "https://www.rockstargames.com/VI/media" },
   rockstarSite: { title: "Rockstar Games — Grand Theft Auto VI", url: "https://www.rockstargames.com/VI" },
   pcgMap: { title: "PC Gamer — charting the GTA 6 map", url: "https://www.pcgamer.com/games/grand-theft-auto/gta6-map" },
   insiderMap: { title: "Insider Gaming — every confirmed location", url: "https://insider-gaming.com/every-gta-6-location-confirmed-so-far-vice-city-included-more/" },
@@ -91,7 +92,7 @@ export function build(category: CategorySlug, list: SeedInput[]): Item[] {
     aliases: x.aliases ?? [],
     tags: x.tags ?? [],
     facts: (x.facts ?? []).map(([k_en, k_ar, v_en, v_ar]) => ({ k_en, k_ar, v_en, v_ar })),
-    location: x.loc ? { x: x.loc[0], y: x.loc[1] } : null,
+    location: LOCS[x.slug] ? { x: LOCS[x.slug][0], y: LOCS[x.slug][1] } : null,
     region: x.region ?? null,
     related: x.related ?? [],
     sources: (x.src ?? []).map((k) => ({ ...S[k] })),

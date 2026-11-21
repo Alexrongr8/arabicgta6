@@ -39,7 +39,7 @@ export interface Item {
   aliases: string[];
   tags: string[];
   facts: Fact[];
-  /** Position on the stylised Leonida map, 0..1000 on both axes (y grows downwards). */
+  /** Pixel position on the official Leonida map poster (2805 × 3840, y grows downwards). */
   location: { x: number; y: number } | null;
   region: string | null;
   related: string[];

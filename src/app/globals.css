@@ -148,7 +148,7 @@ body {
 
 /* Leaflet overrides */
 .leaflet-container {
-  background: #0a1830 !important;
+  background: #23b3d3 !important;
   font-family: var(--font-sans) !important;
 }
 .leaflet-control-zoom a {

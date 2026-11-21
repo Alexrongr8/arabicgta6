@@ -92,7 +92,7 @@ type NewItem = {
   event_date: string | null;
 };
 
-const REGION_HINT = `Stylised map coordinates (0..1000, y grows downward): Vice City ~ (835,640) with neighbourhoods within ±50; Vice Beach islands x≈895 y 560-700; Hamlet (765,715); Grassrivers (705,700); Leonida Keys chain from (800,850) to (560,940); Ambrosia (640,470) next to the big lake (700,430); Port Gellhorn (175,230); Mount Kalaga (500,160). Only give a location when the place is clearly known; otherwise null.`;
+const REGION_HINT = `Map coordinates are pixels on Rockstar's official Leonida map poster (2805 wide x 3840 tall, y grows downward). Reference points: Vice City (1880,1995), Downtown (1968,2053), Little Cuba (1853,2047), Vice Beach (2390,1880), Ocean Beach (2418,2006), Belville (1845,1520), Tequesta (1890,2285), VCIA airport (1590,2190), Hamlet (1575,2632), Grassrivers (1265,2545), Pelican Valley (1462,2812), Port Gellhorn (855,1370), Capri (805,2025), Ambrosia (1560,1368), Lake Leonida (1697,1205), Mount Kalaga National Park (1395,870), Millport (1848,883), Key Lento (1595,3197), Southwind (918,3282), Riquezas Keys (612,3187). Only give a location when the place is clearly known; otherwise null.`;
 
 function buildPrompt(existing: { slug: string; title_en: string }[], since: string) {
   return `You are the editor of an Arabic-first GTA 6 (Grand Theft Auto VI) fan encyclopedia. GTA VI launched on 19 November 2026 on PS5 and Xbox Series X|S.
@@ -162,7 +162,7 @@ async function main() {
     while (knownSlugs.has(slug)) slug = `${slug}-${Math.random().toString(36).slice(2, 6)}`;
     knownSlugs.add(slug);
 
-    const loc = it.location && it.location.x >= 0 && it.location.x <= 1000 && it.location.y >= 0 && it.location.y <= 1000 ? it.location : null;
+    const loc = it.location && it.location.x >= 0 && it.location.x <= 2805 && it.location.y >= 0 && it.location.y <= 3840 ? it.location : null;
     const published = it.category === "news" && it.event_date && !Number.isNaN(Date.parse(it.event_date)) && Date.parse(it.event_date) <= Date.now() ? new Date(it.event_date).toISOString() : new Date().toISOString();
     const row = {
       slug,

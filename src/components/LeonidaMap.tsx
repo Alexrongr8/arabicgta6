@@ -12,20 +12,13 @@ import type { CategorySlug, ItemCard, Locale } from "@/lib/types";
 import { CategoryIcon } from "./CategoryIcon";
 import { StatusBadge } from "./StatusBadge";
 
-const SIZE = 1000;
-const toLatLng = (p: { x: number; y: number }): L.LatLngExpression => [SIZE - p.y, p.x];
+// Rockstar's official Leonida map poster, in image pixels.
+const W = 2805;
+const H = 3840;
+const toLatLng = (p: { x: number; y: number }): L.LatLngExpression => [H - p.y, p.x];
 const BOUNDS: L.LatLngBoundsExpression = [
   [0, 0],
-  [SIZE, SIZE],
-];
-
-const REGIONS: { name: string; x: number; y: number }[] = [
-  { name: "VICE CITY", x: 805, y: 548 },
-  { name: "LEONIDA KEYS", x: 690, y: 955 },
-  { name: "GRASSRIVERS", x: 690, y: 655 },
-  { name: "PORT GELLHORN", x: 175, y: 280 },
-  { name: "AMBROSIA", x: 630, y: 510 },
-  { name: "MOUNT KALAGA", x: 470, y: 115 },
+  [H, W],
 ];
 
 const iconCache = new Map<string, L.DivIcon>();
@@ -70,7 +63,7 @@ function FlyTo({ target }: { target: ItemCard | null }) {
   useEffect(() => {
     if (!target?.location) return;
     const t = setTimeout(() => {
-      const z = Math.max(map.getZoom(), 1);
+      const z = Math.max(map.getZoom(), -0.5);
       // shift the target up so the bottom sheet doesn't cover it
       const pt = map.project(toLatLng(target.location!), z).add([0, map.getSize().y * 0.18]);
       map.flyTo(map.unproject(pt, z), z, { duration: 0.6 });
@@ -87,11 +80,12 @@ function FitOnLoad() {
       map.invalidateSize();
       map.setMinZoom(-4);
       const z = map.getBoundsZoom(BOUNDS, false);
-      map.setMinZoom(z - 0.25);
+      map.setMinZoom(z - 0.5);
       // portrait phones: frame the southern peninsula (where most pins are) a bit tighter
-      const portrait = map.getSize().y > map.getSize().x * 1.2;
-      if (portrait) map.setView([SIZE - 560, 690], z + 0.75);
-      else map.fitBounds(BOUNDS);
+      // fill the screen height on phones (map is portrait), the user can pan sideways
+      const size = map.getSize();
+      const fillH = Math.log2(size.y / H);
+      map.setView([H * 0.52, W * 0.55], Math.max(z, Math.min(fillH, z + 1)), { animate: false });
     };
     fit();
     window.addEventListener("resize", fit);
@@ -104,7 +98,7 @@ export default function LeonidaMap({ items, locale, focus, labels }: { items: It
   const [active, setActive] = useState<Set<CategorySlug>>(new Set());
   const [selected, setSelected] = useState<ItemCard | null>(() => items.find((i) => i.slug === focus) ?? null);
   const [legendOpen, setLegendOpen] = useState(false);
-  const [zoom, setZoom] = useState(-1);
+  const [zoom, setZoom] = useState(-3);
   const mapRef = useRef<L.Map | null>(null);
 
   const cats = useMemo(() => CATEGORIES.filter((c) => items.some((i) => i.category === c.slug)), [items]);
@@ -128,11 +122,11 @@ export default function LeonidaMap({ items, locale, focus, labels }: { items: It
         crs={L.CRS.Simple}
         bounds={BOUNDS}
         maxBounds={[
-          [-150, -150],
-          [SIZE + 150, SIZE + 150],
+          [-400, -400],
+          [H + 400, W + 400],
         ]}
         minZoom={-4}
-        maxZoom={3}
+        maxZoom={1}
         zoomSnap={0.25}
         zoomControl={false}
         attributionControl={false}
@@ -141,19 +135,13 @@ export default function LeonidaMap({ items, locale, focus, labels }: { items: It
         <FitOnLoad />
         <ZoomWatcher onZoom={setZoom} />
         <FlyTo target={selected} />
-        <ImageOverlay url="/map/leonida.svg" bounds={BOUNDS} />
-        {REGIONS.map((r) => (
-          <Marker key={r.name} position={toLatLng(r)} icon={L.divIcon({ className: "", html: "", iconSize: [0, 0] })} interactive={false}>
-            <Tooltip permanent direction="center" className="region-label">
-              {r.name}
-            </Tooltip>
-          </Marker>
-        ))}
+        <ImageOverlay url="/map/leonida-official-small.webp" bounds={BOUNDS} />
+        <ImageOverlay url="/map/leonida-official.webp" bounds={BOUNDS} />
         {visible.map((i) => (
           <Marker
             key={i.slug}
             position={toLatLng(i.location!)}
-            icon={zoom >= 0.25 || selected?.slug === i.slug ? pinIcon(i.category, selected?.slug === i.slug) : dotIcon(i.category, false)}
+            icon={zoom >= -1.25 || selected?.slug === i.slug ? pinIcon(i.category, selected?.slug === i.slug) : dotIcon(i.category, false)}
             eventHandlers={{ click: () => setSelected(i) }}
             zIndexOffset={selected?.slug === i.slug ? 1000 : 0}
           />
@@ -197,7 +185,7 @@ export default function LeonidaMap({ items, locale, focus, labels }: { items: It
       </div>
 
       {/* right controls */}
-      <div className="absolute end-3 bottom-8 z-[500] flex flex-col gap-2">
+      <div className={`absolute end-3 bottom-8 z-[500] flex-col gap-2 ${selected ? "hidden" : "flex"}`}>
         <button type="button" onClick={() => mapRef.current?.zoomIn()} className="glass grid size-10 place-items-center rounded-full border border-line text-xl font-bold">+</button>
         <button type="button" onClick={() => mapRef.current?.zoomOut()} className="glass grid size-10 place-items-center rounded-full border border-line text-xl font-bold">−</button>
         <button type="button" onClick={() => mapRef.current?.fitBounds(BOUNDS)} className="glass grid size-10 place-items-center rounded-full border border-line" aria-label="reset">
