@@ -1,36 +1,12 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# arabicgta6.com
 
-## Getting Started
+Arabic-first GTA 6 encyclopedia: news, secrets, glitches, money methods, rare weapons, places, characters, vehicles, tips, an interactive Leonida map and Wikipedia-style search.
 
-First, run the development server:
+- Next.js 16 (App Router) + Tailwind v4, deployed on Vercel
+- Supabase: Postgres + Google sign-in. Guests see the latest 10 news items; everything else requires sign-in (RLS-enforced)
+- `scripts/update.ts`: OpenAI web search → classify, summarise, translate → publish (GitHub Actions, every 6h)
+- `scripts/digest.ts`: weekly email via Resend (GitHub Actions, Fridays)
+- `data/seed/`: the initial bilingual encyclopedia (`npm run seed` uploads it)
+- `/admin`: owner-only dashboard (members, locations, visits), gated by `OWNER_EMAILS`
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Without Supabase env vars the app runs in preview mode from the seed data. Setup guide (Arabic): [SETUP.md](SETUP.md).
