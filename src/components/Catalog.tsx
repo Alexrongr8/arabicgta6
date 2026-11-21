@@ -67,11 +67,22 @@ export function Catalog({
       <ol className="grid gap-2.5 md:grid-cols-2">
         {shown.map((r) => (
           <li key={r.name} className="card overflow-hidden p-0">
-            <div className="relative aspect-[16/9] w-full overflow-hidden" style={{ background: "linear-gradient(135deg,var(--chip-2),var(--chip))" }}>
-              <span className="absolute inset-0 grid place-items-center text-6xl opacity-60">{r.emoji ?? "✨"}</span>
+            <div className="noimg relative aspect-[16/9] w-full overflow-hidden" style={{ background: "linear-gradient(135deg,var(--chip-2),var(--chip))" }}>
+              {!r.image && (
+                <span className="absolute inset-0 grid place-items-center">
+                  <span className="flex flex-col items-center gap-1.5">
+                    <span className="text-5xl opacity-50">{r.emoji ?? "✨"}</span>
+                    <span className="rounded-full bg-card px-3 py-1 text-[12px] font-extrabold text-muted shadow-sm">📷 {ar ? "تتوفر الصورة قريباً" : "Image coming soon"}</span>
+                  </span>
+                </span>
+              )}
               {r.image && (
                 // eslint-disable-next-line @next/next/no-img-element
-                <img src={r.image.url} alt={r.name} loading="lazy" referrerPolicy="no-referrer" className="absolute inset-0 size-full object-cover" onError={(e) => (e.currentTarget.style.display = "none")} />
+                <img src={r.image.url} alt={r.name} loading="lazy" referrerPolicy="no-referrer" className="absolute inset-0 size-full object-cover" onError={(e) => {
+                    e.currentTarget.style.display = "none";
+                    e.currentTarget.nextElementSibling?.remove();
+                    e.currentTarget.parentElement?.setAttribute("data-noimg", ar ? "📷 تتوفر الصورة قريباً" : "📷 Image coming soon");
+                  }} />
               )}
               {r.image && <span className="absolute bottom-1.5 end-1.5 rounded-full bg-black/55 px-2 py-0.5 text-[9.5px] text-white/85" dir="ltr">📷 {r.image.credit}</span>}
             </div>

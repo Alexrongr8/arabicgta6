@@ -254,3 +254,15 @@ h3,
     animation: none;
   }
 }
+
+/* catalog card whose remote picture failed to load */
+.noimg[data-noimg]::after {
+  content: attr(data-noimg);
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--muted);
+}
