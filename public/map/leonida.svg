@@ -1,0 +1,143 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" width="1000" height="1000">
+  <defs>
+    <radialGradient id="sea" cx="70%" cy="65%" r="85%">
+      <stop offset="0" stop-color="#0f3358"/>
+      <stop offset=".55" stop-color="#0b2443"/>
+      <stop offset="1" stop-color="#07152b"/>
+    </radialGradient>
+    <linearGradient id="land" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2b2342"/>
+      <stop offset="1" stop-color="#241c38"/>
+    </linearGradient>
+    <radialGradient id="forest" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#1f5a43" stop-opacity=".95"/>
+      <stop offset="1" stop-color="#1f5a43" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="swamp" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#2f6b4a" stop-opacity=".85"/>
+      <stop offset="1" stop-color="#2f6b4a" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="city" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#ff3d8b" stop-opacity=".75"/>
+      <stop offset=".5" stop-color="#ff6a5b" stop-opacity=".25"/>
+      <stop offset="1" stop-color="#ff6a5b" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="town" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#ffb13d" stop-opacity=".55"/>
+      <stop offset="1" stop-color="#ffb13d" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="waves" width="28" height="14" patternUnits="userSpaceOnUse">
+      <path d="M0 7 Q7 2 14 7 T28 7" fill="none" stroke="#6fb7ff" stroke-opacity=".07" stroke-width="1.2"/>
+    </pattern>
+    <pattern id="reeds" width="16" height="16" patternUnits="userSpaceOnUse">
+      <path d="M3 13 v-6 M8 14 v-8 M13 13 v-5" stroke="#7fd39a" stroke-opacity=".25" stroke-width="1"/>
+    </pattern>
+    <pattern id="blocks" width="10" height="10" patternUnits="userSpaceOnUse">
+      <rect width="7" height="7" fill="#ff9ac2" fill-opacity=".12"/>
+    </pattern>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <clipPath id="landClip"><path id="mainland" d="M20 40 L980 40 L960 120 L935 210 L912 320 L892 440 L872 535 L858 580 L852 650 L846 712 L832 785 L798 822 L752 834 L712 828 L680 800 L648 744 L626 664 L604 582 L588 502 L562 420 L530 352 L502 302 L466 276 L418 262 L362 256 L300 251 L240 242 L180 247 L120 252 L60 246 L20 240 Z"/></clipPath>
+  </defs>
+
+  <rect width="1000" height="1000" fill="url(#sea)"/>
+  <rect width="1000" height="1000" fill="url(#waves)"/>
+
+  <!-- shallow-water halo -->
+  <g fill="none" stroke="#3fd0ff" stroke-opacity=".10" stroke-linejoin="round">
+    <use href="#mainland" stroke-width="26"/>
+    <use href="#mainland" stroke-width="12" stroke-opacity=".14"/>
+  </g>
+
+  <!-- mainland -->
+  <use href="#mainland" fill="url(#land)" stroke="#5c4f86" stroke-width="2"/>
+
+  <g clip-path="url(#landClip)">
+    <!-- neighbouring states (north) -->
+    <rect x="0" y="0" width="1000" height="70" fill="#17122a"/>
+    <path d="M20 70 H980" stroke="#5c4f86" stroke-dasharray="8 6" stroke-width="1.5"/>
+    <!-- Mount Kalaga forest -->
+    <ellipse cx="500" cy="165" rx="170" ry="85" fill="url(#forest)"/>
+    <ellipse cx="330" cy="150" rx="120" ry="60" fill="url(#forest)" opacity=".7"/>
+    <g fill="none" stroke="#9be7b8" stroke-opacity=".28" stroke-width="1.3">
+      <path d="M430 175 l18 -26 l18 26 M470 160 l20 -30 l20 30 M520 178 l16 -22 l16 22 M555 158 l18 -26 l18 26"/>
+    </g>
+    <!-- Grassrivers swamp -->
+    <ellipse cx="705" cy="705" rx="105" ry="95" fill="url(#swamp)"/>
+    <ellipse cx="705" cy="705" rx="95" ry="85" fill="url(#reeds)"/>
+    <!-- farmland around Ambrosia -->
+    <g stroke="#ffd166" stroke-opacity=".08">
+      <path d="M600 500 H760 M600 520 H760 M600 540 H760 M600 560 H760"/>
+    </g>
+    <!-- city & towns glow -->
+    <ellipse cx="815" cy="635" rx="85" ry="95" fill="url(#city)"/>
+    <rect x="760" y="560" width="92" height="160" fill="url(#blocks)" opacity=".9"/>
+    <circle cx="175" cy="238" r="55" fill="url(#town)"/>
+    <circle cx="640" cy="470" r="40" fill="url(#town)"/>
+    <circle cx="768" cy="715" r="28" fill="url(#town)" opacity=".8"/>
+    <!-- rivers -->
+    <g fill="none" stroke="#3fa7ff" stroke-opacity=".45" stroke-width="2.2" stroke-linecap="round">
+      <path d="M520 95 C540 160 600 200 640 260 S700 360 700 400"/>
+      <path d="M700 480 C710 560 690 620 705 700 S740 780 760 820"/>
+      <path d="M380 90 C390 150 360 200 350 254"/>
+    </g>
+  </g>
+
+  <!-- the big inland lake -->
+  <ellipse cx="700" cy="430" rx="46" ry="40" fill="#123a66" stroke="#3fd0ff" stroke-opacity=".35" stroke-width="2"/>
+  <ellipse cx="700" cy="430" rx="40" ry="34" fill="url(#waves)"/>
+  <!-- Cottonmouth lake -->
+  <ellipse cx="755" cy="765" rx="14" ry="9" fill="#123a66" stroke="#3fd0ff" stroke-opacity=".3"/>
+
+  <!-- Vice Beach barrier island & bay islands -->
+  <path d="M884 548 C896 560 906 600 912 640 C916 668 912 690 904 702 C898 690 892 650 888 610 C885 585 882 562 884 548 Z" fill="url(#land)" stroke="#ff9ac2" stroke-opacity=".7" stroke-width="1.5"/>
+  <path d="M893 560 C902 600 908 650 905 695" stroke="#ffe2a8" stroke-opacity=".55" stroke-width="2" fill="none"/>
+  <g fill="#2b2342" stroke="#ff9ac2" stroke-opacity=".55" stroke-width="1.2">
+    <ellipse cx="874" cy="600" rx="7" ry="5"/>
+    <ellipse cx="866" cy="628" rx="9" ry="5"/>
+    <ellipse cx="871" cy="640" rx="5" ry="4"/>
+    <ellipse cx="861" cy="700" rx="9" ry="6"/>
+  </g>
+  <!-- causeways -->
+  <g stroke="#ffd166" stroke-opacity=".45" stroke-width="1.6">
+    <path d="M852 600 L888 596"/><path d="M852 632 L888 640"/><path d="M850 690 L896 682"/>
+  </g>
+
+  <!-- Leonida Keys -->
+  <g fill="#2b2342" stroke="#3fd0ff" stroke-opacity=".55" stroke-width="1.3">
+    <ellipse cx="796" cy="846" rx="12" ry="5" transform="rotate(-20 796 846)"/>
+    <ellipse cx="772" cy="860" rx="14" ry="5" transform="rotate(-18 772 860)"/>
+    <ellipse cx="744" cy="874" rx="16" ry="6" transform="rotate(-14 744 874)"/>
+    <ellipse cx="712" cy="887" rx="18" ry="6" transform="rotate(-10 712 887)"/>
+    <ellipse cx="678" cy="897" rx="14" ry="5" transform="rotate(-8 678 897)"/>
+    <ellipse cx="648" cy="906" rx="12" ry="5" transform="rotate(-6 648 906)"/>
+    <ellipse cx="616" cy="918" rx="20" ry="8" transform="rotate(-6 616 918)"/>
+    <ellipse cx="582" cy="930" rx="11" ry="5"/>
+    <ellipse cx="556" cy="938" rx="9" ry="4"/>
+  </g>
+  <path d="M808 836 L796 846 L772 860 L744 874 L712 887 L678 897 L648 906 L616 918 L582 930 L556 938" fill="none" stroke="#ffd166" stroke-opacity=".5" stroke-width="1.4" stroke-dasharray="5 4"/>
+  <!-- sunken ship marker area -->
+  <circle cx="615" cy="905" r="10" fill="none" stroke="#3fd0ff" stroke-opacity=".35" stroke-dasharray="2 3"/>
+
+  <!-- highways -->
+  <g fill="none" stroke="#ffd166" stroke-opacity=".55" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" filter="url(#glow)">
+    <path d="M836 650 L858 520 L880 380 L900 220 L915 60"/>
+    <path d="M830 660 L700 590 L640 520 L612 420 L560 330 L470 270 L330 240 L180 236 L40 220"/>
+    <path d="M820 700 L790 760 L770 800 L790 830"/>
+    <path d="M612 420 L520 250 L500 120 L505 60"/>
+  </g>
+  <g fill="none" stroke="#ff3d8b" stroke-opacity=".35" stroke-width="1">
+    <path d="M760 600 H852 M760 630 H852 M760 660 H850 M790 560 V720 M820 560 V720"/>
+  </g>
+
+  <!-- compass -->
+  <g transform="translate(90 880)" font-family="Arial, sans-serif">
+    <circle r="34" fill="#0b1a33" fill-opacity=".7" stroke="#5c4f86"/>
+    <path d="M0 -26 L7 0 L0 26 L-7 0 Z" fill="#ff3d8b"/>
+    <path d="M0 0 L7 0 L0 26 L-7 0 Z" fill="#fbf6ff" fill-opacity=".85"/>
+    <text y="-38" text-anchor="middle" fill="#fbf6ff" font-size="14" font-weight="700">N</text>
+  </g>
+  <text x="975" y="985" text-anchor="end" fill="#8a7aa3" font-family="Arial, sans-serif" font-size="11">Stylised fan map — not to scale</text>
+</svg>

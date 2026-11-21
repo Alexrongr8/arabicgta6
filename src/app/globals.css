@@ -1,0 +1,212 @@
+@import "tailwindcss";
+
+/* Leonida Hub — original "Leonida sunset" theme: deep night sky, neon pink → orange sunset, ocean teal. */
+:root {
+  --bg: #0b0613;
+  --bg-2: #130a22;
+  --card: rgba(255, 255, 255, 0.045);
+  --card-2: rgba(255, 255, 255, 0.08);
+  --line: rgba(255, 255, 255, 0.1);
+  --fg: #fbf6ff;
+  --muted: #b9a9cf;
+  --dim: #8a7aa3;
+  --pink: #ff3d8b;
+  --orange: #ff9a3d;
+  --sun: #ffd166;
+  --purple: #8b3dff;
+  --teal: #19d3c5;
+  --sunset: linear-gradient(120deg, #ff3d8b 0%, #ff6a5b 45%, #ffb13d 100%);
+  --sunset-soft: linear-gradient(135deg, rgba(255, 61, 139, 0.22), rgba(255, 154, 61, 0.12) 60%, rgba(139, 61, 255, 0.18));
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-bg2: var(--bg-2);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-dim: var(--dim);
+  --color-pink: var(--pink);
+  --color-orange: var(--orange);
+  --color-sun: var(--sun);
+  --color-purple: var(--purple);
+  --color-teal: var(--teal);
+  --color-line: var(--line);
+  --font-sans: var(--font-cairo), system-ui, sans-serif;
+  --font-display: var(--font-anton), var(--font-cairo), sans-serif;
+}
+
+html {
+  background: var(--bg);
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  background:
+    radial-gradient(1200px 600px at 85% -10%, rgba(255, 61, 139, 0.18), transparent 60%),
+    radial-gradient(900px 500px at -10% 10%, rgba(139, 61, 255, 0.16), transparent 60%),
+    var(--bg);
+  background-attachment: fixed;
+  color: var(--fg);
+  font-family: var(--font-sans);
+  min-height: 100dvh;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--pink);
+  color: white;
+}
+
+.text-sunset {
+  background: var(--sunset);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.bg-sunset {
+  background: var(--sunset);
+}
+
+.glass {
+  background: rgba(16, 8, 28, 0.72);
+  backdrop-filter: saturate(160%) blur(18px);
+  -webkit-backdrop-filter: saturate(160%) blur(18px);
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 1.25rem;
+}
+
+.card-hover {
+  transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+}
+.card-hover:hover {
+  border-color: rgba(255, 61, 139, 0.45);
+  background: var(--card-2);
+}
+.card-hover:active {
+  transform: scale(0.985);
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.pb-safe {
+  padding-bottom: max(env(safe-area-inset-bottom), 0.5rem);
+}
+
+/* Retro sun with horizon stripes (hero). */
+.hero-sun {
+  background: linear-gradient(180deg, #ffd166 0%, #ff9a3d 40%, #ff3d8b 75%, #8b3dff 100%);
+  border-radius: 9999px;
+  box-shadow: 0 0 80px rgba(255, 61, 139, 0.55);
+  overflow: hidden;
+}
+.sun-stripes {
+  background: repeating-linear-gradient(180deg, transparent 0 10px, var(--bg) 10px 14px);
+  mask: linear-gradient(180deg, transparent 50%, #000 52%);
+  -webkit-mask: linear-gradient(180deg, transparent 50%, #000 52%);
+}
+
+.grid-floor {
+  background-image:
+    linear-gradient(rgba(255, 61, 139, 0.35) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 61, 139, 0.35) 1px, transparent 1px);
+  background-size: 44px 44px;
+  transform: perspective(300px) rotateX(60deg);
+  transform-origin: top;
+  mask: linear-gradient(180deg, #000, transparent 85%);
+  -webkit-mask: linear-gradient(180deg, #000, transparent 85%);
+}
+
+.prose-item p {
+  margin: 0 0 1rem;
+  line-height: 1.95;
+  color: #eadff7;
+}
+.prose-item ul {
+  margin: 0 0 1rem;
+  padding-inline-start: 1.25rem;
+  list-style: disc;
+}
+.prose-item li {
+  margin: 0.35rem 0;
+  line-height: 1.8;
+  color: #eadff7;
+}
+.prose-item li::marker {
+  color: var(--pink);
+}
+
+/* Leaflet overrides */
+.leaflet-container {
+  background: #0a1830 !important;
+  font-family: var(--font-sans) !important;
+}
+.leaflet-control-zoom a {
+  background: rgba(16, 8, 28, 0.85) !important;
+  color: #fff !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+}
+.leaflet-control-attribution {
+  display: none;
+}
+.pin {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 9999px 9999px 9999px 2px;
+  transform: rotate(-45deg);
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.55);
+}
+.pin > span {
+  transform: rotate(45deg);
+  display: grid;
+  place-items: center;
+}
+.pin.active {
+  outline: 3px solid #fff;
+  outline-offset: 2px;
+}
+.region-label {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  color: rgba(255, 255, 255, 0.92) !important;
+  font-family: var(--font-display) !important;
+  letter-spacing: 0.08em;
+  font-size: 15px !important;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.9), 0 0 2px rgba(0, 0, 0, 1);
+  white-space: nowrap;
+}
+.region-label::before {
+  display: none;
+}
+
+@keyframes rise {
+  from {
+    transform: translateY(10px);
+  }
+  to {
+    transform: none;
+  }
+}
+.rise {
+  animation: rise 0.45s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rise {
+    animation: none;
+  }
+}
