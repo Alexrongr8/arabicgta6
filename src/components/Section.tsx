@@ -7,7 +7,7 @@ export function Section({ title, href, linkLabel, locale, children }: { title: s
   return (
     <section className="mx-auto mt-8 max-w-6xl px-4">
       <div className="mb-3 flex items-end justify-between">
-        <h2 className="flex items-center gap-2 text-lg font-black md:text-xl">
+        <h2 className="flex items-center gap-2 text-lg font-extrabold md:text-xl">
           <span className="bg-sunset h-5 w-1.5 rounded-full" />
           {title}
         </h2>

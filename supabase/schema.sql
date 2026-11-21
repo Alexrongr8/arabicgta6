@@ -7,7 +7,7 @@ create extension if not exists pg_trgm;
 create table if not exists public.items (
   id uuid primary key default gen_random_uuid(),
   slug text not null unique,
-  category text not null check (category in ('news','secrets','glitches','money','weapons','places','strange','characters','vehicles','tips')),
+  category text not null check (category in ('news','secrets','glitches','money','weapons','places','strange','funny','choices','characters','vehicles','tips')),
   status text not null default 'rumor' check (status in ('official','confirmed','leak','rumor')),
   title_en text not null,
   title_ar text not null,
@@ -23,6 +23,7 @@ create table if not exists public.items (
   related text[] not null default '{}',
   sources jsonb not null default '[]',
   featured boolean not null default false,
+  image text,
   search_text text not null default '',
   origin text not null default 'seed', -- seed | auto
   published_at timestamptz not null default now(),
@@ -149,6 +150,8 @@ create table if not exists public.update_runs (
   note text
 );
 alter table public.update_runs enable row level security;
+
+alter table public.items add column if not exists image text;
 
 -- ───────────────────────── owner analytics ─────────────────────────
 -- Sign-in details on profiles (written by the server with the service role on each sign-in).

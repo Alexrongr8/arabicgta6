@@ -34,13 +34,13 @@ export default async function CategoryPage({ params, searchParams }: PageProps<"
   return (
     <main className="mx-auto max-w-6xl px-4 pt-5">
       <CategoryChips locale={locale} active={category} />
-      <header className="relative mt-5 mb-5 overflow-hidden rounded-3xl p-5" style={{ background: `linear-gradient(135deg, ${c.color}40, rgba(20,10,35,.6))` }}>
+      <header className="relative mt-5 mb-5 overflow-hidden rounded-3xl p-5" style={{ background: `linear-gradient(135deg, ${c.color}40, var(--card))` }}>
         <CategoryIcon category={category} className="absolute -end-3 -bottom-4 size-28 opacity-20" style={{ color: c.color }} />
-        <h1 className="relative text-2xl font-black md:text-3xl">{locale === "ar" ? c.ar : c.en}</h1>
-        <p className="relative mt-1 text-sm text-fg/80">{locale === "ar" ? c.descAr : c.descEn}</p>
+        <h1 className="relative text-2xl font-extrabold md:text-3xl">{locale === "ar" ? c.ar : c.en}</h1>
+        <p className="relative mt-1 text-sm text-muted">{locale === "ar" ? c.descAr : c.descEn}</p>
         {viewer.member && (
           <p className="relative mt-2 font-display text-lg" style={{ color: c.color }}>
-            {items.length} <span className="font-sans text-xs text-fg/70">{t(locale, "items")}</span>
+            {items.length} <span className="font-sans text-xs text-muted">{t(locale, "items")}</span>
           </p>
         )}
       </header>

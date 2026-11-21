@@ -13,7 +13,7 @@ import { SEED } from "./seed";
 
 export const GUEST_NEWS_LIMIT = 10;
 const CARD_COLS =
-  "slug,category,status,title_en,title_ar,summary_en,summary_ar,published_at,region,location,featured";
+  "slug,category,status,title_en,title_ar,summary_en,summary_ar,published_at,region,location,featured,image";
 
 function toCard(i: Item): ItemCard {
   return {
@@ -28,6 +28,7 @@ function toCard(i: Item): ItemCard {
     region: i.region,
     location: i.location,
     featured: i.featured,
+    image: i.image ?? null,
   };
 }
 

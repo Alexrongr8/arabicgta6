@@ -1,4 +1,4 @@
-import { Banknote, Bug, CarFront, Crosshair, Ghost, KeyRound, Lightbulb, MapPinned, Newspaper, Users, type LucideProps } from "lucide-react";
+import { GitBranch, Laugh, Banknote, Bug, CarFront, Crosshair, Ghost, KeyRound, Lightbulb, MapPinned, Newspaper, Users, type LucideProps } from "lucide-react";
 import type { CategorySlug } from "@/lib/types";
 
 const ICONS: Record<CategorySlug, React.ComponentType<LucideProps>> = {
@@ -11,6 +11,8 @@ const ICONS: Record<CategorySlug, React.ComponentType<LucideProps>> = {
   vehicles: CarFront,
   glitches: Bug,
   strange: Ghost,
+  funny: Laugh,
+  choices: GitBranch,
   tips: Lightbulb,
 };
 

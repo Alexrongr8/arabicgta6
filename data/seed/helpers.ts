@@ -1,5 +1,22 @@
 import type { CategorySlug, Item, Status } from "../../src/lib/types";
 import { LOCS } from "./locations";
+import IMAGES from "./images.json";
+
+// Official Rockstar Games media (rockstargames.com/VI/media), stored in /public/img.
+const OFFICIAL_IMAGES: Record<string, string> = {
+  "lucia-caminos": "/img/lucia.webp",
+  "jason-duval": "/img/jason-lucia.webp",
+  "gta-6-release-november-19-2026": "/img/out-now.webp",
+  "day-one-sales-record-3-79-billion": "/img/rooftop.webp",
+  "metacritic-99-score": "/img/jason-lucia.webp",
+  "trailer-2-may-2025": "/img/rooftop.webp",
+  "price-and-editions": "/img/ultimate.webp",
+  "which-edition-to-buy": "/img/ultimate.webp",
+  "grotti-cheetah-95": "/img/cheetah.webp",
+  "hawk-little-morgan-revolvers": "/img/revolvers.webp",
+  "vice-city": "/img/vice-city.webp",
+  leonida: "/img/vice-city.webp",
+};
 
 export interface SeedInput {
   slug: string;
@@ -39,6 +56,14 @@ export const S = {
   windowsPrice: { title: "Windows Central — price confirmed", url: "https://www.windowscentral.com/gaming/grand-theft-auto-vi-price-confirmed-at-usd79-99-with-a-feature-locking-ultimate-edition-at-usd99-99-and-the-physical-edition-is-just-a-code-in-a-box" },
   shackPrice: { title: "Shacknews — price and editions", url: "https://www.shacknews.com/article/149778/grand-theft-auto-6-price-standard-ultimate-gta-6" },
   pcgEditions: { title: "PC Gamer — pre-order editions explained", url: "https://pcgamer.com/games/grand-theft-auto/gta-6-pre-order-editions-standard-ultimate/" },
+  ladFunny: { title: "LADbible — GTA 6 NPC car-crash interaction", url: "https://ladbible.com/entertainment/gaming/gta-6-npc-interactions-107298-20261119" },
+  funnyNpc: { title: "Tips and Tricks For — funny NPC moments", url: "https://tipsandtricksfor.com/gta-6-funny-npc-moments/" },
+  sportskeedaSpidey: { title: "Sportskeeda — 'Spider-Man' NPC in the trailer", url: "https://sportskeeda.com/gta/i-just-found-spiderman-gta-6-trailer-gta-6-fans-react-strange-npc-caught-official-video" },
+  beebomChoices: { title: "Beebom — all choices and how they impact your run", url: "https://beebom.com/gta-6-choices-consequences/" },
+  meowChoices: { title: "MeowDB — choices and consequences by mission", url: "https://meowdb.com/gta6/choices" },
+  ggChoices: { title: "Games.gg — all choices and consequences", url: "https://games.gg/grand-theft-auto-vi/guides/all-choices-and-consequences-in-gta-6/" },
+  athRelationship: { title: "AllThings.How — the Jason & Lucia relationship mechanic", url: "https://allthings.how/gta-6-s-jason-and-lucia-deep-relationship-mechanic-explained/" },
+  trustSystem: { title: "GTA Six Online — trust system explained", url: "https://gtasixonline.com/blog/gta-6-trust-system-lucia-jason-mechanic-explained" },
   rockstarMap: { title: "Rockstar Games — official Leonida map poster", url: "https://www.rockstargames.com/VI/media" },
   rockstarSite: { title: "Rockstar Games — Grand Theft Auto VI", url: "https://www.rockstargames.com/VI" },
   pcgMap: { title: "PC Gamer — charting the GTA 6 map", url: "https://www.pcgamer.com/games/grand-theft-auto/gta6-map" },
@@ -98,5 +123,6 @@ export function build(category: CategorySlug, list: SeedInput[]): Item[] {
     sources: (x.src ?? []).map((k) => ({ ...S[k] })),
     published_at: x.date ?? DEFAULT_DATE,
     featured: x.featured ?? false,
+    image: OFFICIAL_IMAGES[x.slug] ?? (IMAGES as Record<string, string>)[x.slug] ?? null,
   }));
 }

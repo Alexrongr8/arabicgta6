@@ -64,7 +64,7 @@ export default async function Admin() {
 
   return (
     <main className="mx-auto max-w-6xl px-4 pt-6">
-      <h1 className="mb-1 text-2xl font-black">{ar ? "لوحة المالك" : "Owner dashboard"}</h1>
+      <h1 className="mb-1 text-2xl font-extrabold">{ar ? "لوحة المالك" : "Owner dashboard"}</h1>
       <p className="mb-5 text-xs text-dim">{ar ? "مرئية لك فقط. الموقع الجغرافي تقريبي من عنوان IP." : "Visible only to you. Location is approximate (from IP)."}</p>
 
       <div className="mb-6 grid grid-cols-2 gap-3 md:grid-cols-4">
@@ -82,7 +82,7 @@ export default async function Admin() {
         <TopList title={ar ? "مصادر الزيارات" : "Referrers"} rows={countBy(pv.filter((r) => r.referrer), (r) => r.referrer).slice(0, 8)} />
       </div>
 
-      <h2 className="mb-3 text-lg font-black">{ar ? "الأعضاء المسجلين" : "Signed-in members"}</h2>
+      <h2 className="mb-3 text-lg font-extrabold">{ar ? "الأعضاء المسجلين" : "Signed-in members"}</h2>
       <div className="space-y-2 md:hidden">
         {users.map((u) => (
           <div key={u.id} className="card flex items-center gap-3 p-3">
@@ -90,7 +90,7 @@ export default async function Admin() {
               // eslint-disable-next-line @next/next/no-img-element
               <img src={u.avatar_url} alt="" referrerPolicy="no-referrer" className="size-10 rounded-xl" />
             ) : (
-              <span className="grid size-10 place-items-center rounded-xl bg-white/10">{(u.full_name ?? u.email ?? "?")[0]}</span>
+              <span className="grid size-10 place-items-center rounded-xl bg-chip2">{(u.full_name ?? u.email ?? "?")[0]}</span>
             )}
             <div className="min-w-0 flex-1 text-[13px]">
               <p className="truncate font-bold">{u.full_name ?? "—"}</p>
@@ -128,7 +128,7 @@ export default async function Admin() {
         </table>
       </div>
 
-      <h2 className="mt-8 mb-3 text-lg font-black">{ar ? "آخر الزيارات" : "Recent visits"}</h2>
+      <h2 className="mt-8 mb-3 text-lg font-extrabold">{ar ? "آخر الزيارات" : "Recent visits"}</h2>
       <div className="card divide-y divide-line">
         {pv.slice(0, 40).map((v, i) => {
           const u = v.user_id ? users.find((x) => x.id === v.user_id) : null;
@@ -144,7 +144,7 @@ export default async function Admin() {
         })}
       </div>
 
-      <h2 className="mt-8 mb-3 text-lg font-black">{ar ? "التحديثات التلقائية" : "Auto-updates"}</h2>
+      <h2 className="mt-8 mb-3 text-lg font-extrabold">{ar ? "التحديثات التلقائية" : "Auto-updates"}</h2>
       <div className="card divide-y divide-line">
         {(runs ?? []).map((r) => (
           <div key={r.id} className="flex gap-3 px-3 py-2 text-[12.5px]">
@@ -163,7 +163,7 @@ function TopList({ title, rows }: { title: string; rows: [string, number][] }) {
   const max = Math.max(1, ...rows.map((r) => r[1]));
   return (
     <div className="card p-4">
-      <p className="mb-3 text-sm font-black">{title}</p>
+      <p className="mb-3 text-sm font-extrabold">{title}</p>
       <ul className="space-y-2">
         {rows.map(([k, n]) => (
           <li key={k} className="text-[12.5px]">
@@ -171,7 +171,7 @@ function TopList({ title, rows }: { title: string; rows: [string, number][] }) {
               <span className="truncate" dir="auto">{k}</span>
               <span className="font-bold">{n}</span>
             </div>
-            <div className="h-1.5 rounded-full bg-white/5">
+            <div className="h-1.5 rounded-full bg-chip">
               <div className="bg-sunset h-full rounded-full" style={{ width: `${(n / max) * 100}%` }} />
             </div>
           </li>

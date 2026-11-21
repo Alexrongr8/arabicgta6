@@ -10,7 +10,7 @@ import { Section } from "@/components/Section";
 import { CategoryGrid } from "@/components/CategoryGrid";
 import { SignInGate } from "@/components/SignInGate";
 import { CategoryIcon } from "@/components/CategoryIcon";
-import { StatusBadge } from "@/components/StatusBadge";
+import { Cover } from "@/components/Cover";
 
 export default async function Home() {
   const [locale, viewer] = await Promise.all([getLocale(), getViewer()]);
@@ -50,15 +50,22 @@ export default async function Home() {
               <Link
                 key={f.slug}
                 href={`/item/${f.slug}`}
-                className="card card-hover relative flex w-[78%] shrink-0 snap-start flex-col justify-end overflow-hidden p-4 sm:w-72"
-                style={{ minHeight: 190, background: `linear-gradient(160deg, ${c.color}55, rgba(20,10,35,.9) 70%)` }}
+                className="card-hover relative flex w-[80%] shrink-0 snap-start flex-col justify-end overflow-hidden rounded-3xl p-4 text-white shadow-lg sm:w-72"
+                style={{ minHeight: 210, background: `linear-gradient(160deg, ${c.color}, #2a1240)` }}
               >
-                <CategoryIcon category={f.category} className="absolute end-3 top-3 size-16 opacity-25" style={{ color: c.color }} />
-                <span className="mb-2 flex items-center gap-2 text-[11px] font-bold" style={{ color: c.color }}>
-                  {locale === "ar" ? c.ar : c.en} <StatusBadge status={f.status} locale={locale} />
+                {f.image ? (
+                  <Cover src={f.image} className="absolute inset-0 size-full object-cover" />
+                ) : (
+                  <CategoryIcon category={f.category} className="absolute end-3 top-3 size-16 opacity-30" />
+                )}
+                <span className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-transparent" />
+                <span className="relative mb-2 flex items-center gap-2">
+                  <span className="rounded-full px-2 py-0.5 text-[11px] font-extrabold text-white" style={{ background: c.color }}>
+                    {locale === "ar" ? c.ar : c.en}
+                  </span>
                 </span>
-                <span className="text-[17px] leading-snug font-black"><Bidi text={pick(f, "title", locale)} /></span>
-                <span className="mt-1 line-clamp-2 text-[12.5px] text-fg/75"><Bidi text={pick(f, "summary", locale)} /></span>
+                <span className="font-head relative text-[19px] leading-snug"><Bidi text={pick(f, "title", locale)} /></span>
+                <span className="relative mt-1 line-clamp-2 text-[12.5px] text-white/85"><Bidi text={pick(f, "summary", locale)} /></span>
               </Link>
             );
           })}

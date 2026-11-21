@@ -198,7 +198,7 @@ export default function LeonidaMap({ items, locale, focus, labels }: { items: It
 
       {legendOpen && (
         <div className="glass absolute end-16 bottom-8 z-[500] w-52 rounded-2xl border border-line p-3 text-[12.5px]">
-          <p className="mb-2 font-black">{labels.legend}</p>
+          <p className="mb-2 font-extrabold">{labels.legend}</p>
           {cats.map((c) => (
             <p key={c.slug} className="flex items-center gap-2 py-0.5">
               <span className="size-3 rounded-full" style={{ background: c.color }} /> {locale === "ar" ? c.ar : c.en} ({items.filter((i) => i.category === c.slug).length})
@@ -227,14 +227,14 @@ export default function LeonidaMap({ items, locale, focus, labels }: { items: It
                   <StatusBadge status={selected.status} locale={locale} />
                   {selected.region && <span className="text-dim">{selected.region}</span>}
                 </div>
-                <h3 className="text-[17px] leading-snug font-black"><Bidi text={locale === "ar" ? selected.title_ar : selected.title_en} /></h3>
+                <h3 className="text-[17px] leading-snug font-extrabold"><Bidi text={locale === "ar" ? selected.title_ar : selected.title_en} /></h3>
                 <p className="mt-1 line-clamp-3 text-[13px] leading-relaxed text-muted"><Bidi text={locale === "ar" ? selected.summary_ar : selected.summary_en} /></p>
               </div>
-              <button type="button" onClick={() => setSelected(null)} className="grid size-8 shrink-0 place-items-center rounded-full bg-white/10" aria-label="close">
+              <button type="button" onClick={() => setSelected(null)} className="grid size-8 shrink-0 place-items-center rounded-full bg-chip2" aria-label="close">
                 <X className="size-4" />
               </button>
             </div>
-            <Link href={`/item/${selected.slug}`} className="bg-sunset mt-4 mb-3 flex h-12 items-center justify-center rounded-2xl font-black text-white shadow-lg shadow-pink/30">
+            <Link href={`/item/${selected.slug}`} className="bg-sunset mt-4 mb-3 flex h-12 items-center justify-center rounded-2xl font-extrabold text-white shadow-lg shadow-pink/30">
               {labels.open}
             </Link>
           </div>

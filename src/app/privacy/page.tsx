@@ -7,7 +7,7 @@ export default async function Privacy() {
   const ar = (await getLocale()) === "ar";
   return (
     <main className="prose-item mx-auto max-w-2xl px-4 pt-8">
-      <h1 className="mb-4 text-2xl font-black">{ar ? "سياسة الخصوصية" : "Privacy policy"}</h1>
+      <h1 className="mb-4 text-2xl font-extrabold">{ar ? "سياسة الخصوصية" : "Privacy policy"}</h1>
       {ar ? (
         <>
           <p>نستخدم تسجيل الدخول بحساب Google فقط. عند تسجيل الدخول نحفظ اسمك وإيميلك وصورتك من Google، ووقت الدخول، وموقعك التقريبي (الدولة والمدينة من عنوان IP)، ونوع جهازك.</p>

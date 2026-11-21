@@ -43,8 +43,8 @@ export function SearchClient({ locale, initialQuery, initialResults, popular, la
 
   return (
     <div>
-      <div className="sticky top-[64px] z-30 -mx-4 bg-bg/90 px-4 pt-1 pb-3 backdrop-blur">
-        <label className="flex h-14 items-center gap-3 rounded-2xl border border-pink/40 bg-white/[.06] px-4 shadow-[0_0_0_4px_rgba(255,61,139,.08)] focus-within:border-pink">
+      <div className="sticky top-[64px] z-30 -mx-4 bg-bg/95 px-4 pt-1 pb-3 backdrop-blur">
+        <label className="flex h-14 items-center gap-3 rounded-2xl border border-pink/40 bg-chip px-4 shadow-[0_0_0_4px_rgba(255,61,139,.08)] focus-within:border-pink">
           {loading ? <Loader2 className="size-5 animate-spin text-pink" /> : <Search className="size-5 text-pink" />}
           <input
             ref={inputRef}
@@ -60,7 +60,7 @@ export function SearchClient({ locale, initialQuery, initialResults, popular, la
             className="h-full min-w-0 flex-1 bg-transparent text-[16px] font-bold outline-none placeholder:font-normal placeholder:text-dim"
           />
           {q && (
-            <button type="button" onClick={() => setQ("")} className="grid size-8 place-items-center rounded-full bg-white/10" aria-label="clear">
+            <button type="button" onClick={() => setQ("")} className="grid size-8 place-items-center rounded-full bg-chip2" aria-label="clear">
               <X className="size-4" />
             </button>
           )}
@@ -88,7 +88,7 @@ export function SearchClient({ locale, initialQuery, initialResults, popular, la
               <button key={p} type="button" onClick={() => {
                   setQ(p);
                   setLoading(true);
-                }} className="rounded-full border border-line bg-white/[.03] px-3.5 py-2 text-sm font-bold hover:border-pink/50">
+                }} className="rounded-full border border-line bg-chip px-3.5 py-2 text-sm font-bold hover:border-pink/50">
                 {p}
               </button>
             ))}

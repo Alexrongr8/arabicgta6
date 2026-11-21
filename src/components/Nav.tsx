@@ -53,7 +53,7 @@ export function TopLinks({ labels }: { labels: Labels }) {
           <li key={href}>
             <Link
               href={href}
-              className={`inline-flex h-9 items-center gap-2 rounded-full px-4 text-sm font-bold transition ${active ? "bg-white/10 text-fg" : "text-muted hover:text-fg"}`}
+              className={`inline-flex h-9 items-center gap-2 rounded-full px-4 text-sm font-bold transition ${active ? "bg-chip2 text-fg" : "text-muted hover:text-fg"}`}
             >
               <Icon className="size-4" /> {labels[key]}
             </Link>

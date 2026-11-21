@@ -15,7 +15,7 @@ export function StatusFilter({ locale, active }: { locale: Locale; active?: Stat
             key={s ?? "all"}
             href={s ? `?status=${s}` : "?"}
             scroll={false}
-            className={`inline-flex h-8 shrink-0 items-center gap-1.5 rounded-full border px-3 text-xs font-bold ${on ? "border-white/40 bg-white/10 text-fg" : "border-line text-muted"}`}
+            className={`inline-flex h-8 shrink-0 items-center gap-1.5 rounded-full border px-3 text-xs font-bold ${on ? "border-pink/50 bg-chip2 text-fg" : "border-line text-muted"}`}
           >
             {m && <span className="size-2 rounded-full" style={{ background: m.color }} />}
             {m ? (locale === "ar" ? m.ar : m.en) : t(locale, "all")}

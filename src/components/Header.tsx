@@ -5,19 +5,23 @@ import type { Viewer } from "@/lib/session";
 import { LangToggle } from "./LangToggle";
 import { Logo } from "./Logo";
 import { TopLinks } from "./Nav";
+import { ThemeToggle } from "./ThemeToggle";
 
-export function Header({ locale, viewer, labels }: { locale: Locale; viewer: Viewer; labels: Parameters<typeof TopLinks>[0]["labels"] }) {
+export function Header({ locale, viewer, labels, theme }: { locale: Locale; viewer: Viewer; labels: Parameters<typeof TopLinks>[0]["labels"]; theme: "light" | "dark" }) {
   return (
     <header className="glass sticky top-0 z-40 border-b border-line">
-      <div className="mx-auto flex h-15 max-w-6xl items-center justify-between gap-3 px-4">
-        <Link href="/" aria-label={t(locale, "siteName")}>
+      <div className="mx-auto flex h-15 max-w-6xl items-center justify-between gap-2 px-3 md:px-4">
+        <Link href="/" aria-label={t(locale, "siteName")} className="flex items-center gap-1.5">
           <Logo />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/img/flag-sa.svg" alt="" title={locale === "ar" ? "من السعودية" : "Made in Saudi Arabia"} className="h-3.5 w-auto rounded-[2px] shadow-sm" />
         </Link>
         <TopLinks labels={labels} />
         <div className="flex items-center gap-2">
+          <ThemeToggle initial={theme} label={locale === "ar" ? "الوضع الفاتح / الداكن" : "Light / dark mode"} />
           <LangToggle locale={locale} />
           {viewer.member && !viewer.demo ? (
-            <Link href="/account" className="grid size-9 place-items-center overflow-hidden rounded-full border border-line bg-white/5" aria-label={t(locale, "account")}>
+            <Link href="/account" className="grid size-9 place-items-center overflow-hidden rounded-full border border-line bg-chip" aria-label={t(locale, "account")}>
               {viewer.avatar ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img src={viewer.avatar} alt="" className="size-full object-cover" referrerPolicy="no-referrer" />
@@ -26,7 +30,7 @@ export function Header({ locale, viewer, labels }: { locale: Locale; viewer: Vie
               )}
             </Link>
           ) : !viewer.member ? (
-            <Link href="/login" className="bg-sunset inline-flex h-9 items-center rounded-full px-4 text-sm font-black text-white shadow-md shadow-pink/30">
+            <Link href="/login" className="bg-sunset inline-flex h-9 items-center rounded-full px-4 text-sm font-extrabold text-white shadow-md shadow-pink/30">
               {t(locale, "signIn")}
             </Link>
           ) : null}

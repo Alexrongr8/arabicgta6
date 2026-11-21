@@ -10,6 +10,8 @@ export type CategorySlug =
   | "weapons"
   | "places"
   | "strange"
+  | "funny"
+  | "choices"
   | "characters"
   | "vehicles"
   | "tips";
@@ -46,6 +48,8 @@ export interface Item {
   sources: Source[];
   published_at: string;
   featured?: boolean;
+  /** Cover image URL (official Rockstar media in /img, or the source article's preview image). */
+  image?: string | null;
 }
 
 export type ItemCard = Pick<
@@ -61,4 +65,5 @@ export type ItemCard = Pick<
   | "region"
   | "location"
   | "featured"
+  | "image"
 >;

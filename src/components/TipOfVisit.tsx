@@ -56,20 +56,20 @@ export function TipOfVisit({ tips, locale }: { tips: Tip[]; locale: Locale }) {
   const close = () => setTip(null);
   return (
     <div className="fixed inset-x-3 bottom-[88px] z-[700] md:inset-x-auto md:end-6 md:bottom-6 md:w-96" role="dialog" aria-live="polite">
-      <div className="rise relative overflow-hidden rounded-3xl border border-teal/40 bg-[#160c27]/95 p-4 shadow-2xl shadow-black/60 backdrop-blur-xl">
+      <div className="rise relative overflow-hidden rounded-3xl border border-teal/40 bg-card p-4 shadow-2xl shadow-black/60 backdrop-blur-xl">
         <div className="pointer-events-none absolute -top-16 -end-10 size-40 rounded-full bg-teal/25 blur-3xl" />
         <div className="relative mb-2 flex items-center justify-between">
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-teal/15 px-2.5 py-1 text-[11px] font-black text-teal">
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-teal/15 px-2.5 py-1 text-[11px] font-extrabold text-teal">
             <Lightbulb className="size-3.5" /> {ar ? "نصيحة اليوم" : "Tip of the visit"}
           </span>
-          <button type="button" onClick={close} className="grid size-8 place-items-center rounded-full bg-white/10" aria-label={ar ? "إغلاق" : "Close"}>
+          <button type="button" onClick={close} className="grid size-8 place-items-center rounded-full bg-chip2" aria-label={ar ? "إغلاق" : "Close"}>
             <X className="size-4" />
           </button>
         </div>
-        <p className="relative text-[15px] leading-snug font-black"><Bidi text={ar ? tip.title_ar : tip.title_en} /></p>
+        <p className="relative text-[15px] leading-snug font-extrabold"><Bidi text={ar ? tip.title_ar : tip.title_en} /></p>
         <p className="relative mt-1.5 text-[13px] leading-relaxed text-muted"><Bidi text={ar ? tip.summary_ar : tip.summary_en} /></p>
         <div className="relative mt-3 flex items-center gap-2">
-          <Link href={`/item/${tip.slug}`} onClick={close} className="h-9 flex-1 rounded-xl bg-teal/90 text-center text-[13px] leading-9 font-black text-[#06221f]">
+          <Link href={`/item/${tip.slug}`} onClick={close} className="h-9 flex-1 rounded-xl bg-teal/90 text-center text-[13px] leading-9 font-extrabold text-[#06221f]">
             {ar ? "اقرأ أكثر" : "Read more"}
           </Link>
           <button
@@ -106,7 +106,7 @@ export function TipsToggle({ locale }: { locale: Locale }) {
         write(() => sessionStorage.removeItem(SESSION_KEY));
         setOff(next);
       }}
-      className={`h-9 rounded-full px-4 text-sm font-black ${off ? "border border-line text-muted" : "bg-teal/90 text-[#06221f]"}`}
+      className={`h-9 rounded-full px-4 text-sm font-extrabold ${off ? "border border-line text-muted" : "bg-teal/90 text-[#06221f]"}`}
     >
       {off ? (ar ? "متوقفة — شغّل" : "Off — turn on") : ar ? "شغّالة ✓" : "On ✓"}
     </button>

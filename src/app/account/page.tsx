@@ -39,22 +39,22 @@ export default async function Account() {
           // eslint-disable-next-line @next/next/no-img-element
           <img src={viewer.avatar} alt="" referrerPolicy="no-referrer" className="size-14 rounded-2xl" />
         ) : (
-          <span className="bg-sunset grid size-14 place-items-center rounded-2xl text-xl font-black">{(viewer.name ?? viewer.email ?? "?")[0]}</span>
+          <span className="bg-sunset grid size-14 place-items-center rounded-2xl text-xl font-extrabold">{(viewer.name ?? viewer.email ?? "?")[0]}</span>
         )}
         <div className="min-w-0">
           <p className="text-xs text-dim">{t(locale, "welcome")}</p>
-          <p className="truncate text-lg font-black">{viewer.name ?? viewer.email}</p>
+          <p className="truncate text-lg font-extrabold">{viewer.name ?? viewer.email}</p>
           <p className="truncate text-xs text-muted" dir="ltr">{viewer.email}</p>
         </div>
       </div>
 
       <div className="card mb-4 p-5">
-        <div className="mb-2 flex items-center gap-2 font-black">
+        <div className="mb-2 flex items-center gap-2 font-extrabold">
           <Mail className="size-5 text-pink" /> {t(locale, "digest")}
         </div>
         <p className="mb-4 text-sm text-muted">{t(locale, "digestDesc")}</p>
         <form action={setDigest.bind(null, !optIn)}>
-          <button className={`h-11 w-full rounded-xl font-black ${optIn ? "border border-line" : "bg-sunset text-white"}`}>
+          <button className={`h-11 w-full rounded-xl font-extrabold ${optIn ? "border border-line" : "bg-sunset text-white"}`}>
             {optIn ? `${t(locale, "subscribed")} ✓ — ${t(locale, "unsubscribe")}` : t(locale, "subscribe")}
           </button>
         </form>
@@ -74,7 +74,7 @@ export default async function Account() {
       </div>
 
       {isOwner(viewer.email) && (
-        <Link href="/admin" className="card card-hover mb-4 flex items-center gap-3 p-5 font-black">
+        <Link href="/admin" className="card card-hover mb-4 flex items-center gap-3 p-5 font-extrabold">
           <BarChart3 className="size-5 text-teal" /> {locale === "ar" ? "لوحة المالك: الزوار والأعضاء" : "Owner dashboard: visitors & members"}
         </Link>
       )}

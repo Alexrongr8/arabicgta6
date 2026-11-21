@@ -13,7 +13,7 @@ export function SignInGate({ locale, next = "/", title }: { locale: Locale; next
           <Lock className="size-6 text-white" />
         </span>
         {title && <p className="mb-1 text-sm text-dim">{title}</p>}
-        <h2 className="mb-2 text-xl font-black">{t(locale, "gateTitle")}</h2>
+        <h2 className="mb-2 text-xl font-extrabold">{t(locale, "gateTitle")}</h2>
         <p className="mb-5 text-sm leading-relaxed text-muted">{t(locale, "gateBody")}</p>
         <ul className="mb-6 space-y-2 text-start text-sm">
           {t(locale, "gatePerks").map((p) => (
