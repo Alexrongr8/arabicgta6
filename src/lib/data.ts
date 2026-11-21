@@ -29,6 +29,7 @@ function toCard(i: Item): ItemCard {
     location: i.location,
     featured: i.featured,
     image: i.image ?? null,
+    spots: i.spots ?? [],
   };
 }
 
@@ -122,9 +123,9 @@ export async function getBySlugs(slugs: string[]): Promise<ItemCard[]> {
 }
 
 export async function getMapItems(): Promise<ItemCard[]> {
-  if (!supabaseConfigured()) return SEED.filter((i) => i.location).map(toCard);
+  if (!supabaseConfigured()) return SEED.filter((i) => i.location || i.spots?.length).map(toCard);
   const supabase = await createClient();
-  const { data } = await supabase.from("items").select(CARD_COLS).not("location", "is", null).limit(2000);
+  const { data } = await supabase.from("items").select(`${CARD_COLS},spots`).or("location.not.is.null,spots.neq.[]").limit(3000);
   return (data ?? []) as ItemCard[];
 }
 

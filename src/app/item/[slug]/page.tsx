@@ -14,6 +14,7 @@ import { SignInGate } from "@/components/SignInGate";
 import { StatusBadge } from "@/components/StatusBadge";
 import { ShareButton } from "@/components/ShareButton";
 import { CoverFigure } from "@/components/Cover";
+import { Videos } from "@/components/Videos";
 import { imageCredit } from "@/lib/image";
 
 export async function generateMetadata({ params }: PageProps<"/item/[slug]">): Promise<Metadata> {
@@ -75,7 +76,7 @@ export default async function ItemPage({ params }: PageProps<"/item/[slug]">) {
             )}
             <p className="relative mt-3 text-[15px] leading-relaxed text-fg"><Bidi text={pick(item, "summary", locale)} /></p>
             <div className="relative mt-4 flex flex-wrap gap-2">
-              {item.location && (
+              {(item.location || (item.spots?.length ?? 0) > 0) && (
                 <Link href={`/map?focus=${item.slug}`} className="bg-sunset inline-flex h-10 items-center gap-2 rounded-xl px-4 text-sm font-extrabold text-white shadow-md shadow-pink/30">
                   <MapPin className="size-4" /> {t(locale, "showOnMap")}
                 </Link>
@@ -83,6 +84,36 @@ export default async function ItemPage({ params }: PageProps<"/item/[slug]">) {
               <ShareButton title={pick(item, "title", locale)} label={locale === "ar" ? "مشاركة" : "Share"} />
             </div>
           </header>
+
+          {(item.spots?.length ?? 0) > 0 && (
+            <section className="card mb-5 overflow-hidden">
+              <div className="flex items-center justify-between gap-2 border-b border-line px-4 py-3">
+                <h2 className="flex items-center gap-2 text-[19px]">
+                  <MapPin className="size-5 text-pink" /> {locale === "ar" ? "وين بالضبط؟" : "Exactly where?"}
+                </h2>
+                <Link href={`/map?focus=${item.slug}`} className="rounded-full bg-pink px-3 py-1.5 text-[12px] font-extrabold text-white">
+                  {locale === "ar" ? "كلها على الخريطة" : "All on the map"}
+                </Link>
+              </div>
+              <ol className="divide-y divide-line">
+                {item.spots!.map((sp, i) => (
+                  <li key={i}>
+                    <Link href={`/map?focus=${item.slug}&spot=${i}`} className="flex items-center gap-3 px-4 py-3 text-[14px] hover:bg-chip">
+                      <span className="grid size-7 shrink-0 place-items-center rounded-full text-[12px] font-extrabold text-white" style={{ background: c.color }}>
+                        {i + 1}
+                      </span>
+                      <span className="flex-1 leading-relaxed">
+                        <Bidi text={locale === "ar" ? sp.label_ar : sp.label_en} />
+                      </span>
+                      <MapPin className="size-4 shrink-0 text-dim" />
+                    </Link>
+                  </li>
+                ))}
+              </ol>
+            </section>
+          )}
+
+          <Videos ids={item.videos ?? []} title={locale === "ar" ? "شوفها بالفيديو" : "Watch it"} />
 
           {/* Infobox on mobile comes before the body, like a wiki */}
           <Infobox item={item} locale={locale} className="mb-5 lg:hidden" />

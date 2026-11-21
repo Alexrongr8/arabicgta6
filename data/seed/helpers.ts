@@ -33,6 +33,10 @@ export interface SeedInput {
   region?: string;
   related?: string[];
   src?: (keyof typeof S)[];
+  /** extra exact spots: [x, y, label_en, label_ar] in official-map pixels */
+  spots?: [number, number, string, string][];
+  /** YouTube video IDs */
+  videos?: string[];
   date?: string;
   featured?: boolean;
 }
@@ -123,6 +127,8 @@ export function build(category: CategorySlug, list: SeedInput[]): Item[] {
     sources: (x.src ?? []).map((k) => ({ ...S[k] })),
     published_at: x.date ?? DEFAULT_DATE,
     featured: x.featured ?? false,
+    spots: (x.spots ?? []).map(([sx, sy, label_en, label_ar]) => ({ x: sx, y: sy, label_en, label_ar })),
+    videos: x.videos ?? [],
     image: OFFICIAL_IMAGES[x.slug] ?? (IMAGES as Record<string, string>)[x.slug] ?? null,
   }));
 }

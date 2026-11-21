@@ -23,6 +23,13 @@ export interface Fact {
   v_ar: string;
 }
 
+export interface Spot {
+  x: number;
+  y: number;
+  label_en: string;
+  label_ar: string;
+}
+
 export interface Source {
   title: string;
   url: string;
@@ -50,6 +57,10 @@ export interface Item {
   featured?: boolean;
   /** Cover image URL (official Rockstar media in /img, or the source article's preview image). */
   image?: string | null;
+  /** Extra exact spots (e.g. every wreck or hideout) shown as pins on the map. */
+  spots?: Spot[];
+  /** YouTube video IDs shown inside the article. */
+  videos?: string[];
 }
 
 export type ItemCard = Pick<
@@ -66,4 +77,5 @@ export type ItemCard = Pick<
   | "location"
   | "featured"
   | "image"
+  | "spots"
 >;

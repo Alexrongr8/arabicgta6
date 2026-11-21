@@ -30,6 +30,7 @@ export default async function MapPage({ searchParams }: PageProps<"/map">) {
         items={items}
         locale={locale}
         focus={typeof sp.focus === "string" ? sp.focus : undefined}
+        spot={typeof sp.spot === "string" && /^\d+$/.test(sp.spot) ? Number(sp.spot) : undefined}
         labels={{ note: t(locale, "mapNote"), open: t(locale, "open"), all: t(locale, "all"), back: t(locale, "back"), legend: t(locale, "legend") }}
       />
     </main>

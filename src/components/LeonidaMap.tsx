@@ -94,9 +94,25 @@ function FitOnLoad() {
   return null;
 }
 
-export default function LeonidaMap({ items, locale, focus, labels }: { items: ItemCard[]; locale: Locale; focus?: string; labels: { note: string; open: string; all: string; back: string; legend: string } }) {
+type Pin = ItemCard & { key: string; spotLabel?: { en: string; ar: string; n: number } };
+
+function toPins(items: ItemCard[]): Pin[] {
+  const pins: Pin[] = [];
+  for (const i of items) {
+    if (i.location) pins.push({ ...i, key: i.slug });
+    (i.spots ?? []).forEach((sp, n) =>
+      pins.push({ ...i, key: `${i.slug}#${n}`, location: { x: sp.x, y: sp.y }, spotLabel: { en: sp.label_en, ar: sp.label_ar, n: n + 1 } }),
+    );
+  }
+  return pins;
+}
+
+export default function LeonidaMap({ items: cards, locale, focus, spot, labels }: { items: ItemCard[]; locale: Locale; focus?: string; spot?: number; labels: { note: string; open: string; all: string; back: string; legend: string } }) {
+  const items = useMemo(() => toPins(cards), [cards]);
   const [active, setActive] = useState<Set<CategorySlug>>(new Set());
-  const [selected, setSelected] = useState<ItemCard | null>(() => items.find((i) => i.slug === focus) ?? null);
+  const [selected, setSelected] = useState<Pin | null>(
+    () => items.find((i) => i.key === (spot !== undefined ? `${focus}#${spot}` : focus)) ?? items.find((i) => i.slug === focus) ?? null,
+  );
   const [legendOpen, setLegendOpen] = useState(false);
   const [zoom, setZoom] = useState(-3);
   const mapRef = useRef<L.Map | null>(null);
@@ -139,11 +155,11 @@ export default function LeonidaMap({ items, locale, focus, labels }: { items: It
         <ImageOverlay url="/map/leonida-official.webp" bounds={BOUNDS} />
         {visible.map((i) => (
           <Marker
-            key={i.slug}
+            key={i.key}
             position={toLatLng(i.location!)}
-            icon={zoom >= -1.25 || selected?.slug === i.slug ? pinIcon(i.category, selected?.slug === i.slug) : dotIcon(i.category, false)}
+            icon={zoom >= -1.25 || selected?.key === i.key ? pinIcon(i.category, selected?.key === i.key) : dotIcon(i.category, false)}
             eventHandlers={{ click: () => setSelected(i) }}
-            zIndexOffset={selected?.slug === i.slug ? 1000 : 0}
+            zIndexOffset={selected?.key === i.key ? 1000 : 0}
           />
         ))}
       </MapContainer>
@@ -228,6 +244,11 @@ export default function LeonidaMap({ items, locale, focus, labels }: { items: It
                   {selected.region && <span className="text-dim">{selected.region}</span>}
                 </div>
                 <h3 className="text-[17px] leading-snug font-extrabold"><Bidi text={locale === "ar" ? selected.title_ar : selected.title_en} /></h3>
+                {selected.spotLabel && (
+                  <p className="mt-1 inline-flex items-start gap-1.5 rounded-xl bg-chip px-2 py-1 text-[13px] font-bold text-pink">
+                    📍 {selected.spotLabel.n}. <Bidi text={locale === "ar" ? selected.spotLabel.ar : selected.spotLabel.en} />
+                  </p>
+                )}
                 <p className="mt-1 line-clamp-3 text-[13px] leading-relaxed text-muted"><Bidi text={locale === "ar" ? selected.summary_ar : selected.summary_en} /></p>
               </div>
               <button type="button" onClick={() => setSelected(null)} className="grid size-8 shrink-0 place-items-center rounded-full bg-chip2" aria-label="close">

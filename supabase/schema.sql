@@ -152,6 +152,8 @@ create table if not exists public.update_runs (
 alter table public.update_runs enable row level security;
 
 alter table public.items add column if not exists image text;
+alter table public.items add column if not exists spots jsonb not null default '[]';
+alter table public.items add column if not exists videos text[] not null default '{}';
 
 -- ───────────────────────── owner analytics ─────────────────────────
 -- Sign-in details on profiles (written by the server with the service role on each sign-in).
