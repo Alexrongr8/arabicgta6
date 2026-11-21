@@ -8,7 +8,7 @@ export interface CatalogRow {
   stats: number[] | null;
   badge?: string | null;
   sub?: string | null;
-  image?: { url: string; credit: string } | null;
+  image?: { url: string; credit: string; page?: string } | null;
   emoji?: string;
 }
 
@@ -84,7 +84,11 @@ export function Catalog({
                     e.currentTarget.parentElement?.setAttribute("data-noimg", ar ? "📷 تتوفر الصورة قريباً" : "📷 Image coming soon");
                   }} />
               )}
-              {r.image && <span className="absolute bottom-1.5 end-1.5 rounded-full bg-black/55 px-2 py-0.5 text-[9.5px] text-white/85" dir="ltr">📷 {r.image.credit}</span>}
+              {r.image && (r.image.page ? (
+                <a href={r.image.page} target="_blank" rel="noopener noreferrer nofollow" aria-label={ar ? `مصدر صورة ${r.name}` : `Image source for ${r.name}`} className="absolute bottom-1.5 end-1.5 rounded-full bg-black/70 px-2 py-1 text-[11px] text-white underline decoration-white/40 underline-offset-2" dir="ltr">📷 {r.image.credit}</a>
+              ) : (
+                <span className="absolute bottom-1.5 end-1.5 rounded-full bg-black/70 px-2 py-1 text-[11px] text-white" dir="ltr">📷 {r.image.credit}</span>
+              ))}
             </div>
             <div className="p-3.5">
             <div className="mb-1 flex flex-wrap items-center gap-1.5">

@@ -1,372 +1,1547 @@
 {
- "animal:American Alligator": {
-  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/03/American_Alligator.jpg/330px-American_Alligator.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "credit": "Wikipedia / Wikimedia Commons",
-  "page": "https://en.wikipedia.org/wiki/American_alligator"
- },
- "animal:Juvenile American Alligator": {
-  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/03/American_Alligator.jpg/330px-American_Alligator.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "credit": "Wikipedia / Wikimedia Commons",
-  "page": "https://en.wikipedia.org/wiki/American_alligator"
- },
- "animal:American Crocodile": {
-  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f2/Crocodylus_acutus_mexico_02-edit1.jpg/330px-Crocodylus_acutus_mexico_02-edit1.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "credit": "Wikipedia / Wikimedia Commons",
-  "page": "https://en.wikipedia.org/wiki/American_crocodile"
- },
- "animal:Green Iguana": {
-  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/21/Iguana_iguana_%28male_resting%29.jpg/330px-Iguana_iguana_%28male_resting%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "credit": "Wikipedia / Wikimedia Commons",
-  "page": "https://en.wikipedia.org/wiki/Green_iguana"
- },
- "animal:Sea Turtle": {
-  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6e/Chelonia_mydas_is_going_for_the_air_edit.jpg/330px-Chelonia_mydas_is_going_for_the_air_edit.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "credit": "Wikipedia / Wikimedia Commons",
-  "page": "https://en.wikipedia.org/wiki/Sea_turtle"
- },
- "animal:Snakes": {
-  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/60/Trimeresurus_sabahi_fucatus%2C_Banded_pit_viper_-_Takua_Pa_District%2C_Phang-nga_Province_%2846710893582%29.jpg/330px-Trimeresurus_sabahi_fucatus%2C_Banded_pit_viper_-_Takua_Pa_District%2C_Phang-nga_Province_%2846710893582%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "credit": "Wikipedia / Wikimedia Commons",
-  "page": "https://en.wikipedia.org/wiki/Snake"
- },
- "animal:Cane Toad": {
-  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/99/Canetoadmale.jpg/330px-Canetoadmale.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "credit": "Wikipedia / Wikimedia Commons",
-  "page": "https://en.wikipedia.org/wiki/Cane_toad"
- },
- "animal:Dolphins": {
-  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/bc/Tursiops_truncatus_01-cropped.jpg/330px-Tursiops_truncatus_01-cropped.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "credit": "Wikipedia / Wikimedia Commons",
-  "page": "https://en.wikipedia.org/wiki/Common_bottlenose_dolphin"
- },
- "animal:Sharks (incl. hammerhead)": {
-  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/bd/Great_hammerhead2.jpg/330px-Great_hammerhead2.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "credit": "Wikipedia / Wikimedia Commons",
-  "page": "https://en.wikipedia.org/wiki/Great_hammerhead"
- },
- "animal:Whales": {
-  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d7/Humpback_whale_breaching_off_Cabo_San_Lucas.jpg/330px-Humpback_whale_breaching_off_Cabo_San_Lucas.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "credit": "Wikipedia / Wikimedia Commons",
-  "page": "https://en.wikipedia.org/wiki/Humpback_whale"
- },
- "animal:Manta Rays": {
-  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/30/Dharavandhoo_Thila_-_Manata_Black_Pearl.JPG/330px-Dharavandhoo_Thila_-_Manata_Black_Pearl.JPG?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "credit": "Wikipedia / Wikimedia Commons",
-  "page": "https://en.wikipedia.org/wiki/Manta_ray"
- },
- "animal:Jellyfish": {
-  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/44/Jelly_cc11.jpg/330px-Jelly_cc11.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "credit": "Wikipedia / Wikimedia Commons",
-  "page": "https://en.wikipedia.org/wiki/Jellyfish"
- },
- "animal:Manatee": {
-  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/99/Manatee_with_calf.PD_-_colour_corrected.jpg/330px-Manatee_with_calf.PD_-_colour_corrected.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "credit": "Wikipedia / Wikimedia Commons",
-  "page": "https://en.wikipedia.org/wiki/West_Indian_manatee"
- },
- "animal:Lionfish": {
-  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/bf/Pterois_volitans_Manado-e_edit.jpg/330px-Pterois_volitans_Manado-e_edit.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "credit": "Wikipedia / Wikimedia Commons",
-  "page": "https://en.wikipedia.org/wiki/Red_lionfish"
- },
- "animal:Eel": {
-  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/33/GreenMorayEel.JPG/330px-GreenMorayEel.JPG?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "credit": "Wikipedia / Wikimedia Commons",
-  "page": "https://en.wikipedia.org/wiki/Green_moray"
- },
- "animal:Reef fish": {
-  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ed/Underwater_World.jpg/330px-Underwater_World.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "credit": "Wikipedia / Wikimedia Commons",
-  "page": "https://en.wikipedia.org/wiki/Coral_reef_fish"
- },
- "animal:Atlantic Spanish Mackerel": {
-  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/01/Spanish_mack_photo3_exp.jpg/330px-Spanish_mack_photo3_exp.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "credit": "Wikipedia / Wikimedia Commons",
-  "page": "https://en.wikipedia.org/wiki/Atlantic_Spanish_mackerel"
- },
- "animal:Stoplight Parrotfish": {
-  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f3/Stoplight-parrotfish.jpg/330px-Stoplight-parrotfish.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "credit": "Wikipedia / Wikimedia Commons",
-  "page": "https://en.wikipedia.org/wiki/Stoplight_parrotfish"
- },
- "animal:Flamingo": {
-  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/21/American_Flamingo_JG.jpg/330px-American_Flamingo_JG.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "credit": "Wikipedia / Wikimedia Commons",
-  "page": "https://en.wikipedia.org/wiki/American_flamingo"
- },
- "animal:Great Egret": {
-  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a7/Great_Egret_%28Ardea_alba%29_in_Breeding_Plumage%2C_Cape_May_County%2C_New_Jersey%2C_USA_%28cropped%29.png/330px-Great_Egret_%28Ardea_alba%29_in_Breeding_Plumage%2C_Cape_May_County%2C_New_Jersey%2C_USA_%28cropped%29.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "credit": "Wikipedia / Wikimedia Commons",
-  "page": "https://en.wikipedia.org/wiki/Great_egret"
- },
- "animal:Great Blue Heron": {
-  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f1/GreatBlueHeronInARiver.jpg/330px-GreatBlueHeronInARiver.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "credit": "Wikipedia / Wikimedia Commons",
-  "page": "https://en.wikipedia.org/wiki/Great_blue_heron"
- },
- "animal:Roseate Spoonbill": {
-  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/ba/Roseate_Spoonbill_-_Myakka_River_State_Park.jpg/330px-Roseate_Spoonbill_-_Myakka_River_State_Park.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "credit": "Wikipedia / Wikimedia Commons",
-  "page": "https://en.wikipedia.org/wiki/Roseate_spoonbill"
- },
- "animal:Caspian Tern": {
-  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/72/Sterna-caspia-010.jpg/330px-Sterna-caspia-010.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "credit": "Wikipedia / Wikimedia Commons",
-  "page": "https://en.wikipedia.org/wiki/Caspian_tern"
- },
- "animal:Black Vulture": {
-  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/cc/Black_vulture_%28Coragyps_atratus_brasiliensis%29_Peten.jpg/330px-Black_vulture_%28Coragyps_atratus_brasiliensis%29_Peten.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "credit": "Wikipedia / Wikimedia Commons",
-  "page": "https://en.wikipedia.org/wiki/Black_vulture"
- },
- "animal:Mottled Duck": {
-  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/86/MottledDuck_Gam.jpg/330px-MottledDuck_Gam.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "credit": "Wikipedia / Wikimedia Commons",
-  "page": "https://en.wikipedia.org/wiki/Mottled_duck"
- },
- "animal:Pelican": {
-  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/06/Brown_pelican_in_flight_%28Bodega_Bay%29.jpg/330px-Brown_pelican_in_flight_%28Bodega_Bay%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "credit": "Wikipedia / Wikimedia Commons",
-  "page": "https://en.wikipedia.org/wiki/Brown_pelican"
- },
- "animal:Pigeon": {
-  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/10/Columba_livia_%28Rock_Dove%2C_wild%29%2C_Duncansby_Head%2C_Caithness%2C_Scotland_1.jpg/330px-Columba_livia_%28Rock_Dove%2C_wild%29%2C_Duncansby_Head%2C_Caithness%2C_Scotland_1.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "credit": "Wikipedia / Wikimedia Commons",
-  "page": "https://en.wikipedia.org/wiki/Rock_dove"
- },
- "animal:Peacock": {
-  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7f/Peacock_on_tree_%2852077240794%29.jpg/330px-Peacock_on_tree_%2852077240794%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "credit": "Wikipedia / Wikimedia Commons",
-  "page": "https://en.wikipedia.org/wiki/Indian_peafowl"
- },
- "animal:Northern Raccoon": {
-  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3e/Raccoon_in_Central_Park_%2835264%29.jpg/330px-Raccoon_in_Central_Park_%2835264%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "credit": "Wikipedia / Wikimedia Commons",
-  "page": "https://en.wikipedia.org/wiki/Raccoon"
- },
- "animal:Bobcat": {
-  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4e/Bobcat_at_Columbus_Zoo_Boo.jpg/330px-Bobcat_at_Columbus_Zoo_Boo.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "credit": "Wikipedia / Wikimedia Commons",
-  "page": "https://en.wikipedia.org/wiki/Bobcat"
- },
- "animal:Armadillo": {
-  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a7/Dasypus_novemcinctus_en_Zool%C3%B3gico_de_Paraguan%C3%A1.jpg/330px-Dasypus_novemcinctus_en_Zool%C3%B3gico_de_Paraguan%C3%A1.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "credit": "Wikipedia / Wikimedia Commons",
-  "page": "https://en.wikipedia.org/wiki/Nine-banded_armadillo"
- },
- "animal:Rhesus Macaque": {
-  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e1/Macaca_mulatta_%2822886604281%29.jpg/330px-Macaca_mulatta_%2822886604281%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "credit": "Wikipedia / Wikimedia Commons",
-  "page": "https://en.wikipedia.org/wiki/Rhesus_macaque"
- },
- "animal:Bengal Cat": {
-  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/ba/Paintedcats_Red_Star_standing.jpg/330px-Paintedcats_Red_Star_standing.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "credit": "Wikipedia / Wikimedia Commons",
-  "page": "https://en.wikipedia.org/wiki/Bengal_cat"
- },
- "animal:Labrador Retriever": {
-  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/34/Labrador_on_Quantock_%282175262184%29.jpg/330px-Labrador_on_Quantock_%282175262184%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "credit": "Wikipedia / Wikimedia Commons",
-  "page": "https://en.wikipedia.org/wiki/Labrador_Retriever"
- },
- "weapon:Girardi ES9": {
-  "url": "https://static.wikia.nocookie.net/gtawiki/images/7/73/Es9.jpg/revision/latest/scale-to-width-down/600?cb=20261119130518",
-  "credit": "GTA Wiki (Fandom)",
-  "page": "https://gta.fandom.com/wiki/ES9"
- },
- "weapon:Mahi Nipper .38": {
-  "url": "https://static.wikia.nocookie.net/gtawiki/images/c/c9/Nipper-38.jpg/revision/latest/scale-to-width-down/600?cb=20261119130520",
-  "credit": "GTA Wiki (Fandom)",
-  "page": "https://gta.fandom.com/wiki/Nipper_.38"
- },
- "weapon:Turnt Nipper .38": {
-  "url": "https://static.wikia.nocookie.net/gtawiki/images/c/c9/Nipper-38.jpg/revision/latest/scale-to-width-down/600?cb=20261119130520",
-  "credit": "GTA Wiki (Fandom)",
-  "page": "https://gta.fandom.com/wiki/Nipper_.38"
- },
- "weapon:Assassin Nipper .38": {
-  "url": "https://static.wikia.nocookie.net/gtawiki/images/c/c9/Nipper-38.jpg/revision/latest/scale-to-width-down/600?cb=20261119130520",
-  "credit": "GTA Wiki (Fandom)",
-  "page": "https://gta.fandom.com/wiki/Nipper_.38"
- },
- "weapon:Mustang .357": {
-  "url": "https://static.wikia.nocookie.net/gtawiki/images/c/c8/Mustang357-GTAVI-OfficialScreenshot-Ambrosia03.png/revision/latest/scale-to-width-down/600?cb=20250815183522",
-  "credit": "GTA Wiki (Fandom)",
-  "page": "https://gta.fandom.com/wiki/Mustang_.357"
- },
- "vehicle:Schyster PMP 700": {
-  "url": "https://static.wikia.nocookie.net/gtawiki/images/f/f3/PMP700-GTAVI-Trailer1.png/revision/latest/scale-to-width-down/600?cb=20250823071953",
-  "credit": "GTA Wiki (Fandom)",
-  "page": "https://gta.fandom.com/wiki/PMP_700"
- },
- "vehicle:Vapid Ganado": {
-  "url": "https://static.wikia.nocookie.net/gtawiki/images/f/f9/GTAVI-Vapid-Ganado.jpg/revision/latest/scale-to-width-down/600?cb=20261105133251",
-  "credit": "GTA Wiki (Fandom)",
-  "page": "https://gta.fandom.com/wiki/Ganado"
- },
- "vehicle:Maibatsu Sanchez": {
-  "url": "https://static.wikia.nocookie.net/gtawiki/images/0/0a/Sanchez-GTAVI-Trailer1.png/revision/latest/scale-to-width-down/600?cb=20250923002752",
-  "credit": "GTA Wiki (Fandom)",
-  "page": "https://gta.fandom.com/wiki/Sanchez"
- },
- "vehicle:Pegassi Vitello": {
-  "url": "https://static.wikia.nocookie.net/gtawiki/images/1/1e/UnnamedPegassiSportsCar-GTAVI-Trailer2-1.png/revision/latest/scale-to-width-down/600?cb=20250516212648",
-  "credit": "GTA Wiki (Fandom)",
-  "page": "https://gta.fandom.com/wiki/Vitello"
- },
- "vehicle:'67 Vapid Dominator Buggy": {
-  "url": "https://static.wikia.nocookie.net/gtawiki/images/f/f8/Vapid-Dominator-Buggy.jpg/revision/latest/scale-to-width-down/600?cb=20261110125737",
-  "credit": "GTA Wiki (Fandom)",
-  "page": "https://gta.fandom.com/wiki/Dominator_Buggy"
- },
- "vehicle:Clarion": {
-  "url": "https://static.wikia.nocookie.net/gtawiki/images/b/b4/UnnamedCigarette38TopGunBoat-GTAVI-Trailer1.png/revision/latest/scale-to-width-down/600?cb=20250808210410",
-  "credit": "GTA Wiki (Fandom)",
-  "page": "https://gta.fandom.com/wiki/Unnamed_GTA_VI_Cigarette_38'_Top_Gun-inspired_boat"
- },
- "animal:Albino American Alligator": {
-  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/03/American_Alligator.jpg/330px-American_Alligator.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "credit": "Wikipedia / Wikimedia Commons",
-  "page": "https://en.wikipedia.org/wiki/American_alligator"
- },
- "animal:Frog": {
-  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/aa/North-American-bullfrog1.jpg/330px-North-American-bullfrog1.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "credit": "Wikipedia / Wikimedia Commons",
-  "page": "https://en.wikipedia.org/wiki/American_bullfrog"
- },
- "animal:Land Turtle": {
-  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f6/Gopher_Tortoise_-_Gopherus_polyphemus%2C_Lake_June-in-Winter_Scrub_State_Park%2C_Lake_Placid%2C_Florida_-_31527638716.jpg/330px-Gopher_Tortoise_-_Gopherus_polyphemus%2C_Lake_June-in-Winter_Scrub_State_Park%2C_Lake_Placid%2C_Florida_-_31527638716.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "credit": "Wikipedia / Wikimedia Commons",
-  "page": "https://en.wikipedia.org/wiki/Gopher_tortoise"
- },
- "animal:Crayfish": {
-  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/8d/Paranephrops.jpg/330px-Paranephrops.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "credit": "Wikipedia / Wikimedia Commons",
-  "page": "https://en.wikipedia.org/wiki/Crayfish"
- },
- "animal:Seagull": {
-  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ed/Leucophaeus_atricilla_Caye_Caulker_04.JPG/330px-Leucophaeus_atricilla_Caye_Caulker_04.JPG?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "credit": "Wikipedia / Wikimedia Commons",
-  "page": "https://en.wikipedia.org/wiki/Laughing_gull"
- },
- "animal:Whooping Crane": {
-  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7f/Grus_americana_Sasata.jpg/330px-Grus_americana_Sasata.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "credit": "Wikipedia / Wikimedia Commons",
-  "page": "https://en.wikipedia.org/wiki/Whooping_crane"
- },
- "animal:Woodpecker": {
-  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/12/PileatedWoodpeckerFeedingonTree%2C_crop.jpg/330px-PileatedWoodpeckerFeedingonTree%2C_crop.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "credit": "Wikipedia / Wikimedia Commons",
-  "page": "https://en.wikipedia.org/wiki/Pileated_woodpecker"
- },
- "animal:Cougar / Florida Panther": {
-  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/37/Everglades_National_Park_Florida_Panther.jpg/330px-Everglades_National_Park_Florida_Panther.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "credit": "Wikipedia / Wikimedia Commons",
-  "page": "https://en.wikipedia.org/wiki/Florida_panther"
- },
- "animal:White-tailed Deer": {
-  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b7/White-tailed_deer.jpg/330px-White-tailed_deer.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "credit": "Wikipedia / Wikimedia Commons",
-  "page": "https://en.wikipedia.org/wiki/White-tailed_deer"
- },
- "animal:Eastern Cottontail Rabbit": {
-  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0e/Eastern_cottontail_%28Sylvilagus_floridanus%29_foraging_on_ground_vegetation.jpg/330px-Eastern_cottontail_%28Sylvilagus_floridanus%29_foraging_on_ground_vegetation.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "credit": "Wikipedia / Wikimedia Commons",
-  "page": "https://en.wikipedia.org/wiki/Eastern_cottontail"
- },
- "animal:Wild Boar / Feral Hog": {
-  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d2/Wildschwein%2C_N%C3%A4he_Pulverstampftor_%28cropped%29.jpg/330px-Wildschwein%2C_N%C3%A4he_Pulverstampftor_%28cropped%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "credit": "Wikipedia / Wikimedia Commons",
-  "page": "https://en.wikipedia.org/wiki/Wild_boar"
- },
- "animal:Black Bear": {
-  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/08/01_Schwarzb%C3%A4r.jpg/330px-01_Schwarzb%C3%A4r.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "credit": "Wikipedia / Wikimedia Commons",
-  "page": "https://en.wikipedia.org/wiki/American_black_bear"
- },
- "animal:Fox": {
-  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a3/Gray_fox.jpg/330px-Gray_fox.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "credit": "Wikipedia / Wikimedia Commons",
-  "page": "https://en.wikipedia.org/wiki/Gray_fox"
- },
- "animal:Beaver": {
-  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6b/American_Beaver.jpg/330px-American_Beaver.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "credit": "Wikipedia / Wikimedia Commons",
-  "page": "https://en.wikipedia.org/wiki/North_American_beaver"
- },
- "animal:Cow": {
-  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/8c/Cow_%28Fleckvieh_breed%29_Oeschinensee_Slaunger_2009-07-07.jpg/330px-Cow_%28Fleckvieh_breed%29_Oeschinensee_Slaunger_2009-07-07.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "credit": "Wikipedia / Wikimedia Commons",
-  "page": "https://en.wikipedia.org/wiki/Cattle"
- },
- "animal:Chihuahua": {
-  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4c/Chihuahua1_bvdb.jpg/330px-Chihuahua1_bvdb.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "credit": "Wikipedia / Wikimedia Commons",
-  "page": "https://en.wikipedia.org/wiki/Chihuahua_(dog_breed)"
- },
- "animal:Doberman": {
-  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/ac/Dobermann_handling.jpg/330px-Dobermann_handling.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "credit": "Wikipedia / Wikimedia Commons",
-  "page": "https://en.wikipedia.org/wiki/Dobermann"
- },
- "animal:Otter": {
-  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/40/Northern_River_Otter_on_Seedskadee_NWR_%2822802102984%29.jpg/330px-Northern_River_Otter_on_Seedskadee_NWR_%2822802102984%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "credit": "Wikipedia / Wikimedia Commons",
-  "page": "https://en.wikipedia.org/wiki/North_American_river_otter"
- },
- "animal:Possum": {
-  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/27/Opossum_2.jpg/330px-Opossum_2.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "credit": "Wikipedia / Wikimedia Commons",
-  "page": "https://en.wikipedia.org/wiki/Virginia_opossum"
- },
- "animal:Skunk": {
-  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1f/Skunk_about_to_spray.jpg/330px-Skunk_about_to_spray.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "credit": "Wikipedia / Wikimedia Commons",
-  "page": "https://en.wikipedia.org/wiki/Striped_skunk"
- },
- "animal:Rat": {
-  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/44/Brown_Rat_%28Rattus_norvegicus%29.jpg/330px-Brown_Rat_%28Rattus_norvegicus%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "credit": "Wikipedia / Wikimedia Commons",
-  "page": "https://en.wikipedia.org/wiki/Brown_rat"
- },
- "animal:Sheep": {
-  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2c/Flock_of_sheep.jpg/330px-Flock_of_sheep.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "credit": "Wikipedia / Wikimedia Commons",
-  "page": "https://en.wikipedia.org/wiki/Sheep"
- },
- "animal:Squirrel": {
-  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/15/EasternGraySquirrel_GAm.jpg/330px-EasternGraySquirrel_GAm.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "credit": "Wikipedia / Wikimedia Commons",
-  "page": "https://en.wikipedia.org/wiki/Eastern_gray_squirrel"
- },
- "animal:American Foxhound": {
-  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e7/AmericanFoxhound2.jpg/330px-AmericanFoxhound2.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "credit": "Wikipedia / Wikimedia Commons",
-  "page": "https://en.wikipedia.org/wiki/American_Foxhound"
- },
- "animal:American Pit Bull Terrier": {
-  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b0/001_American_Pit_Bull_Terrier.jpg/330px-001_American_Pit_Bull_Terrier.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "credit": "Wikipedia / Wikimedia Commons",
-  "page": "https://en.wikipedia.org/wiki/American_Pit_Bull_Terrier"
- },
- "animal:Australian Shepherd": {
-  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/80/Australian_Shepherd_red_bi.JPG/330px-Australian_Shepherd_red_bi.JPG?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "credit": "Wikipedia / Wikimedia Commons",
-  "page": "https://en.wikipedia.org/wiki/Australian_Shepherd"
- },
- "animal:Rottweiler": {
-  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/26/Rottweiler_standing_facing_left.jpg/330px-Rottweiler_standing_facing_left.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "credit": "Wikipedia / Wikimedia Commons",
-  "page": "https://en.wikipedia.org/wiki/Rottweiler"
- },
- "animal:Police K-9 (German Shepherd)": {
-  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d0/German_Shepherd_-_DSC_0346_%2810096362833%29.jpg/330px-German_Shepherd_-_DSC_0346_%2810096362833%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "credit": "Wikipedia / Wikimedia Commons",
-  "page": "https://en.wikipedia.org/wiki/German_Shepherd"
- },
- "animal:Skunk Ape": {
-  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/ac/The_Florida_Skunk_Ape_-_panoramio.jpg/330px-The_Florida_Skunk_Ape_-_panoramio.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "credit": "Wikipedia / Wikimedia Commons",
-  "page": "https://en.wikipedia.org/wiki/Skunk_ape"
- }
+  "animal:American Alligator": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/03/American_Alligator.jpg/330px-American_Alligator.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "Wikipedia / Wikimedia Commons",
+    "page": "https://en.wikipedia.org/wiki/American_alligator"
+  },
+  "animal:Juvenile American Alligator": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c5/Juvenile_American_Alligator_close_up_%2832821204827%29.jpg/960px-Juvenile_American_Alligator_close_up_%2832821204827%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "credit": "A. Sanchez / Everglades National Park / Wikimedia Commons · Public domain",
+    "page": "https://commons.wikimedia.org/wiki/File:Juvenile_American_Alligator_close_up_(32821204827).jpg"
+  },
+  "animal:American Crocodile": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f2/Crocodylus_acutus_mexico_02-edit1.jpg/330px-Crocodylus_acutus_mexico_02-edit1.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "Wikipedia / Wikimedia Commons",
+    "page": "https://en.wikipedia.org/wiki/American_crocodile"
+  },
+  "animal:Green Iguana": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/21/Iguana_iguana_%28male_resting%29.jpg/330px-Iguana_iguana_%28male_resting%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "Wikipedia / Wikimedia Commons",
+    "page": "https://en.wikipedia.org/wiki/Green_iguana"
+  },
+  "animal:Sea Turtle": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6e/Chelonia_mydas_is_going_for_the_air_edit.jpg/330px-Chelonia_mydas_is_going_for_the_air_edit.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "Wikipedia / Wikimedia Commons",
+    "page": "https://en.wikipedia.org/wiki/Sea_turtle"
+  },
+  "animal:Snakes": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/60/Trimeresurus_sabahi_fucatus%2C_Banded_pit_viper_-_Takua_Pa_District%2C_Phang-nga_Province_%2846710893582%29.jpg/330px-Trimeresurus_sabahi_fucatus%2C_Banded_pit_viper_-_Takua_Pa_District%2C_Phang-nga_Province_%2846710893582%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "Wikipedia / Wikimedia Commons",
+    "page": "https://en.wikipedia.org/wiki/Snake"
+  },
+  "animal:Cane Toad": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/99/Canetoadmale.jpg/330px-Canetoadmale.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "Wikipedia / Wikimedia Commons",
+    "page": "https://en.wikipedia.org/wiki/Cane_toad"
+  },
+  "animal:Dolphins": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/bc/Tursiops_truncatus_01-cropped.jpg/330px-Tursiops_truncatus_01-cropped.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "Wikipedia / Wikimedia Commons",
+    "page": "https://en.wikipedia.org/wiki/Common_bottlenose_dolphin"
+  },
+  "animal:Sharks (incl. hammerhead)": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/bd/Great_hammerhead2.jpg/330px-Great_hammerhead2.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "Wikipedia / Wikimedia Commons",
+    "page": "https://en.wikipedia.org/wiki/Great_hammerhead"
+  },
+  "animal:Whales": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d7/Humpback_whale_breaching_off_Cabo_San_Lucas.jpg/330px-Humpback_whale_breaching_off_Cabo_San_Lucas.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "Wikipedia / Wikimedia Commons",
+    "page": "https://en.wikipedia.org/wiki/Humpback_whale"
+  },
+  "animal:Manta Rays": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/30/Dharavandhoo_Thila_-_Manata_Black_Pearl.JPG/330px-Dharavandhoo_Thila_-_Manata_Black_Pearl.JPG?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "Wikipedia / Wikimedia Commons",
+    "page": "https://en.wikipedia.org/wiki/Manta_ray"
+  },
+  "animal:Jellyfish": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/44/Jelly_cc11.jpg/330px-Jelly_cc11.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "Wikipedia / Wikimedia Commons",
+    "page": "https://en.wikipedia.org/wiki/Jellyfish"
+  },
+  "animal:Manatee": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/99/Manatee_with_calf.PD_-_colour_corrected.jpg/330px-Manatee_with_calf.PD_-_colour_corrected.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "Wikipedia / Wikimedia Commons",
+    "page": "https://en.wikipedia.org/wiki/West_Indian_manatee"
+  },
+  "animal:Lionfish": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/bf/Pterois_volitans_Manado-e_edit.jpg/330px-Pterois_volitans_Manado-e_edit.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "Wikipedia / Wikimedia Commons",
+    "page": "https://en.wikipedia.org/wiki/Red_lionfish"
+  },
+  "animal:Eel": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/33/GreenMorayEel.JPG/330px-GreenMorayEel.JPG?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "Wikipedia / Wikimedia Commons",
+    "page": "https://en.wikipedia.org/wiki/Green_moray"
+  },
+  "animal:Reef fish": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ed/Underwater_World.jpg/330px-Underwater_World.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "Wikipedia / Wikimedia Commons",
+    "page": "https://en.wikipedia.org/wiki/Coral_reef_fish"
+  },
+  "animal:Atlantic Spanish Mackerel": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/01/Spanish_mack_photo3_exp.jpg/330px-Spanish_mack_photo3_exp.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "Wikipedia / Wikimedia Commons",
+    "page": "https://en.wikipedia.org/wiki/Atlantic_Spanish_mackerel"
+  },
+  "animal:Stoplight Parrotfish": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f3/Stoplight-parrotfish.jpg/330px-Stoplight-parrotfish.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "Wikipedia / Wikimedia Commons",
+    "page": "https://en.wikipedia.org/wiki/Stoplight_parrotfish"
+  },
+  "animal:Flamingo": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/21/American_Flamingo_JG.jpg/330px-American_Flamingo_JG.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "Wikipedia / Wikimedia Commons",
+    "page": "https://en.wikipedia.org/wiki/American_flamingo"
+  },
+  "animal:Great Egret": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a7/Great_Egret_%28Ardea_alba%29_in_Breeding_Plumage%2C_Cape_May_County%2C_New_Jersey%2C_USA_%28cropped%29.png/330px-Great_Egret_%28Ardea_alba%29_in_Breeding_Plumage%2C_Cape_May_County%2C_New_Jersey%2C_USA_%28cropped%29.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "Wikipedia / Wikimedia Commons",
+    "page": "https://en.wikipedia.org/wiki/Great_egret"
+  },
+  "animal:Great Blue Heron": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f1/GreatBlueHeronInARiver.jpg/330px-GreatBlueHeronInARiver.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "Wikipedia / Wikimedia Commons",
+    "page": "https://en.wikipedia.org/wiki/Great_blue_heron"
+  },
+  "animal:Roseate Spoonbill": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/ba/Roseate_Spoonbill_-_Myakka_River_State_Park.jpg/330px-Roseate_Spoonbill_-_Myakka_River_State_Park.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "Wikipedia / Wikimedia Commons",
+    "page": "https://en.wikipedia.org/wiki/Roseate_spoonbill"
+  },
+  "animal:Caspian Tern": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/72/Sterna-caspia-010.jpg/330px-Sterna-caspia-010.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "Wikipedia / Wikimedia Commons",
+    "page": "https://en.wikipedia.org/wiki/Caspian_tern"
+  },
+  "animal:Black Vulture": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/cc/Black_vulture_%28Coragyps_atratus_brasiliensis%29_Peten.jpg/330px-Black_vulture_%28Coragyps_atratus_brasiliensis%29_Peten.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "Wikipedia / Wikimedia Commons",
+    "page": "https://en.wikipedia.org/wiki/Black_vulture"
+  },
+  "animal:Mottled Duck": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/86/MottledDuck_Gam.jpg/330px-MottledDuck_Gam.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "Wikipedia / Wikimedia Commons",
+    "page": "https://en.wikipedia.org/wiki/Mottled_duck"
+  },
+  "animal:Pelican": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/06/Brown_pelican_in_flight_%28Bodega_Bay%29.jpg/330px-Brown_pelican_in_flight_%28Bodega_Bay%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "Wikipedia / Wikimedia Commons",
+    "page": "https://en.wikipedia.org/wiki/Brown_pelican"
+  },
+  "animal:Pigeon": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/10/Columba_livia_%28Rock_Dove%2C_wild%29%2C_Duncansby_Head%2C_Caithness%2C_Scotland_1.jpg/330px-Columba_livia_%28Rock_Dove%2C_wild%29%2C_Duncansby_Head%2C_Caithness%2C_Scotland_1.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "Wikipedia / Wikimedia Commons",
+    "page": "https://en.wikipedia.org/wiki/Rock_dove"
+  },
+  "animal:Peacock": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7f/Peacock_on_tree_%2852077240794%29.jpg/330px-Peacock_on_tree_%2852077240794%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "Wikipedia / Wikimedia Commons",
+    "page": "https://en.wikipedia.org/wiki/Indian_peafowl"
+  },
+  "animal:Northern Raccoon": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3e/Raccoon_in_Central_Park_%2835264%29.jpg/330px-Raccoon_in_Central_Park_%2835264%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "Wikipedia / Wikimedia Commons",
+    "page": "https://en.wikipedia.org/wiki/Raccoon"
+  },
+  "animal:Bobcat": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4e/Bobcat_at_Columbus_Zoo_Boo.jpg/330px-Bobcat_at_Columbus_Zoo_Boo.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "Wikipedia / Wikimedia Commons",
+    "page": "https://en.wikipedia.org/wiki/Bobcat"
+  },
+  "animal:Armadillo": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a7/Dasypus_novemcinctus_en_Zool%C3%B3gico_de_Paraguan%C3%A1.jpg/330px-Dasypus_novemcinctus_en_Zool%C3%B3gico_de_Paraguan%C3%A1.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "Wikipedia / Wikimedia Commons",
+    "page": "https://en.wikipedia.org/wiki/Nine-banded_armadillo"
+  },
+  "animal:Rhesus Macaque": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e1/Macaca_mulatta_%2822886604281%29.jpg/330px-Macaca_mulatta_%2822886604281%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "Wikipedia / Wikimedia Commons",
+    "page": "https://en.wikipedia.org/wiki/Rhesus_macaque"
+  },
+  "animal:Bengal Cat": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/ba/Paintedcats_Red_Star_standing.jpg/330px-Paintedcats_Red_Star_standing.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "Wikipedia / Wikimedia Commons",
+    "page": "https://en.wikipedia.org/wiki/Bengal_cat"
+  },
+  "animal:Labrador Retriever": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/34/Labrador_on_Quantock_%282175262184%29.jpg/330px-Labrador_on_Quantock_%282175262184%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "Wikipedia / Wikimedia Commons",
+    "page": "https://en.wikipedia.org/wiki/Labrador_Retriever"
+  },
+  "weapon:Girardi ES9": {
+    "url": "https://static.wikia.nocookie.net/gtawiki/images/7/73/Es9.jpg/revision/latest/scale-to-width-down/600?cb=20261119130518",
+    "credit": "GTA Wiki (Fandom)",
+    "page": "https://gta.fandom.com/wiki/ES9"
+  },
+  "weapon:Mahi Nipper .38": {
+    "url": "https://meowdb.com/gta6/media/footage/mahi-nipper-38.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:Turnt Nipper .38": {
+    "url": "https://meowdb.com/gta6/media/footage/nov20-turnt-nipper-38.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:Assassin Nipper .38": {
+    "url": "https://meowdb.com/gta6/media/footage/nov20-assassin-nipper-38.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:Mustang .357": {
+    "url": "https://static.wikia.nocookie.net/gtawiki/images/c/c8/Mustang357-GTAVI-OfficialScreenshot-Ambrosia03.png/revision/latest/scale-to-width-down/600?cb=20250815183522",
+    "credit": "GTA Wiki (Fandom)",
+    "page": "https://gta.fandom.com/wiki/Mustang_.357"
+  },
+  "vehicle:Schyster PMP 700": {
+    "url": "https://static.wikia.nocookie.net/gtawiki/images/f/f3/PMP700-GTAVI-Trailer1.png/revision/latest/scale-to-width-down/600?cb=20250823071953",
+    "credit": "GTA Wiki (Fandom)",
+    "page": "https://gta.fandom.com/wiki/PMP_700"
+  },
+  "vehicle:Vapid Ganado": {
+    "url": "https://static.wikia.nocookie.net/gtawiki/images/f/f9/GTAVI-Vapid-Ganado.jpg/revision/latest/scale-to-width-down/600?cb=20261105133251",
+    "credit": "GTA Wiki (Fandom)",
+    "page": "https://gta.fandom.com/wiki/Ganado"
+  },
+  "vehicle:Maibatsu Sanchez": {
+    "url": "https://static.wikia.nocookie.net/gtawiki/images/0/0a/Sanchez-GTAVI-Trailer1.png/revision/latest/scale-to-width-down/600?cb=20250923002752",
+    "credit": "GTA Wiki (Fandom)",
+    "page": "https://gta.fandom.com/wiki/Sanchez"
+  },
+  "vehicle:Pegassi Vitello": {
+    "url": "https://static.wikia.nocookie.net/gtawiki/images/1/1e/UnnamedPegassiSportsCar-GTAVI-Trailer2-1.png/revision/latest/scale-to-width-down/600?cb=20250516212648",
+    "credit": "GTA Wiki (Fandom)",
+    "page": "https://gta.fandom.com/wiki/Vitello"
+  },
+  "vehicle:'67 Vapid Dominator Buggy": {
+    "url": "https://static.wikia.nocookie.net/gtawiki/images/f/f8/Vapid-Dominator-Buggy.jpg/revision/latest/scale-to-width-down/600?cb=20261110125737",
+    "credit": "GTA Wiki (Fandom)",
+    "page": "https://gta.fandom.com/wiki/Dominator_Buggy"
+  },
+  "vehicle:Clarion": {
+    "url": "https://static.wikia.nocookie.net/gtawiki/images/b/b4/UnnamedCigarette38TopGunBoat-GTAVI-Trailer1.png/revision/latest/scale-to-width-down/600?cb=20250808210410",
+    "credit": "GTA Wiki (Fandom)",
+    "page": "https://gta.fandom.com/wiki/Unnamed_GTA_VI_Cigarette_38'_Top_Gun-inspired_boat"
+  },
+  "animal:Albino American Alligator": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/bd/16-08-075-alligator.jpg/960px-16-08-075-alligator.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "credit": "Dsdugan / Wikimedia Commons · CC0",
+    "page": "https://commons.wikimedia.org/wiki/File:16-08-075-alligator.jpg"
+  },
+  "animal:Frog": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/aa/North-American-bullfrog1.jpg/330px-North-American-bullfrog1.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "Wikipedia / Wikimedia Commons",
+    "page": "https://en.wikipedia.org/wiki/American_bullfrog"
+  },
+  "animal:Land Turtle": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f6/Gopher_Tortoise_-_Gopherus_polyphemus%2C_Lake_June-in-Winter_Scrub_State_Park%2C_Lake_Placid%2C_Florida_-_31527638716.jpg/330px-Gopher_Tortoise_-_Gopherus_polyphemus%2C_Lake_June-in-Winter_Scrub_State_Park%2C_Lake_Placid%2C_Florida_-_31527638716.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "Wikipedia / Wikimedia Commons",
+    "page": "https://en.wikipedia.org/wiki/Gopher_tortoise"
+  },
+  "animal:Crayfish": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/8d/Paranephrops.jpg/330px-Paranephrops.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "Wikipedia / Wikimedia Commons",
+    "page": "https://en.wikipedia.org/wiki/Crayfish"
+  },
+  "animal:Seagull": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ed/Leucophaeus_atricilla_Caye_Caulker_04.JPG/330px-Leucophaeus_atricilla_Caye_Caulker_04.JPG?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "Wikipedia / Wikimedia Commons",
+    "page": "https://en.wikipedia.org/wiki/Laughing_gull"
+  },
+  "animal:Whooping Crane": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7f/Grus_americana_Sasata.jpg/330px-Grus_americana_Sasata.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "Wikipedia / Wikimedia Commons",
+    "page": "https://en.wikipedia.org/wiki/Whooping_crane"
+  },
+  "animal:Woodpecker": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/12/PileatedWoodpeckerFeedingonTree%2C_crop.jpg/330px-PileatedWoodpeckerFeedingonTree%2C_crop.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "Wikipedia / Wikimedia Commons",
+    "page": "https://en.wikipedia.org/wiki/Pileated_woodpecker"
+  },
+  "animal:Cougar / Florida Panther": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/37/Everglades_National_Park_Florida_Panther.jpg/330px-Everglades_National_Park_Florida_Panther.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "Wikipedia / Wikimedia Commons",
+    "page": "https://en.wikipedia.org/wiki/Florida_panther"
+  },
+  "animal:White-tailed Deer": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b7/White-tailed_deer.jpg/330px-White-tailed_deer.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "Wikipedia / Wikimedia Commons",
+    "page": "https://en.wikipedia.org/wiki/White-tailed_deer"
+  },
+  "animal:Eastern Cottontail Rabbit": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0e/Eastern_cottontail_%28Sylvilagus_floridanus%29_foraging_on_ground_vegetation.jpg/330px-Eastern_cottontail_%28Sylvilagus_floridanus%29_foraging_on_ground_vegetation.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "Wikipedia / Wikimedia Commons",
+    "page": "https://en.wikipedia.org/wiki/Eastern_cottontail"
+  },
+  "animal:Wild Boar / Feral Hog": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d2/Wildschwein%2C_N%C3%A4he_Pulverstampftor_%28cropped%29.jpg/330px-Wildschwein%2C_N%C3%A4he_Pulverstampftor_%28cropped%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "Wikipedia / Wikimedia Commons",
+    "page": "https://en.wikipedia.org/wiki/Wild_boar"
+  },
+  "animal:Black Bear": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/08/01_Schwarzb%C3%A4r.jpg/330px-01_Schwarzb%C3%A4r.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "Wikipedia / Wikimedia Commons",
+    "page": "https://en.wikipedia.org/wiki/American_black_bear"
+  },
+  "animal:Fox": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a3/Gray_fox.jpg/330px-Gray_fox.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "Wikipedia / Wikimedia Commons",
+    "page": "https://en.wikipedia.org/wiki/Gray_fox"
+  },
+  "animal:Beaver": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6b/American_Beaver.jpg/330px-American_Beaver.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "Wikipedia / Wikimedia Commons",
+    "page": "https://en.wikipedia.org/wiki/North_American_beaver"
+  },
+  "animal:Cow": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/8c/Cow_%28Fleckvieh_breed%29_Oeschinensee_Slaunger_2009-07-07.jpg/330px-Cow_%28Fleckvieh_breed%29_Oeschinensee_Slaunger_2009-07-07.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "Wikipedia / Wikimedia Commons",
+    "page": "https://en.wikipedia.org/wiki/Cattle"
+  },
+  "animal:Chihuahua": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4c/Chihuahua1_bvdb.jpg/330px-Chihuahua1_bvdb.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "Wikipedia / Wikimedia Commons",
+    "page": "https://en.wikipedia.org/wiki/Chihuahua_(dog_breed)"
+  },
+  "animal:Doberman": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/ac/Dobermann_handling.jpg/330px-Dobermann_handling.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "Wikipedia / Wikimedia Commons",
+    "page": "https://en.wikipedia.org/wiki/Dobermann"
+  },
+  "animal:Otter": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/40/Northern_River_Otter_on_Seedskadee_NWR_%2822802102984%29.jpg/330px-Northern_River_Otter_on_Seedskadee_NWR_%2822802102984%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "Wikipedia / Wikimedia Commons",
+    "page": "https://en.wikipedia.org/wiki/North_American_river_otter"
+  },
+  "animal:Possum": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/27/Opossum_2.jpg/330px-Opossum_2.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "Wikipedia / Wikimedia Commons",
+    "page": "https://en.wikipedia.org/wiki/Virginia_opossum"
+  },
+  "animal:Skunk": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1f/Skunk_about_to_spray.jpg/330px-Skunk_about_to_spray.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "Wikipedia / Wikimedia Commons",
+    "page": "https://en.wikipedia.org/wiki/Striped_skunk"
+  },
+  "animal:Rat": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/44/Brown_Rat_%28Rattus_norvegicus%29.jpg/330px-Brown_Rat_%28Rattus_norvegicus%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "Wikipedia / Wikimedia Commons",
+    "page": "https://en.wikipedia.org/wiki/Brown_rat"
+  },
+  "animal:Sheep": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2c/Flock_of_sheep.jpg/330px-Flock_of_sheep.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "Wikipedia / Wikimedia Commons",
+    "page": "https://en.wikipedia.org/wiki/Sheep"
+  },
+  "animal:Squirrel": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/15/EasternGraySquirrel_GAm.jpg/330px-EasternGraySquirrel_GAm.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "Wikipedia / Wikimedia Commons",
+    "page": "https://en.wikipedia.org/wiki/Eastern_gray_squirrel"
+  },
+  "animal:American Foxhound": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e7/AmericanFoxhound2.jpg/330px-AmericanFoxhound2.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "Wikipedia / Wikimedia Commons",
+    "page": "https://en.wikipedia.org/wiki/American_Foxhound"
+  },
+  "animal:American Pit Bull Terrier": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b0/001_American_Pit_Bull_Terrier.jpg/330px-001_American_Pit_Bull_Terrier.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "Wikipedia / Wikimedia Commons",
+    "page": "https://en.wikipedia.org/wiki/American_Pit_Bull_Terrier"
+  },
+  "animal:Australian Shepherd": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/80/Australian_Shepherd_red_bi.JPG/330px-Australian_Shepherd_red_bi.JPG?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "Wikipedia / Wikimedia Commons",
+    "page": "https://en.wikipedia.org/wiki/Australian_Shepherd"
+  },
+  "animal:Rottweiler": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/26/Rottweiler_standing_facing_left.jpg/330px-Rottweiler_standing_facing_left.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "Wikipedia / Wikimedia Commons",
+    "page": "https://en.wikipedia.org/wiki/Rottweiler"
+  },
+  "animal:Police K-9 (German Shepherd)": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d0/German_Shepherd_-_DSC_0346_%2810096362833%29.jpg/330px-German_Shepherd_-_DSC_0346_%2810096362833%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "Wikipedia / Wikimedia Commons",
+    "page": "https://en.wikipedia.org/wiki/German_Shepherd"
+  },
+  "animal:Skunk Ape": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/ac/The_Florida_Skunk_Ape_-_panoramio.jpg/330px-The_Florida_Skunk_Ape_-_panoramio.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "Wikipedia / Wikimedia Commons",
+    "page": "https://en.wikipedia.org/wiki/Skunk_ape"
+  },
+  "weapon:Klose K17": {
+    "url": "https://gta6data.com/wp-content/uploads/2026/11/gta6-klose-k17-body.jpg",
+    "credit": "Rockstar Games / GTA6Data",
+    "page": "https://gta6data.com/gta-6-weapons-guide/"
+  },
+  "weapon:Duke 1922 Pistol": {
+    "url": "https://gta6data.com/wp-content/uploads/2026/11/gta6-duke-1922-weapon-body.jpg",
+    "credit": "Rockstar Games / GTA6Data",
+    "page": "https://gta6data.com/gta-6-weapons-guide/"
+  },
+  "weapon:Nipper .38 Pistol": {
+    "url": "https://gta6data.com/wp-content/uploads/2026/11/gta6-weapon-body-nipper-38.jpg",
+    "credit": "Rockstar Games / GTA6Data",
+    "page": "https://gta6data.com/gta-6-weapons-guide/"
+  },
+  "weapon:Hawk & Little Morgan Revolvers": {
+    "url": "https://www.rockstargames.com/VI/_next/static/media/ULTIMATE_EDITION_HAWK_AND_LITTLE_MORGAN_REVOLVERS_01.0~3pdc~~sing4.jpg?akim=1&imdensity=1&imwidth=1280",
+    "credit": "Rockstar Games",
+    "page": "https://www.rockstargames.com/VI"
+  },
+  "weapon:Moreland 850 Shotgun": {
+    "url": "https://gta6data.com/wp-content/uploads/2026/11/weapon-moreland-850-pump-action-shotgun.jpg",
+    "credit": "Rockstar Games / GTA6Data",
+    "page": "https://gta6data.com/gta-6-weapons-guide/"
+  },
+  "weapon:Gorse 425 Shotgun": {
+    "url": "https://gta6data.com/wp-content/uploads/2026/11/weapon-gorse-425-stubby-shotgun.jpg",
+    "credit": "Rockstar Games / GTA6Data",
+    "page": "https://gta6data.com/gta-6-weapons-guide/"
+  },
+  "weapon:Shrewsbury Drifter": {
+    "url": "https://gta6data.com/wp-content/uploads/2026/11/gta6-weapon-body-shrewsbury-drifter.jpg",
+    "credit": "Rockstar Games / GTA6Data",
+    "page": "https://gta6data.com/gta-6-weapons-guide/"
+  },
+  "weapon:Shrewsbury Hobo": {
+    "url": "https://gta6data.com/wp-content/uploads/2026/11/gta6-weapon-body-shrewsbury-hobo.jpg",
+    "credit": "Rockstar Games / GTA6Data",
+    "page": "https://gta6data.com/gta-6-weapons-guide/"
+  },
+  "weapon:Duke 556 Assault Rifle": {
+    "url": "https://gta6data.com/wp-content/uploads/2026/11/gta6-weapon-body-duke-556.jpg",
+    "credit": "Rockstar Games / GTA6Data",
+    "page": "https://gta6data.com/gta-6-weapons-guide/"
+  },
+  "weapon:Hawk & Little Mediator": {
+    "url": "https://gta6data.com/wp-content/uploads/2026/11/gta6-hawk-little-mediator-body.png",
+    "credit": "Rockstar Games / GTA6Data",
+    "page": "https://gta6data.com/gta-6-weapons-guide/"
+  },
+  "weapon:Hunting Knife": {
+    "url": "https://gta6data.com/wp-content/uploads/2026/11/gta6-hunting-knife-wheel-icon.png",
+    "credit": "Rockstar Games / GTA6Data",
+    "page": "https://gta6data.com/gta-6-weapons-guide/"
+  },
+  "weapon:Baseball Bat": {
+    "url": "https://gta6data.com/wp-content/uploads/2026/11/gta6-weapon-baseball-bat-wheel.jpg",
+    "credit": "Rockstar Games / GTA6Data",
+    "page": "https://gta6data.com/gta-6-weapons-guide/"
+  },
+  "weapon:Machete": {
+    "url": "https://gta6data.com/wp-content/uploads/2026/11/gta6-machete-blade-detail.jpg",
+    "credit": "Rockstar Games / GTA6Data",
+    "page": "https://gta6data.com/gta-6-weapons-guide/"
+  },
+  "weapon:Schlamm DRX": {
+    "url": "https://meowdb.com/gta6/media/footage/schlamm-drx.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:Fairview Kalinga .50": {
+    "url": "https://meowdb.com/gta6/media/footage/launch-fairview-kalinga-50.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:Girardi ES18": {
+    "url": "https://meowdb.com/gta6/media/footage/launch-girardi-es18.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:Klose K17 MCD": {
+    "url": "https://meowdb.com/gta6/media/footage/launch-klose-k17-mcd.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:Gil's Kalinga .50": {
+    "url": "https://meowdb.com/gta6/media/footage/gils-kalinga.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:Quarter Mile ES9": {
+    "url": "https://meowdb.com/gta6/media/footage/quarter-mile-es9.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:Rogue Alpha DRX": {
+    "url": "https://meowdb.com/gta6/media/footage/rogue-alpha-drx.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:Caminos Signature K17": {
+    "url": "https://meowdb.com/gta6/media/footage/caminos-signature-k17.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:The Guardian ES18": {
+    "url": "https://meowdb.com/gta6/media/footage/nov20-the-guardian-es18.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:The Silver 1922": {
+    "url": "https://meowdb.com/gta6/media/footage/the-silver-1922.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:Sand Storm ES9": {
+    "url": "https://meowdb.com/gta6/media/footage/sand-storm-es9.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:San4San K17": {
+    "url": "https://meowdb.com/gta6/media/footage/nov20-san4san-k17.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:Scorpio Akulus": {
+    "url": "https://meowdb.com/gta6/media/footage/launch-scorpio-akulus.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:Wortham WCR1": {
+    "url": "https://meowdb.com/gta6/media/footage/launch-wortham-wcr1.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:Hawk & Little .38": {
+    "url": "https://meowdb.com/gta6/media/footage/launch-hawk-little-38.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:Donnie's H&L .38": {
+    "url": "https://meowdb.com/gta6/media/footage/weapon-donnies-hl-38.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:Swamp Bait Akulus": {
+    "url": "https://meowdb.com/gta6/media/footage/nov20-swamp-bait-akulus.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:Honky Tonk Mustang .357": {
+    "url": "https://meowdb.com/gta6/media/footage/nov20-honky-tonk-mustang-357.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:Kingfishers Akulus": {
+    "url": "https://meowdb.com/gta6/media/footage/nov20-kingfishers-akulus.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:VF5 SMG": {
+    "url": "https://meowdb.com/gta6/media/footage/launch-vom-feuer-vf5.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:Wortham W-10": {
+    "url": "https://meowdb.com/gta6/media/footage/wortham-w-10.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:BZI Vatra": {
+    "url": "https://meowdb.com/gta6/media/footage/launch-bzi-vatra.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:ADB PD-90": {
+    "url": "https://meowdb.com/gta6/media/footage/launch-adb-pd-90.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:Deever Tech DSG": {
+    "url": "https://meowdb.com/gta6/media/footage/launch-deever-tech-dsg.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:Schlamm DW-9": {
+    "url": "https://meowdb.com/gta6/media/footage/launch-schlamm-dw-9.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:Vom Feuer VF5C": {
+    "url": "https://meowdb.com/gta6/media/footage/launch-vom-feuer-vf5c.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:Zhang Wu Type 9": {
+    "url": "https://meowdb.com/gta6/media/footage/launch-zhang-wu-type-9.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:Conspiracist Type 9": {
+    "url": "https://meowdb.com/gta6/media/footage/nov20-conspiracist-type-9.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:Crabshack VF5": {
+    "url": "https://meowdb.com/gta6/media/footage/nov20-crabshack-vf5.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:Double Cross Vatra": {
+    "url": "https://meowdb.com/gta6/media/footage/nov20-double-cross-vatra.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:Kolt & Associates Vatra": {
+    "url": "https://meowdb.com/gta6/media/footage/nov20-kolt-associates-vatra.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:Girardi Verro": {
+    "url": "https://meowdb.com/gta6/media/footage/launch-girardi-verro.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:Girardi AZ1200": {
+    "url": "https://meowdb.com/gta6/media/footage/launch-girardi-az1200.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:Girardi Super400": {
+    "url": "https://meowdb.com/gta6/media/footage/launch-girardi-super400.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:Godwin Comshot 12": {
+    "url": "https://meowdb.com/gta6/media/footage/launch-godwin-comshot-12.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:Kozlov KVGA-12": {
+    "url": "https://meowdb.com/gta6/media/footage/launch-kozlov-kvga-12.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:Mason & Keen Longshot": {
+    "url": "https://meowdb.com/gta6/media/footage/launch-mason-keen-longshot.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:Mason & Keen Shortstraw": {
+    "url": "https://meowdb.com/gta6/media/footage/launch-mason-keen-shortstraw.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:Gutterball Moreland 850": {
+    "url": "https://meowdb.com/gta6/media/footage/gutterball-moreland-850.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:Marabunta Grande Hobo": {
+    "url": "https://meowdb.com/gta6/media/footage/nov20-marabunta-grande-hobo.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:Smuggler Gorse 425": {
+    "url": "https://meowdb.com/gta6/media/footage/nov20-smuggler-gorse-425.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:Basher Gorse 425": {
+    "url": "https://meowdb.com/gta6/media/footage/nov20-basher-gorse-425.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:Bruiser Super400": {
+    "url": "https://meowdb.com/gta6/media/footage/bruiser-super400.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:Backdoor Hobo": {
+    "url": "https://meowdb.com/gta6/media/footage/backdoor-hobo.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:Darknite Drifter": {
+    "url": "https://meowdb.com/gta6/media/footage/nov20-darknite-drifter.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:Throttler Verro": {
+    "url": "https://meowdb.com/gta6/media/footage/nov20-throttler-verro.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:Kozlov Hind": {
+    "url": "https://meowdb.com/gta6/media/footage/kozlov-hind.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:W-14 Rifle": {
+    "url": "https://meowdb.com/gta6/media/footage/w-14-rifle.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:Fortune & Son Laird 350": {
+    "url": "https://meowdb.com/gta6/media/footage/fortune-son-laird-350.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:Kozlov KZ-59": {
+    "url": "https://meowdb.com/gta6/media/footage/launch-kozlov-kz-59.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:ADB FRA": {
+    "url": "https://meowdb.com/gta6/media/footage/launch-adb-fra.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:Hillinger Heathen": {
+    "url": "https://meowdb.com/gta6/media/footage/launch-hillinger-heathen.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:Vom Feuer VF-G1": {
+    "url": "https://meowdb.com/gta6/media/footage/launch-vom-feuer-vf-g1.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:Fairview FF-50": {
+    "url": "https://meowdb.com/gta6/media/footage/launch-fairview-ff-50.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:Fairview FF-SR": {
+    "url": "https://meowdb.com/gta6/media/footage/launch-fairview-ff-sr.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:Shrewsbury SM-69": {
+    "url": "https://meowdb.com/gta6/media/footage/launch-shrewsbury-sm-69.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:Shrewsbury SMS-01": {
+    "url": "https://meowdb.com/gta6/media/footage/launch-shrewsbury-sms-01.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:Hillinger M306": {
+    "url": "https://meowdb.com/gta6/media/footage/launch-hillinger-m306.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:Hillinger M306 TMR": {
+    "url": "https://meowdb.com/gta6/media/footage/launch-hillinger-m306-tmr.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:Nightmare KZ-59": {
+    "url": "https://meowdb.com/gta6/media/footage/nightmare-kz-59.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:Wortham W-22": {
+    "url": "https://meowdb.com/gta6/media/footage/wortham-w-22.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:Clunker 556": {
+    "url": "https://meowdb.com/gta6/media/footage/clunker-556.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:Raul's CQB 556": {
+    "url": "https://meowdb.com/gta6/media/footage/rauls-cqb-556.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:Killtelligence SM-69": {
+    "url": "https://meowdb.com/gta6/media/footage/killtelligence-sm-69.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:Kingfishers W-22": {
+    "url": "https://meowdb.com/gta6/media/footage/kingfishers-w-22.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:La Polilla Negra KZ-59": {
+    "url": "https://meowdb.com/gta6/media/footage/nov20-la-polilla-negra-kz-59.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:Drug Mule KZ-59": {
+    "url": "https://meowdb.com/gta6/media/footage/nov20-drug-mule-kz-59.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:Marabunta Grande KZ-59": {
+    "url": "https://meowdb.com/gta6/media/footage/nov20-marabunta-grande-kz-59.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:La Polilla Negra VF-G1": {
+    "url": "https://meowdb.com/gta6/media/footage/nov20-la-polilla-negra-vf-g1.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:Cockroach Xtreme 556": {
+    "url": "https://meowdb.com/gta6/media/footage/nov20-cockroach-xtreme-556.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:Kolt & Associates 556": {
+    "url": "https://meowdb.com/gta6/media/footage/nov20-kolt-associates-556.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:Black Eagle Import M306 TMR": {
+    "url": "https://meowdb.com/gta6/media/footage/nov20-black-eagle-import-m306-tmr.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:Kingfishers Laird 350": {
+    "url": "https://meowdb.com/gta6/media/footage/nov20-kingfishers-laird-350.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:Mister Mangrove Laird 350": {
+    "url": "https://meowdb.com/gta6/media/footage/nov20-mister-mangrove-laird-350.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:Cruel Huntsman's SM-69": {
+    "url": "https://meowdb.com/gta6/media/footage/nov20-cruel-huntsmans-sm-69.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:Vice City Heathen": {
+    "url": "https://meowdb.com/gta6/media/footage/vice-city-heathen.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:Star Spangled 556": {
+    "url": "https://meowdb.com/gta6/media/footage/nov20-star-spangled-556.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:Fincredible Laird 350": {
+    "url": "https://meowdb.com/gta6/media/footage/nov20-fincredible-laird-350.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:San4San KZ-59": {
+    "url": "https://meowdb.com/gta6/media/footage/nov20-san4san-kz-59.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:ADB M350": {
+    "url": "https://meowdb.com/gta6/media/footage/launch-adb-m350.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:Francisco's LMG 6": {
+    "url": "https://meowdb.com/gta6/media/footage/nov20-franciscos-lmg-6.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:Hillinger Boomer": {
+    "url": "https://meowdb.com/gta6/media/footage/launch-hillinger-boomer.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:Deever Tech GLR40": {
+    "url": "https://meowdb.com/gta6/media/footage/nov20-deever-tech-glr40.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:Flasher Flare Gun": {
+    "url": "https://meowdb.com/gta6/media/footage/nov20-flasher-flare-gun.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:Switchblade": {
+    "url": "https://meowdb.com/gta6/media/footage/launch-switchblade.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:Diving Knife": {
+    "url": "https://meowdb.com/gta6/media/footage/diving-knife.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:Bushcraft Knife": {
+    "url": "https://meowdb.com/gta6/media/footage/launch-bushcraft-knife.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:Survival Knife": {
+    "url": "https://meowdb.com/gta6/media/footage/launch-survival-knife.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:Combat Knife": {
+    "url": "https://meowdb.com/gta6/media/footage/launch-combat-knife.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:EDC Knife": {
+    "url": "https://meowdb.com/gta6/media/footage/launch-edc-knife.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:Baton": {
+    "url": "https://meowdb.com/gta6/media/footage/launch-baton.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:Brass Knuckles": {
+    "url": "https://meowdb.com/gta6/media/footage/launch-brass-knuckles.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:Hammer": {
+    "url": "https://meowdb.com/gta6/media/footage/hammer.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:Crowbar": {
+    "url": "https://meowdb.com/gta6/media/footage/crowbar.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:Shocker Stun Gun": {
+    "url": "https://meowdb.com/gta6/media/footage/shocker-stun-gun.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:Buntosaurus Bat": {
+    "url": "https://meowdb.com/gta6/media/footage/nov20-buntosaurus-bat.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:Soldier's Combat Knife": {
+    "url": "https://meowdb.com/gta6/media/footage/nov20-soldiers-combat-knife.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:Cursed Knife": {
+    "url": "https://meowdb.com/gta6/media/footage/nov20-cursed-knife.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:Molotov": {
+    "url": "https://meowdb.com/gta6/media/footage/molotov.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:Frag Grenade": {
+    "url": "https://meowdb.com/gta6/media/footage/frag-grenade.webp",
+    "credit": "Rockstar Games / NiaMeowDB",
+    "page": "https://meowdb.com/gta6/weapons"
+  },
+  "weapon:Duval Signature ES9": {
+    "url": "https://assetsio.gnwcdn.com/gta-6-duval-signature-es9-military-pistol.jpg?width=1200&height=630&fit=crop&enable=upscale&auto=webp",
+    "credit": "Rockstar Games / Eurogamer",
+    "page": "https://www.eurogamer.net/how-to-claim-duval-signature-es9-gun-gta-6"
+  },
+  "weapon:Sticky Bomb": {
+    "url": "https://gtadb.net/images/media/derivatives/7d/cd/7dcdf4df-3638-4948-a4dd-86b4a3a911e9-v1-960.webp",
+    "credit": "Rockstar Games / GTADB",
+    "page": "https://gtadb.net/gta-6/weapons/sticky-bomb-gta-6/"
+  },
+  "weapon:Bae-Luxe's Bat": {
+    "url": "https://www.powerpyx.com/wp-content/uploads/gta6-walkthrough-cooties-6.jpg",
+    "credit": "Rockstar Games / PowerPyx · Cooties mission scene",
+    "page": "https://www.powerpyx.com/gta-6-cooties-shoot-the-music-video-walkthrough/"
+  },
+  "vehicle:Pegassi '96 Infernus (modded)": {
+    "url": "https://meowdb.com/gta6/media/footage/pegassi-infernus.webp",
+    "credit": "MeowDB / GameSpot",
+    "page": "https://meowdb.com/gta6/vehicles/pegassi-infernus"
+  },
+  "vehicle:Invetero Coquette D10": {
+    "url": "https://meowdb.com/gta6/media/footage/invetero-coquette-d10.webp",
+    "credit": "MeowDB / Broughy1322",
+    "page": "https://meowdb.com/gta6/vehicles/invetero-coquette-d10"
+  },
+  "vehicle:Ocelot Jugular (modded)": {
+    "url": "https://meowdb.com/gta6/media/footage/ocelot-jugular.webp",
+    "credit": "MeowDB / Kotaku",
+    "page": "https://meowdb.com/gta6/vehicles/ocelot-jugular"
+  },
+  "vehicle:Grotti Carbonizzare": {
+    "url": "https://meowdb.com/gta6/media/footage/grotti-carbonizzare.webp",
+    "credit": "MeowDB / GamingBolt",
+    "page": "https://meowdb.com/gta6/vehicles/grotti-carbonizzare"
+  },
+  "vehicle:Invetero Coquette": {
+    "url": "https://meowdb.com/gta6/media/footage/invetero-coquette.webp",
+    "credit": "MeowDB / Digital Foundry",
+    "page": "https://meowdb.com/gta6/vehicles/invetero-coquette"
+  },
+  "vehicle:Vapid Dominator": {
+    "url": "https://meowdb.com/gta6/media/footage/vapid-dominator.webp",
+    "credit": "MeowDB / Vandal",
+    "page": "https://meowdb.com/gta6/vehicles/vapid-dominator"
+  },
+  "vehicle:Annis '90 Elegy": {
+    "url": "https://meowdb.com/gta6/media/footage/annis-elegy.webp",
+    "credit": "MeowDB / IGN",
+    "page": "https://meowdb.com/gta6/vehicles/annis-elegy"
+  },
+  "vehicle:Dinka Chavos XS": {
+    "url": "https://meowdb.com/gta6/media/footage/dinka-chavos-xs.webp",
+    "credit": "MeowDB / Vandal",
+    "page": "https://meowdb.com/gta6/vehicles/dinka-chavos-xs"
+  },
+  "vehicle:Maibatsu '97 Penumbra FF": {
+    "url": "https://meowdb.com/gta6/media/footage/lucia-penumbra-ff.webp",
+    "credit": "MeowDB / GamersPrey",
+    "page": "https://meowdb.com/gta6/vehicles/maibatsu-penumbra-ff"
+  },
+  "vehicle:Dinka Sugoi": {
+    "url": "https://meowdb.com/gta6/media/footage/dinka-sugoi.webp",
+    "credit": "MeowDB / Broughy1322",
+    "page": "https://meowdb.com/gta6/vehicles/dinka-sugoi"
+  },
+  "vehicle:Emperor Sultan": {
+    "url": "https://meowdb.com/gta6/media/footage/emperor-sultan.webp",
+    "credit": "MeowDB / Broughy1322",
+    "page": "https://meowdb.com/gta6/vehicles/emperor-sultan"
+  },
+  "vehicle:Vapid Lowline": {
+    "url": "https://meowdb.com/gta6/media/footage/vapid-lowline.webp",
+    "credit": "MeowDB / TGM",
+    "page": "https://meowdb.com/gta6/vehicles/vapid-lowline"
+  },
+  "vehicle:Declasse '20 Impaler (modded)": {
+    "url": "https://meowdb.com/gta6/media/footage/declasse-impaler.webp",
+    "credit": "MeowDB / IGN",
+    "page": "https://meowdb.com/gta6/vehicles/declasse-impaler"
+  },
+  "vehicle:Bravado '95 Bison 900": {
+    "url": "https://meowdb.com/gta6/media/footage/bravado-bison-900.webp",
+    "credit": "MeowDB / Shirrako",
+    "page": "https://meowdb.com/gta6/vehicles/bravado-bison-900"
+  },
+  "vehicle:Bravado Bison 1800": {
+    "url": "https://meowdb.com/gta6/media/footage/bravado-bison-1800.webp",
+    "credit": "MeowDB / Kotaku",
+    "page": "https://meowdb.com/gta6/vehicles/bravado-bison-1800"
+  },
+  "vehicle:Karin '84 Rebel (modded)": {
+    "url": "https://meowdb.com/gta6/media/footage/karin-rebel.webp",
+    "credit": "MeowDB / IGN",
+    "page": "https://meowdb.com/gta6/vehicles/karin-rebel"
+  },
+  "vehicle:Nagasaki SFB 1000": {
+    "url": "https://meowdb.com/gta6/media/footage/nagasaki-sfb-1000.webp",
+    "credit": "MeowDB / gameranx",
+    "page": "https://meowdb.com/gta6/vehicles/nagasaki-sfb-1000"
+  },
+  "vehicle:BF '77 Bandito (modded)": {
+    "url": "https://meowdb.com/gta6/media/footage/bf-bandito.webp",
+    "credit": "MeowDB / Broughy1322",
+    "page": "https://meowdb.com/gta6/vehicles/bf-bandito"
+  },
+  "vehicle:Piccia Furia": {
+    "url": "https://meowdb.com/gta6/media/footage/nov20-piccia-furia.webp",
+    "credit": "MeowDB / Aura",
+    "page": "https://meowdb.com/gta6/vehicles#piccia-furia"
+  },
+  "vehicle:Pegassi Tempesta": {
+    "url": "https://meowdb.com/gta6/media/footage/pegassi-tempesta.webp",
+    "credit": "MeowDB / Skill Up",
+    "page": "https://meowdb.com/gta6/vehicles#pegassi-tempesta"
+  },
+  "vehicle:Pegassi Gold Rush Tempesta": {
+    "url": "https://meowdb.com/gta6/media/footage/nov20-pegassi-gold-rush-tempesta.webp",
+    "credit": "MeowDB / DeluxPlays",
+    "page": "https://meowdb.com/gta6/vehicles#pegassi-gold-rush-tempesta"
+  },
+  "vehicle:Progen Royal Ruby Emerus": {
+    "url": "https://meowdb.com/gta6/media/footage/nov20-progen-royal-ruby-emerus.webp",
+    "credit": "MeowDB / WiLLiSGaming",
+    "page": "https://meowdb.com/gta6/vehicles/progen-royal-ruby-emerus"
+  },
+  "vehicle:Progen Purple Drank Emerus": {
+    "url": "https://meowdb.com/gta6/media/footage/nov20-progen-purple-drank-emerus.webp",
+    "credit": "MeowDB / WiLLiSGaming",
+    "page": "https://meowdb.com/gta6/vehicles/progen-purple-drank-emerus"
+  },
+  "vehicle:Granforma Zorrusso": {
+    "url": "https://meowdb.com/gta6/media/footage/granforma-zorrusso.webp",
+    "credit": "MeowDB / Sirloin",
+    "page": "https://meowdb.com/gta6/vehicles/granforma-zorrusso"
+  },
+  "vehicle:'95 Grotti Cheetah": {
+    "url": "https://meowdb.com/gta6/media/items/grotti-cheetah-1.webp",
+    "credit": "MeowDB / Rockstar Games",
+    "page": "https://meowdb.com/gta6/vehicles/grotti-cheetah"
+  },
+  "vehicle:Pegassi Gold Rope Infernus": {
+    "url": "https://meowdb.com/gta6/media/footage/nov20-pegassi-gold-rope-infernus.webp",
+    "credit": "MeowDB / Nerpah",
+    "page": "https://meowdb.com/gta6/vehicles/pegassi-gold-rope-infernus"
+  },
+  "vehicle:Pfister Comet S2": {
+    "url": "https://meowdb.com/gta6/media/footage/pfister-comet-s2.webp",
+    "credit": "MeowDB / Kotaku",
+    "page": "https://meowdb.com/gta6/vehicles#pfister-comet-s2"
+  },
+  "vehicle:'55 Vapid Stanier": {
+    "url": "https://meowdb.com/gta6/media/items/vapid-stanier-1.webp",
+    "credit": "MeowDB / Rockstar Games",
+    "page": "https://meowdb.com/gta6/vehicles/vapid-stanier"
+  },
+  "vehicle:'64 Declasse Mamba GT": {
+    "url": "https://meowdb.com/gta6/media/footage/nov20-declasse-mamba-gt.webp",
+    "credit": "MeowDB / LunarGaming",
+    "page": "https://meowdb.com/gta6/vehicles/declasse-mamba-gt"
+  },
+  "vehicle:Übermacht Cypher": {
+    "url": "https://meowdb.com/gta6/media/footage/nov20-ubermacht-cypher.webp",
+    "credit": "MeowDB / Broughy1322",
+    "page": "https://meowdb.com/gta6/vehicles/ubermacht-cypher"
+  },
+  "vehicle:Übermacht '85 Sentinel": {
+    "url": "https://meowdb.com/gta6/media/footage/nov20-ubermacht-sentinel.webp",
+    "credit": "MeowDB / GamersPrey",
+    "page": "https://meowdb.com/gta6/vehicles#bermacht-85-sentinel"
+  },
+  "vehicle:Buckingham Windsor Drop": {
+    "url": "https://meowdb.com/gta6/media/footage/nov20-buckingham-windsor-drop.webp",
+    "credit": "MeowDB / Broughy1322",
+    "page": "https://meowdb.com/gta6/vehicles/buckingham-windsor-drop"
+  },
+  "vehicle:Karin Asterope GZ": {
+    "url": "https://meowdb.com/gta6/media/footage/nov20-karin-asterope-gz.webp",
+    "credit": "MeowDB / Broughy1322",
+    "page": "https://meowdb.com/gta6/vehicles/karin-asterope-gz"
+  },
+  "vehicle:Karin '98 Feroci": {
+    "url": "https://meowdb.com/gta6/media/footage/nov20-karin-feroci.webp",
+    "credit": "MeowDB / Hazard",
+    "page": "https://meowdb.com/gta6/vehicles#karin-98-feroci"
+  },
+  "vehicle:BF Greta": {
+    "url": "https://meowdb.com/gta6/media/footage/nov20-bf-greta.webp",
+    "credit": "MeowDB / Broughy1322",
+    "page": "https://meowdb.com/gta6/vehicles/bf-greta"
+  },
+  "vehicle:Pegassi Toros": {
+    "url": "https://meowdb.com/gta6/media/footage/nov20-pegassi-toros.webp",
+    "credit": "MeowDB / Aura",
+    "page": "https://meowdb.com/gta6/vehicles#pegassi-toros"
+  },
+  "vehicle:Pegassi Charred Toros": {
+    "url": "https://meowdb.com/gta6/media/footage/nov20-pegassi-charred-toros.webp",
+    "credit": "MeowDB / WiLLiSGaming",
+    "page": "https://meowdb.com/gta6/vehicles/pegassi-charred-toros"
+  },
+  "vehicle:Dundreary Landstalker XL": {
+    "url": "https://meowdb.com/gta6/media/footage/nov20-dundreary-landstalker-xl.webp",
+    "credit": "MeowDB / Nemsk",
+    "page": "https://meowdb.com/gta6/vehicles#dundreary-landstalker-xl"
+  },
+  "vehicle:Gallivanter Baller ST-D": {
+    "url": "https://meowdb.com/gta6/media/footage/nov20-gallivanter-baller-st-d.webp",
+    "credit": "MeowDB / Broughy1322",
+    "page": "https://meowdb.com/gta6/vehicles/gallivanter-baller-st-d"
+  },
+  "vehicle:Vapid Rumpo": {
+    "url": "https://meowdb.com/gta6/media/footage/nov20-vapid-rumpo.webp",
+    "credit": "MeowDB / Broughy1322",
+    "page": "https://meowdb.com/gta6/vehicles#vapid-rumpo"
+  },
+  "vehicle:Whiffler Dashound": {
+    "url": "https://meowdb.com/gta6/media/footage/nov20-whiffler-dashound.webp",
+    "credit": "MeowDB / Nemsk",
+    "page": "https://meowdb.com/gta6/vehicles#whiffler-dashound"
+  },
+  "vehicle:Vapid Sandking XT": {
+    "url": "https://meowdb.com/gta6/media/footage/nov20-vapid-sandking-xt.webp",
+    "credit": "MeowDB / Buckacherz",
+    "page": "https://meowdb.com/gta6/vehicles#vapid-sandking-xt"
+  },
+  "vehicle:Vapid Truth & Justice Caracara": {
+    "url": "https://meowdb.com/gta6/media/footage/nov20-vapid-truth-justice-caracara.webp",
+    "credit": "MeowDB / FP Good Game",
+    "page": "https://meowdb.com/gta6/vehicles/vapid-truth-and-justice-caracara"
+  },
+  "vehicle:MTL Packer": {
+    "url": "https://meowdb.com/gta6/media/footage/nov20-mtl-packer.webp",
+    "credit": "MeowDB / Broughy1322",
+    "page": "https://meowdb.com/gta6/vehicles/mtl-packer"
+  },
+  "vehicle:Interstate '80 Yankee": {
+    "url": "https://meowdb.com/gta6/media/footage/nov20-interstate-yankee.webp",
+    "credit": "MeowDB / Broughy1322",
+    "page": "https://meowdb.com/gta6/vehicles#interstate-80-yankee"
+  },
+  "vehicle:Dinka Enduro": {
+    "url": "https://meowdb.com/gta6/media/items/safehouse-vehicles-2.webp",
+    "credit": "MeowDB / Rockstar Games",
+    "page": "https://meowdb.com/gta6/vehicles/dinka-enduro"
+  },
+  "vehicle:Taci Ragno": {
+    "url": "https://meowdb.com/gta6/media/footage/nov20-taci-ragno.webp",
+    "credit": "MeowDB / Broughy1322",
+    "page": "https://meowdb.com/gta6/vehicles/taci-ragno"
+  },
+  "vehicle:Mer-Can Outlaw": {
+    "url": "https://meowdb.com/gta6/media/footage/nov20-mer-can-outlaw.webp",
+    "credit": "MeowDB / Zanar",
+    "page": "https://meowdb.com/gta6/vehicles#mer-can-outlaw"
+  },
+  "vehicle:Mer-Can Blast": {
+    "url": "https://meowdb.com/gta6/media/footage/nov20-mer-can-blast.webp",
+    "credit": "MeowDB / Broughy1322",
+    "page": "https://meowdb.com/gta6/vehicles/mer-can-blast"
+  },
+  "vehicle:Seashark Hydroblast": {
+    "url": "https://meowdb.com/gta6/media/footage/nov20-seashark-hydroblast.webp",
+    "credit": "MeowDB / Broughy1322",
+    "page": "https://meowdb.com/gta6/vehicles#seashark-hydroblast"
+  },
+  "vehicle:Shitzu Squalo": {
+    "url": "https://meowdb.com/gta6/media/items/shitzu-squalo-1.webp",
+    "credit": "MeowDB / Rockstar Games",
+    "page": "https://meowdb.com/gta6/vehicles/shitzu-squalo"
+  },
+  "vehicle:Hulls Sea Enchantress": {
+    "url": "https://meowdb.com/gta6/media/footage/nov20-hulls-sea-enchantress.webp",
+    "credit": "MeowDB / Broughy1322",
+    "page": "https://meowdb.com/gta6/vehicles#hulls-sea-enchantress"
+  },
+  "vehicle:Nagasaki Rudolph Tao": {
+    "url": "https://meowdb.com/gta6/media/footage/nov20-nagasaki-rudolph-tao.webp",
+    "credit": "MeowDB / Broughy1322",
+    "page": "https://meowdb.com/gta6/vehicles/nagasaki-rudolph-tao"
+  },
+  "vehicle:Lure Predator L20S": {
+    "url": "https://meowdb.com/gta6/media/footage/nov20-lure-predator-l20s.webp",
+    "credit": "MeowDB / Nemsk",
+    "page": "https://meowdb.com/gta6/vehicles#lure-predator-l20s"
+  },
+  "vehicle:Lure Predator L35P": {
+    "url": "https://meowdb.com/gta6/media/footage/nov20-lure-predator-l35p.webp",
+    "credit": "MeowDB / Hazard",
+    "page": "https://meowdb.com/gta6/vehicles#lure-predator-l35p"
+  },
+  "vehicle:Crest Kayak": {
+    "url": "https://meowdb.com/gta6/media/items/safehouse-vehicles-3.webp",
+    "credit": "MeowDB / Rockstar Games",
+    "page": "https://meowdb.com/gta6/vehicles/crest-kayak"
+  },
+  "vehicle:Buckingham SuperVolito": {
+    "url": "https://meowdb.com/gta6/media/footage/nov20-buckingham-supervolito.webp",
+    "credit": "MeowDB / TJRH",
+    "page": "https://meowdb.com/gta6/vehicles#buckingham-supervolito"
+  },
+  "vehicle:Buckingham Volatus": {
+    "url": "https://meowdb.com/gta6/media/footage/nov20-buckingham-volatus.webp",
+    "credit": "MeowDB / Christian Konopatzki",
+    "page": "https://meowdb.com/gta6/vehicles#buckingham-volatus"
+  },
+  "vehicle:Jack Sheepe B3000 Excavator": {
+    "url": "https://meowdb.com/gta6/media/footage/nov20-jack-sheepe-b3000-excavator.webp",
+    "credit": "MeowDB / Broughy1322",
+    "page": "https://meowdb.com/gta6/vehicles/jack-sheepe-b3000-excavator"
+  },
+  "vehicle:HVY Lifta": {
+    "url": "https://meowdb.com/gta6/media/footage/nov20-hvy-lifta.webp",
+    "credit": "MeowDB / 100% Guides",
+    "page": "https://meowdb.com/gta6/vehicles#hvy-lifta"
+  },
+  "vehicle:Albany '77 Manana": {
+    "url": "https://meowdb.com/gta6/media/footage/nov20-albany-manana.webp",
+    "credit": "MeowDB / Sirloin",
+    "page": "https://meowdb.com/gta6/vehicles#albany-77-manana"
+  },
+  "vehicle:Albany Primo": {
+    "url": "https://meowdb.com/gta6/media/footage/nov20-albany-primo.webp",
+    "credit": "MeowDB / MELOO",
+    "page": "https://meowdb.com/gta6/vehicles#albany-primo"
+  },
+  "vehicle:Benefactor Schafter S": {
+    "url": "https://meowdb.com/gta6/media/footage/benefactor-schafter-s.webp",
+    "credit": "MeowDB / Kotaku",
+    "page": "https://meowdb.com/gta6/vehicles/benefactor-schafter-s"
+  },
+  "vehicle:Benefactor Schafter V12": {
+    "url": "https://meowdb.com/gta6/media/footage/benefactor-schafter-v12.webp",
+    "credit": "MeowDB / GamersPrey",
+    "page": "https://meowdb.com/gta6/vehicles#benefactor-schafter-v12"
+  },
+  "vehicle:Bravado Banshee": {
+    "url": "https://static.wikia.nocookie.net/gtawiki/images/6/64/Banshee-GTAVI-Trailer2.png/revision/latest?cb=20250506212454",
+    "credit": "GTA Wiki (Fandom) / Rockstar Games",
+    "page": "https://gta.fandom.com/wiki/Banshee_%28HD_Universe%29"
+  },
+  "vehicle:Bravado Bogan": {
+    "url": "https://meowdb.com/gta6/media/footage/bravado-bogan.webp",
+    "credit": "MeowDB / Shirrako",
+    "page": "https://meowdb.com/gta6/vehicles#bravado-bogan"
+  },
+  "vehicle:Bravado '07 Buffalo": {
+    "url": "https://meowdb.com/gta6/media/footage/bravado-buffalo-07.webp",
+    "credit": "MeowDB / Sirloin",
+    "page": "https://meowdb.com/gta6/vehicles#bravado-07-buffalo"
+  },
+  "vehicle:Coil Raiden": {
+    "url": "https://meowdb.com/gta6/media/footage/coil-raiden.webp",
+    "credit": "MeowDB / TGM",
+    "page": "https://meowdb.com/gta6/vehicles#coil-raiden"
+  },
+  "vehicle:Declasse Akane": {
+    "url": "https://meowdb.com/gta6/media/footage/mia-akane.webp",
+    "credit": "MeowDB / GamersPrey",
+    "page": "https://meowdb.com/gta6/vehicles/declasse-akane"
+  },
+  "vehicle:Declasse '72 Tulip": {
+    "url": "https://meowdb.com/gta6/media/footage/declasse-tulip.webp",
+    "credit": "MeowDB / gameranx",
+    "page": "https://meowdb.com/gta6/vehicles/declasse-tulip"
+  },
+  "vehicle:Obey Animus": {
+    "url": "https://meowdb.com/gta6/media/footage/obey-animus.webp",
+    "credit": "MeowDB / TGM",
+    "page": "https://meowdb.com/gta6/vehicles#obey-animus"
+  },
+  "vehicle:Pfister Neon": {
+    "url": "https://meowdb.com/gta6/media/footage/pfister-neon.webp",
+    "credit": "MeowDB / TmarTn2",
+    "page": "https://meowdb.com/gta6/vehicles#pfister-neon"
+  },
+  "vehicle:Vapid Stanier G2": {
+    "url": "https://meowdb.com/gta6/media/footage/vapid-stanier-g2.webp",
+    "credit": "MeowDB / GameStar",
+    "page": "https://meowdb.com/gta6/vehicles#vapid-stanier-g2"
+  },
+  "vehicle:Vapid '32 Hustler": {
+    "url": "https://meowdb.com/gta6/media/footage/vapid-hustler-32.webp",
+    "credit": "MeowDB / GamersPrey",
+    "page": "https://meowdb.com/gta6/vehicles#vapid-32-hustler"
+  },
+  "vehicle:Willard '92 Grouse": {
+    "url": "https://meowdb.com/gta6/media/footage/willard-grouse-scan.webp",
+    "credit": "MeowDB / AFGuidesHD",
+    "page": "https://meowdb.com/gta6/vehicles/willard-grouse"
+  },
+  "vehicle:Willard Transient": {
+    "url": "https://meowdb.com/gta6/media/footage/willard-transient.webp",
+    "credit": "MeowDB / AFGuidesHD",
+    "page": "https://meowdb.com/gta6/vehicles#willard-transient"
+  },
+  "vehicle:Willard '90 Lasso": {
+    "url": "https://meowdb.com/gta6/media/footage/willard-lasso-convertible.webp",
+    "credit": "MeowDB / AFGuidesHD",
+    "page": "https://meowdb.com/gta6/vehicles/willard-lasso"
+  },
+  "vehicle:Albany Cavalcade XL": {
+    "url": "https://meowdb.com/gta6/media/footage/albany-cavalcade-xl.webp",
+    "credit": "MeowDB / Sirloin",
+    "page": "https://meowdb.com/gta6/vehicles/albany-cavalcade-xl"
+  },
+  "vehicle:Benefactor Dubsta": {
+    "url": "https://meowdb.com/gta6/media/footage/benefactor-dubsta.webp",
+    "credit": "MeowDB / TGM",
+    "page": "https://meowdb.com/gta6/vehicles/benefactor-dubsta"
+  },
+  "vehicle:Bravado Dorado": {
+    "url": "https://meowdb.com/gta6/media/footage/bravado-dorado.webp",
+    "credit": "MeowDB / Vandal",
+    "page": "https://meowdb.com/gta6/vehicles/bravado-dorado"
+  },
+  "vehicle:Buckingham Jubilee": {
+    "url": "https://meowdb.com/gta6/media/footage/buckingham-jubilee.webp",
+    "credit": "MeowDB / GameStar",
+    "page": "https://meowdb.com/gta6/vehicles/buckingham-jubilee"
+  },
+  "vehicle:Canis '82 Crawler": {
+    "url": "https://meowdb.com/gta6/media/footage/canis-crawler.webp",
+    "credit": "MeowDB / AFGuidesHD",
+    "page": "https://meowdb.com/gta6/vehicles/canis-crawler"
+  },
+  "vehicle:Declasse Burrito": {
+    "url": "https://meowdb.com/gta6/media/footage/declasse-burrito-98.webp",
+    "credit": "MeowDB / GamersPrey",
+    "page": "https://meowdb.com/gta6/vehicles/declasse-burrito"
+  },
+  "vehicle:Declasse Granger": {
+    "url": "https://meowdb.com/gta6/media/footage/declasse-granger.webp",
+    "credit": "MeowDB / AFGuidesHD",
+    "page": "https://meowdb.com/gta6/vehicles#declasse-granger"
+  },
+  "vehicle:Karin Allander": {
+    "url": "https://meowdb.com/gta6/media/footage/karin-allander.webp",
+    "credit": "MeowDB / TGM",
+    "page": "https://meowdb.com/gta6/vehicles/karin-allander"
+  },
+  "vehicle:Übermacht Rebla GTS": {
+    "url": "https://meowdb.com/gta6/media/footage/ubermacht-rebla-gts.webp",
+    "credit": "MeowDB / Sirloin",
+    "page": "https://meowdb.com/gta6/vehicles/ubermacht-rebla-gts"
+  },
+  "vehicle:Vapid Aleutian": {
+    "url": "https://meowdb.com/gta6/media/footage/vapid-aleutian.webp",
+    "credit": "MeowDB / AFGuidesHD",
+    "page": "https://meowdb.com/gta6/vehicles#vapid-aleutian"
+  },
+  "vehicle:Vapid Montagne XL": {
+    "url": "https://meowdb.com/gta6/media/footage/vapid-montagne-xl.webp",
+    "credit": "MeowDB / AFGuidesHD",
+    "page": "https://meowdb.com/gta6/vehicles/vapid-montagne-xl"
+  },
+  "vehicle:Vapid Speedo": {
+    "url": "https://meowdb.com/gta6/media/footage/vapid-speedo.webp",
+    "credit": "MeowDB / GamersPrey",
+    "page": "https://meowdb.com/gta6/vehicles#vapid-speedo"
+  },
+  "vehicle:Bravado Bison 3800": {
+    "url": "https://meowdb.com/gta6/media/footage/bravado-bison-3800.webp",
+    "credit": "MeowDB / IGN",
+    "page": "https://meowdb.com/gta6/vehicles/bravado-bison-3800"
+  },
+  "vehicle:Canis Kamacho": {
+    "url": "https://meowdb.com/gta6/media/footage/nov20-canis-kamacho.webp",
+    "credit": "MeowDB / Christian Konopatzki",
+    "page": "https://meowdb.com/gta6/vehicles#canis-kamacho"
+  },
+  "vehicle:Declasse '84 Bobcat XL": {
+    "url": "https://meowdb.com/gta6/media/footage/declasse-bobcat-xl.webp",
+    "credit": "MeowDB / AFGuidesHD",
+    "page": "https://meowdb.com/gta6/vehicles/declasse-bobcat-xl"
+  },
+  "vehicle:Declasse '86 Rancher": {
+    "url": "https://meowdb.com/gta6/media/footage/declasse-rancher.webp",
+    "credit": "MeowDB / Shirrako",
+    "page": "https://meowdb.com/gta6/vehicles#declasse-86-rancher"
+  },
+  "vehicle:Vapid Caracara 4x4": {
+    "url": "https://static.wikia.nocookie.net/gtawiki/images/8/85/Caracara4x4-GTAVI-Trailer2.png/revision/latest/scale-to-width-down/1200?cb=20250506155051",
+    "credit": "GTA Wiki (Fandom) / Rockstar Games",
+    "page": "https://gta.fandom.com/wiki/Caracara_4x4"
+  },
+  "vehicle:Vapid Riata": {
+    "url": "https://meowdb.com/gta6/media/footage/vapid-riata-pickup.webp",
+    "credit": "MeowDB / AFGuidesHD",
+    "page": "https://meowdb.com/gta6/vehicles/vapid-riata"
+  },
+  "vehicle:Vapid Reclaimer": {
+    "url": "https://meowdb.com/gta6/media/footage/vapid-reclaimer.webp",
+    "credit": "MeowDB / Kotaku",
+    "page": "https://meowdb.com/gta6/vehicles#vapid-reclaimer"
+  },
+  "vehicle:Vapid Sandking XL": {
+    "url": "https://meowdb.com/gta6/media/footage/vapid-sandking-xl.webp",
+    "credit": "MeowDB / Fuzion Xbox Testing",
+    "page": "https://meowdb.com/gta6/vehicles/vapid-sandking-xl"
+  },
+  "vehicle:Principe Alvino V1": {
+    "url": "https://meowdb.com/gta6/media/characters/jason-duval-2.webp",
+    "credit": "MeowDB / Rockstar Games",
+    "page": "https://meowdb.com/gta6/vehicles#principe-alvino-v1"
+  },
+  "vehicle:Dingus Nepa": {
+    "url": "https://meowdb.com/gta6/media/footage/nov20-dingus-nepa.webp",
+    "credit": "MeowDB / GamersPrey",
+    "page": "https://meowdb.com/gta6/vehicles#dingus-nepa"
+  },
+  "vehicle:Dingus Como": {
+    "url": "https://meowdb.com/gta6/media/footage/nov20-dingus-como.webp",
+    "credit": "MeowDB / AFGuidesHD",
+    "page": "https://meowdb.com/gta6/vehicles#dingus-como"
+  },
+  "vehicle:Mammoth Dodo": {
+    "url": "https://meowdb.com/gta6/media/footage/mammoth-dodo.webp",
+    "credit": "MeowDB / IGN",
+    "page": "https://meowdb.com/gta6/vehicles/mammoth-dodo"
+  },
+  "vehicle:Lapwing Mammatus": {
+    "url": "https://meowdb.com/gta6/media/footage/nov20-lapwing-mammatus.webp",
+    "credit": "MeowDB / Sirloin",
+    "page": "https://meowdb.com/gta6/vehicles#lapwing-mammatus"
+  },
+  "vehicle:Lapwing Mallard": {
+    "url": "https://meowdb.com/gta6/media/footage/nov20-lapwing-mallard.webp",
+    "credit": "MeowDB / TJRH",
+    "page": "https://meowdb.com/gta6/vehicles#lapwing-mallard"
+  },
+  "vehicle:Lapwing Stolen Valor 300-H": {
+    "url": "https://meowdb.com/gta6/media/footage/nov20-lapwing-stolen-valor-300-h.webp",
+    "credit": "MeowDB / Trophy Tom",
+    "page": "https://meowdb.com/gta6/vehicles#lapwing-stolen-valor-300-h"
+  },
+  "vehicle:Bottcher Duster": {
+    "url": "https://meowdb.com/gta6/media/footage/nov20-bottcher-duster.webp",
+    "credit": "MeowDB / TJRH",
+    "page": "https://meowdb.com/gta6/vehicles#bottcher-duster"
+  },
+  "vehicle:Buckingham Maverick": {
+    "url": "https://meowdb.com/gta6/media/footage/buckingham-maverick.webp",
+    "credit": "MeowDB / TGM",
+    "page": "https://meowdb.com/gta6/vehicles#buckingham-maverick"
+  },
+  "vehicle:Albany '85 Emperor": {
+    "url": "https://meowdb.com/gta6/media/footage/albany-emperor.webp",
+    "credit": "MeowDB / Vandal",
+    "page": "https://meowdb.com/gta6/vehicles/albany-emperor"
+  },
+  "vehicle:Dinka '85 Blista": {
+    "url": "https://meowdb.com/gta6/media/footage/dinka-blista.webp",
+    "credit": "MeowDB / IGN",
+    "page": "https://meowdb.com/gta6/vehicles/dinka-blista"
+  },
+  "vehicle:Western / Bottcher 020": {
+    "url": "https://meowdb.com/gta6/media/footage/launch-bottcher-020.webp",
+    "credit": "MeowDB / AFGuidesHD",
+    "page": "https://meowdb.com/gta6/vehicles#bottcher-020"
+  },
+  "vehicle:Rhino Tank": {
+    "url": "https://meowdb.com/gta6/media/footage/hauners-rhino-tank.webp",
+    "credit": "MeowDB / TGG",
+    "page": "https://meowdb.com/gta6/vehicles/hauners-rhino-tank"
+  },
+  "vehicle:Albany V-STR": {
+    "url": "https://static.wikia.nocookie.net/gtawiki/images/6/66/VSTR-GTAVI-OfficialScreenshot-AmbrosiaPostcard.png/revision/latest/scale-to-width-down/1200?cb=20250730071229",
+    "credit": "GTA Wiki (Fandom) / Rockstar Games",
+    "page": "https://gta.fandom.com/wiki/V-STR"
+  },
+  "vehicle:Maibatsu Manchez": {
+    "url": "https://static.wikia.nocookie.net/gtawiki/images/5/50/Manchez-GTAVI-OfficialScreenshot-MountKalaga01.png/revision/latest/scale-to-width-down/1200?cb=20250509102325",
+    "credit": "GTA Wiki (Fandom) / Rockstar Games",
+    "page": "https://gta.fandom.com/wiki/Manchez"
+  },
+  "vehicle:Bravado Gauntlet Hellfire": {
+    "url": "https://static.wikia.nocookie.net/gtawiki/images/c/c4/GauntletHellfire-GTAVI-Trailer1.png/revision/latest/scale-to-width-down/1200?cb=20250810233259",
+    "credit": "GTA Wiki (Fandom) / Rockstar Games",
+    "page": "https://gta.fandom.com/wiki/Gauntlet_Hellfire"
+  },
+  "vehicle:Brute Boxville": {
+    "url": "https://static.wikia.nocookie.net/gtawiki/images/c/c7/Boxville-GTAVI-OfficialScreenshot-Ambrosia02.png/revision/latest?cb=20250507040215",
+    "credit": "GTA Wiki (Fandom) / Rockstar Games",
+    "page": "https://gta.fandom.com/wiki/Boxville_%28HD_Universe%29"
+  },
+  "vehicle:Buzzard Attack Chopper": {
+    "url": "https://static.wikia.nocookie.net/gtawiki/images/9/91/BuzzardAttackChopper-GTAVI-Trailer2.png/revision/latest/scale-to-width-down/1200?cb=20250507001827",
+    "credit": "GTA Wiki (Fandom) / Rockstar Games",
+    "page": "https://gta.fandom.com/wiki/Buzzard_Attack_Chopper"
+  },
+  "vehicle:Canis Mesa": {
+    "url": "https://static.wikia.nocookie.net/gtawiki/images/8/88/Mesa-GTAVI-OfficialScreenshot-LeonidaKeys01.png/revision/latest?cb=20250508044623",
+    "credit": "GTA Wiki (Fandom) / Rockstar Games",
+    "page": "https://gta.fandom.com/wiki/Mesa_%28HD_Universe%29"
+  },
+  "vehicle:Declasse Tulip M-100": {
+    "url": "https://static.wikia.nocookie.net/gtawiki/images/e/e5/TulipM100-GTAVI-OfficialScreenshot-Ambrosia01.png/revision/latest?cb=20250507024912",
+    "credit": "GTA Wiki (Fandom) / Rockstar Games",
+    "page": "https://gta.fandom.com/wiki/Tulip_M-100"
+  },
+  "vehicle:Pfister Astron": {
+    "url": "https://static.wikia.nocookie.net/gtawiki/images/5/5f/Astron-GTAVI-Trailer2.png/revision/latest?cb=20250507010814",
+    "credit": "GTA Wiki (Fandom) / Rockstar Games",
+    "page": "https://gta.fandom.com/wiki/Astron"
+  },
+  "vehicle:Vapid Dominator ASP": {
+    "url": "https://static.wikia.nocookie.net/gtawiki/images/9/98/DominatorASP-GTAVI-Trailer1.png/revision/latest?cb=20250310121106",
+    "credit": "GTA Wiki (Fandom) / Rockstar Games",
+    "page": "https://gta.fandom.com/wiki/Dominator_ASP"
+  }
 }

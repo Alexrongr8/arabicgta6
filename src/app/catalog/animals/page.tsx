@@ -56,7 +56,7 @@ export default async function AnimalsCatalog() {
                       // eslint-disable-next-line @next/next/no-img-element
                       <img src={img.url} alt={a.en} loading="lazy" referrerPolicy="no-referrer" className="absolute inset-0 size-full object-cover" />
                     )}
-                    {img && <span className="absolute bottom-1.5 end-1.5 rounded-full bg-black/55 px-2 py-0.5 text-[9.5px] text-white/85" dir="ltr">📷 {img.credit} ({ar ? "صورة حقيقية" : "real-world photo"})</span>}
+                    {img && <a href={img.page} target="_blank" rel="noopener noreferrer nofollow" aria-label={ar ? `مصدر صورة ${a.ar}` : `Image source for ${a.en}`} className="absolute bottom-1.5 end-1.5 rounded-full bg-black/70 px-2 py-1 text-[11px] text-white underline decoration-white/40 underline-offset-2" dir="ltr">📷 {img.credit} ({ar ? "صورة حقيقية" : "real-world photo"})</a>}
                   </div>
                   <div className="p-3.5">
                   <div className="flex flex-wrap items-center gap-1.5">

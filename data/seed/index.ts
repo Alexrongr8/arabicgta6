@@ -14,6 +14,8 @@ import funny from "./funny";
 import choices from "./choices";
 import batch2 from "./batch2";
 import streamers from "./streamers";
+import npcExpansion from "./npc-expansion";
+import contentExpansion from "./content-expansion";
 
 export const SEED_ITEMS: Item[] = [
   ...news,
@@ -33,4 +35,6 @@ export const SEED_ITEMS: Item[] = [
   ...choices,
   ...batch2,
   ...streamers,
+  ...npcExpansion,
+  ...contentExpansion,
 ];
