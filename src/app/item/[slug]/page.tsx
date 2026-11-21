@@ -30,14 +30,14 @@ export async function generateMetadata({ params }: PageProps<"/item/[slug]">): P
   if (!item) return {};
   const title = locale === "ar" ? item.title_ar : item.title_en;
   const description = locale === "ar" ? item.summary_ar : item.summary_en;
-  const image = item.image ? (item.image.startsWith("/") ? `${SITE}${item.image}` : item.image) : undefined;
+  // og:image / twitter:image come from ./opengraph-image.tsx and ./twitter-image.tsx (file-based metadata wins).
   return {
     title,
     description,
     keywords: [...item.aliases, "GTA 6", "قراند 6"],
     alternates: { canonical: `${SITE}/item/${slug}` },
-    openGraph: { title, description, type: "article", url: `${SITE}/item/${slug}`, images: image ? [{ url: image }] : undefined },
-    twitter: { card: "summary_large_image", title, description, images: image ? [image] : undefined },
+    openGraph: { title, description, type: "article", url: `${SITE}/item/${slug}`, siteName: "Arabic GTA 6", locale: "ar_SA" },
+    twitter: { card: "summary_large_image", title, description },
   };
 }
 

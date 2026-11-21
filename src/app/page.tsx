@@ -13,7 +13,6 @@ import { ItemCard } from "@/components/ItemCard";
 import { Section } from "@/components/Section";
 import { CategoryGrid } from "@/components/CategoryGrid";
 import { SignInGate } from "@/components/SignInGate";
-import { CategoryIcon } from "@/components/CategoryIcon";
 import { Cover } from "@/components/Cover";
 
 export default async function Home() {
@@ -28,10 +27,6 @@ export default async function Home() {
     <main>
       <Hero locale={locale} total={total} />
       <DailyCards secret={secret} challenge={challenge} locale={locale} />
-
-      <Section title={locale === "ar" ? "الكتالوج 📚" : "Catalogs 📚"} locale={locale}>
-        <CatalogTiles locale={locale} />
-      </Section>
 
       <Section title={t(locale, "featured")} locale={locale}>
         <div className="no-scrollbar -mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-2">
@@ -100,6 +95,10 @@ export default async function Home() {
           </Section>
         </div>
       </div>
+
+      <Section title={locale === "ar" ? "الكتالوج 📚" : "Catalogs 📚"} locale={locale}>
+        <CatalogTiles locale={locale} />
+      </Section>
     </main>
   );
 }

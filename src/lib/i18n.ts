@@ -52,7 +52,7 @@ const dict = {
   open: { ar: "افتح", en: "Open" },
   all: { ar: "الكل", en: "All" },
   items: { ar: "موضوع", en: "entries" },
-  autoUpdate: { ar: "يتحدّث كل ساعة", en: "Updated every hour" },
+  autoUpdate: { ar: "نضيف محتوى جديد باستمرار", en: "New content added regularly" },
   mapNote: {
     ar: "خريطة فنية تقريبية لليونيدا — المواقع تقريبية وليست خريطة اللعبة الرسمية.",
     en: "Stylised approximate map of Leonida — positions are approximate, not the official in-game map.",

@@ -1,9 +1,10 @@
-name: Radar (hourly content update)
+name: Radar (content update every 3 hours)
 
 on:
   schedule:
-    # Every hour at minute 7. For every 6 hours use: "7 */6 * * *"
-    - cron: "7 * * * *"
+    # Every 3 hours at minute 7 (8 runs/day). Keep the workflow disabled until
+    # OPENAI_API_KEY and the cost variables below are configured.
+    - cron: "7 */3 * * *"
   workflow_dispatch: {}
 
 concurrency:
@@ -11,12 +12,14 @@ concurrency:
   cancel-in-progress: false
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   update:
+    # Paid automation is off unless the repo variable CONTENT_AUTOMATION_ENABLED is exactly "true".
+    if: ${{ vars.CONTENT_AUTOMATION_ENABLED == 'true' }}
     runs-on: ubuntu-latest
-    timeout-minutes: 40
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -35,17 +38,3 @@ jobs:
           RADAR_BEAMS: ${{ vars.RADAR_BEAMS }}
           UPDATE_MAX_ITEMS: ${{ vars.UPDATE_MAX_ITEMS }}
           ENRICH_PER_RUN: ${{ vars.ENRICH_PER_RUN }}
-      - name: Find pictures for catalog entries that still have none
-        run: npm run catalog-images -- --count=10
-        env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          OPENAI_MODEL: ${{ vars.OPENAI_MODEL }}
-      - name: Commit new catalog images
-        run: |
-          if ! git diff --quiet data/catalog-images.json; then
-            git config user.name "arabicgta6-radar"
-            git config user.email "radar@users.noreply.github.com"
-            git add data/catalog-images.json
-            git commit -m "Radar: catalog images"
-            git push
-          fi

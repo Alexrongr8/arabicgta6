@@ -2,12 +2,43 @@ import OpenAI from "openai";
 import { need } from "./env";
 import { CATEGORIES } from "../../src/lib/categories";
 
-export const MODEL = process.env.OPENAI_MODEL || "gpt-5.5";
+// No silent expensive default: the model must be chosen explicitly (repo variable OPENAI_MODEL).
+export const MODEL = process.env.OPENAI_MODEL || "";
 export const RADAR_MODEL = process.env.OPENAI_RADAR_MODEL || MODEL;
+
+/** Errors that must stop the whole run immediately: no further paid calls, no success log. */
+export class FatalAiError extends Error {}
+
+const FATAL_CODES = [
+  "organization_spend_limit_exceeded",
+  "project_spend_limit_exceeded",
+  "credit_balance_exhausted",
+  "insufficient_quota",
+  "billing_hard_limit_reached",
+  "invalid_api_key",
+  "model_not_found",
+];
+
+export function isFatal(e: unknown): boolean {
+  if (e instanceof FatalAiError) return true;
+  const err = e as { status?: number; code?: string; type?: string; error?: { code?: string; type?: string }; message?: string };
+  const code = err?.code ?? err?.error?.code ?? err?.type ?? err?.error?.type ?? "";
+  if (FATAL_CODES.includes(code)) return true;
+  if (err?.status === 401 || err?.status === 403 || err?.status === 404) return true;
+  return FATAL_CODES.some((c) => (err?.message ?? "").includes(c));
+}
+
+/** Call before any paid request: fails fast (and costs nothing) when the setup is incomplete. */
+export function preflight() {
+  if (!process.env.OPENAI_API_KEY) throw new FatalAiError("OPENAI_API_KEY is not set.");
+  if (!MODEL) throw new FatalAiError("OPENAI_MODEL is not set — refusing to run paid requests with an implicit model.");
+}
 
 let client: OpenAI | null = null;
 export function ai() {
-  client ??= new OpenAI({ apiKey: need("OPENAI_API_KEY") });
+  preflight();
+  // Finite timeout, no hidden retries: every paid request is counted once.
+  client ??= new OpenAI({ apiKey: need("OPENAI_API_KEY"), timeout: 120_000, maxRetries: 0 });
   return client;
 }
 
@@ -99,18 +130,32 @@ export async function askJson<T>(opts: {
   name: string;
   domains?: string[];
   search?: boolean;
+  /** cap on generated tokens (default 1500 for leads; pass ~6000 for bilingual articles) */
+  maxOutputTokens?: number;
 }): Promise<T> {
   const tools =
     opts.search === false
       ? []
-      : [{ type: "web_search" as const, ...(opts.domains?.length ? { filters: { allowed_domains: opts.domains } } : {}) }];
-  const res = await ai().responses.create({
-    model: opts.model ?? MODEL,
-    tools,
-    input: opts.prompt,
-    text: { format: { type: "json_schema", name: opts.name, schema: opts.schema, strict: true } },
-  });
-  return JSON.parse(res.output_text || "{}") as T;
+      : [{ type: "web_search" as const, search_context_size: "low" as const, ...(opts.domains?.length ? { filters: { allowed_domains: opts.domains } } : {}) }];
+  let res;
+  try {
+    res = await ai().responses.create({
+      model: opts.model ?? MODEL,
+      tools,
+      max_tool_calls: opts.search === false ? undefined : 1,
+      max_output_tokens: opts.maxOutputTokens ?? 1500,
+      reasoning: { effort: "low" },
+      input: opts.prompt,
+      text: { format: { type: "json_schema", name: opts.name, schema: opts.schema, strict: true } },
+    });
+  } catch (e) {
+    if (isFatal(e)) throw new FatalAiError(`${opts.name}: ${(e as Error).message}`);
+    throw e;
+  }
+  const u = res.usage;
+  console.log(`  [usage] ${opts.name}: status=${res.status} in=${u?.input_tokens ?? "?"} out=${u?.output_tokens ?? "?"}`);
+  if (res.status !== "completed" || !res.output_text) throw new Error(`${opts.name}: incomplete response (${res.status})`);
+  return JSON.parse(res.output_text) as T;
 }
 
 export function youtubeThumb(url: string): string | null {

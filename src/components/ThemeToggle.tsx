@@ -16,7 +16,7 @@ export function ThemeToggle({ initial, label }: { initial: "light" | "dark"; lab
         document.querySelector('meta[name="theme-color"]')?.setAttribute("content", next === "dark" ? "#0d0717" : "#fff5ec");
         setTheme(next);
       }}
-      className="grid size-9 place-items-center rounded-full border border-line bg-chip text-fg"
+      className="grid size-9 shrink-0 place-items-center rounded-full border border-line bg-chip text-fg"
     >
       {theme === "light" ? <Moon className="size-[18px]" /> : <Sun className="size-[18px] text-sun" />}
     </button>

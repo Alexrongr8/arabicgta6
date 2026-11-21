@@ -27,7 +27,7 @@ The owner (Alexron) has both Claude and ChatGPT working on arabicgta6.com. To av
 - Append one line to `.collab/LOG.md` (committed): date, who, what changed.
 
 ## 3. Owner decisions — do not change without the owner asking
-- Logo: "ARABIC GTA6" wordmark centred next to the icon, with the Saudi flag (previous size, `h-[11px]`) tucked **under "A6"** at the end of the wordmark (see `src/components/Logo.tsx`). The owner tried several placements and chose this one.
+- Logo (owner decision 22 Nov 2026, replaces the earlier "flag under A6"): the Saudi flag sits inline **before** the logo icon and "ARABIC GTA6" wordmark, never underneath or overlapping, 3:2 ratio (`public/img/flag-sa-3x2.svg`). On very narrow phones (<360px) the round icon hides so the header fits (see `src/components/Logo.tsx`, `Header.tsx`).
 - Light theme is the default; dark mode via the toggle in the header.
 - Footer: "Developed by PROTEC-SA" (protec-sa.com) + Saudi flag + "صُنع بحب في السعودية". No "unofficial fan site" disclaimer in the footer.
 - The whole site is open to everyone; Google sign-in is only for the weekly email digest, comments, votes and submissions.

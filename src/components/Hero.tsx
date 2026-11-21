@@ -16,7 +16,7 @@ export function Hero({ locale, total, compact }: { locale: Locale; total: number
         <div className="relative flex h-full min-h-[inherit] flex-col justify-end p-5 text-white md:p-9">
           <span className="mb-3 inline-flex w-fit -rotate-2 items-center gap-2 rounded-full bg-[#ffd166] px-3 py-1 text-[12px] font-extrabold text-[#2a1240] shadow-md">
             <span className="size-2 animate-pulse rounded-full bg-[#f0287a]" />
-            {ar ? "يتحدّث كل ساعة" : "Updated every hour"}
+            {ar ? "موسوعة GTA 6 بالعربي" : "The Arabic GTA 6 encyclopedia"}
           </span>
           <h1 className={`${compact ? "text-[30px] md:text-5xl" : "text-[40px] md:text-6xl"} leading-[1.15] drop-shadow-[0_3px_16px_rgba(0,0,0,.6)]`}>
             {ar ? (

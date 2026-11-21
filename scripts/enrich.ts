@@ -8,7 +8,7 @@
  */
 import "./lib/env";
 import { db } from "./lib/db";
-import { askJson, itemSchema, MAP_HINT, STYLE_GUIDE, youtubeThumb, type AiItem } from "./lib/ai";
+import { askJson, isFatal, preflight, itemSchema, MAP_HINT, STYLE_GUIDE, youtubeThumb, type AiItem } from "./lib/ai";
 import { findImage } from "./lib/og";
 import { searchText } from "../src/lib/normalize";
 
@@ -36,7 +36,9 @@ type Row = {
 };
 
 export async function enrichBatch(count: number, dry = false): Promise<number> {
-  if (count <= 0) return 0;
+  if (!Number.isInteger(count) || count <= 0) return 0;
+  count = Math.min(count, 10);
+  preflight();
   const supabase = db();
   const { data, error } = await supabase
     .from("items")
@@ -68,7 +70,7 @@ ${r.sources.map((s) => `- ${s.title}: ${s.url}`).join("\n")}
 Return the full article. Add the new sources you used to "sources" (keep the useful existing ones). facts: 3-8 infobox pairs. aliases: English + Arabic search terms. related: [] (leave empty). ${MAP_HINT}
 ${STYLE_GUIDE}`;
     try {
-      const it = await askJson<AiItem>({ prompt, schema: itemSchema as unknown as Record<string, unknown>, name: "gta6_enrich" });
+      const it = await askJson<AiItem>({ prompt, schema: itemSchema as unknown as Record<string, unknown>, name: "gta6_enrich", maxOutputTokens: 6000 });
       if (!it.body_ar || it.body_ar.length < r.body_ar.length) continue;
       const sources = [...r.sources, ...it.sources]
         .filter((s, i, arr) => /^https?:\/\//.test(s.url) && arr.findIndex((x) => x.url === s.url) === i)
@@ -100,6 +102,7 @@ ${STYLE_GUIDE}`;
       }
       done++;
     } catch (e) {
+      if (isFatal(e)) throw e;
       console.warn("enrich failed for", r.slug, (e as Error).message);
     }
   }
@@ -107,7 +110,9 @@ ${STYLE_GUIDE}`;
 }
 
 if (process.argv[1]?.match(/enrich\.ts$/)) {
-  const count = Number(process.argv.find((a) => a.startsWith("--count="))?.slice(8) ?? 10);
+  // Explicit, bounded count (1..10, default 1). Standalone runs are paid: --dry still calls the model.
+  const raw = Number(process.argv.find((a) => a.startsWith("--count="))?.slice(8) ?? 1);
+  const count = Number.isInteger(raw) && raw > 0 ? Math.min(raw, 10) : 1;
   enrichBatch(count, process.argv.includes("--dry"))
     .then((n) => console.log(`Enriched ${n} items.`))
     .catch((e) => {

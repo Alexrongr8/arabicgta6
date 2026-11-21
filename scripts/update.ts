@@ -11,14 +11,21 @@
  */
 import "./lib/env";
 import { db } from "./lib/db";
-import { askJson, itemSchema, MAP_HINT, MODEL, RADAR_MODEL, STYLE_GUIDE, CATEGORY_GUIDE, youtubeThumb, type AiItem } from "./lib/ai";
+import { askJson, isFatal, preflight, itemSchema, MAP_HINT, MODEL, RADAR_MODEL, STYLE_GUIDE, CATEGORY_GUIDE, youtubeThumb, type AiItem } from "./lib/ai";
 import { findImage } from "./lib/og";
 import { enrichBatch } from "./enrich";
 import { normalize, searchText, slugify } from "../src/lib/normalize";
 
 const DRY = process.argv.includes("--dry");
-const MAX_NEW = Number(process.env.UPDATE_MAX_ITEMS || 8);
-const ENRICH_PER_RUN = Number(process.env.ENRICH_PER_RUN || 4);
+/** bounded integer env var (invalid / negative values fall back to the cheap default) */
+const intEnv = (name: string, def: number, max: number) => {
+  const raw = (process.env[name] ?? "").trim();
+  if (raw === "") return def;
+  const n = Number(raw);
+  return Number.isInteger(n) && n >= 0 ? Math.min(n, max) : def;
+};
+const MAX_NEW = intEnv("UPDATE_MAX_ITEMS", 1, 8);
+const ENRICH_PER_RUN = intEnv("ENRICH_PER_RUN", 0, 4);
 
 type Beam = { id: string; label: string; domains?: string[]; focus: string };
 
@@ -95,7 +102,7 @@ function similar(a: string, b: string) {
 
 const cleanUrl = (u: string) => u.replace(/[?#].*$/, "").replace(/\/$/, "");
 
-async function sweep(beam: Beam, since: string, knownTitles: string[]): Promise<Lead[]> {
+async function sweep(beam: Beam, since: string, knownTitles: string[]): Promise<{ ok: boolean; leads: Lead[] }> {
   const prompt = `You are a radar scanning for NEW Grand Theft Auto VI (GTA 6) information published since ${since}. GTA VI launched on 19 November 2026 on PS5 and Xbox Series X|S.
 Source to scan: ${beam.label}. Focus: ${beam.focus}
 
@@ -107,14 +114,16 @@ Already published (titles):
 ${knownTitles.slice(0, 400).join("\n")}`;
   try {
     const r = await askJson<{ leads: Omit<Lead, "beam">[] }>({ model: RADAR_MODEL, prompt, schema: leadSchema as unknown as Record<string, unknown>, name: "radar_leads", domains: beam.domains });
-    return (r.leads ?? []).map((l) => ({ ...l, beam: beam.id }));
+    return { ok: true, leads: (r.leads ?? []).map((l) => ({ ...l, beam: beam.id })) };
   } catch (e) {
+    if (isFatal(e)) throw e; // spend limit / quota / auth: stop everything
     console.warn(`beam ${beam.id} failed:`, (e as Error).message);
-    return [];
+    return { ok: false, leads: [] };
   }
 }
 
 async function main() {
+  preflight(); // free check: key + model configured, before any database or paid work
   const supabase = db();
   const { data: existing, error } = await supabase
     .from("items")
@@ -130,12 +139,19 @@ async function main() {
   const since = new Date(new Date(lastRun?.ran_at ?? Date.now() - 2 * 864e5).getTime() - 6 * 3600e3).toISOString().slice(0, 16) + "Z";
 
   const beams = (process.env.RADAR_BEAMS ?? "").split(",").map((s) => s.trim()).filter(Boolean);
-  const active = beams.length ? BEAMS.filter((b) => beams.includes(b.id)) : BEAMS;
+  // Unset = one cheap beam. Set RADAR_BEAMS=all (or a comma list) to widen deliberately.
+  const active = beams.includes("all") ? BEAMS : BEAMS.filter((b) => (beams.length ? beams : ["web"]).includes(b.id));
   console.log(`Radar: ${active.map((b) => b.id).join(", ")} | model ${RADAR_MODEL}/${MODEL} | since ${since}`);
 
-  // 1) Sweep all beams in parallel.
+  // 1) Sweep the active beams one after another (a fatal error stops before the next paid call).
   const knownTitles = known.map((k) => k.title_en);
-  const leads = (await Promise.all(active.map((b) => sweep(b, since, knownTitles)))).flat();
+  const results: { ok: boolean; leads: Lead[] }[] = [];
+  for (const b of active) results.push(await sweep(b, since, knownTitles));
+  if (!results.some((r) => r.ok)) {
+    // Don't log a successful run: that would advance the search watermark past news we never saw.
+    throw new Error("All discovery beams failed — not recording a successful run.");
+  }
+  const leads = results.flatMap((r) => r.leads);
 
   // 2) Keep fresh, distinct, credible leads.
   const fresh: Lead[] = [];
@@ -171,7 +187,7 @@ Rules:
 - ${MAP_HINT}
 ${STYLE_GUIDE}`;
     try {
-      const it = await askJson<AiItem>({ prompt, schema: itemSchema as unknown as Record<string, unknown>, name: "gta6_item" });
+      const it = await askJson<AiItem>({ prompt, schema: itemSchema as unknown as Record<string, unknown>, name: "gta6_item", maxOutputTokens: 6000 });
       if (!it.title_en || !it.body_ar || it.body_ar.length < 400) continue;
       if (accepted.some((a) => similar(String(a.title_en), it.title_en) >= 0.75)) continue;
 
@@ -216,6 +232,7 @@ ${STYLE_GUIDE}`;
       accepted.push({ ...row, search_text: searchText(row) });
       console.log(` + [${row.category}/${row.status}] ${row.title_en}${image ? " 🖼" : ""}`);
     } catch (e) {
+      if (isFatal(e)) throw e;
       console.warn("editor failed for", lead.headline, (e as Error).message);
     }
   }
@@ -229,11 +246,12 @@ ${STYLE_GUIDE}`;
   const enriched = await enrichBatch(ENRICH_PER_RUN, DRY);
 
   if (!DRY) {
-    await supabase.from("update_runs").insert({
+    const { error: logErr } = await supabase.from("update_runs").insert({
       kind: "update",
       added: accepted.length,
       note: `beams=${active.map((b) => b.id).join("+")} leads=${leads.length} new=${accepted.map((a) => a.slug).join(", ").slice(0, 700)} enriched=${enriched}`,
     });
+    if (logErr) throw logErr;
   }
 }
 

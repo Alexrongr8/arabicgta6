@@ -11,11 +11,11 @@ export function Header({ locale, viewer, labels, theme }: { locale: Locale; view
   return (
     <header className="glass sticky top-0 z-40 border-b border-line">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-2 px-3 md:px-4">
-        <Link href="/" aria-label={t(locale, "siteName")} dir="ltr">
+        <Link href="/" aria-label={t(locale, "siteName")} dir="ltr" className="min-w-0 shrink-0">
           <Logo />
         </Link>
         <TopLinks labels={labels} />
-        <div className="flex items-center gap-2">
+        <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
           <ThemeToggle initial={theme} label={locale === "ar" ? "الوضع الفاتح / الداكن" : "Light / dark mode"} />
           <LangToggle locale={locale} />
           {viewer.signedIn ? (
@@ -28,8 +28,12 @@ export function Header({ locale, viewer, labels, theme }: { locale: Locale; view
               )}
             </Link>
           ) : (
-            <Link href="/login" className="bg-sunset inline-flex h-9 items-center gap-1 rounded-full px-3.5 text-[13px] font-extrabold text-white shadow-md shadow-pink/30">
-              ✉️ {locale === "ar" ? "النشرة" : "Digest"}
+            <Link
+              href="/login"
+              aria-label={locale === "ar" ? "النشرة الأسبوعية" : "Weekly digest"}
+              className="bg-sunset inline-flex h-9 min-w-9 items-center justify-center gap-1 rounded-full px-2.5 text-[13px] font-extrabold text-white shadow-md shadow-pink/30 min-[480px]:px-3.5"
+            >
+              ✉️<span className="hidden min-[480px]:inline">{locale === "ar" ? "النشرة" : "Digest"}</span>
             </Link>
           )}
         </div>
