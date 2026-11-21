@@ -1,6 +1,8 @@
 "use client";
 import { usePathname } from "next/navigation";
+import Link from "next/link";
 import type { Locale } from "@/lib/types";
+import { SEO_PAGES } from "../../data/seo-pages";
 
 export function Footer({ locale }: { locale: Locale }) {
   const ar = locale === "ar";
@@ -8,7 +10,15 @@ export function Footer({ locale }: { locale: Locale }) {
   if (path.startsWith("/map")) return null;
   return (
     <footer className="mt-12 px-4 pb-28 md:pb-10">
-      <div className="mx-auto flex max-w-6xl flex-col items-center gap-3 border-t border-line pt-7 text-center">
+      <nav className="mx-auto mb-6 flex max-w-6xl flex-wrap justify-center gap-x-4 gap-y-2 border-t border-line pt-6 text-[12.5px] text-muted">
+        {SEO_PAGES.map((p) => (
+          <Link key={p.slug} href={`/guides/${p.slug}`} className="hover:text-pink">
+            {(ar ? p.titleAr : p.titleEn).split(/[—؟?]/)[0].trim()}
+          </Link>
+        ))}
+        <Link href="/trophies" className="hover:text-pink">{ar ? "كؤوس GTA 6" : "GTA 6 trophies"}</Link>
+      </nav>
+      <div className="mx-auto flex max-w-6xl flex-col items-center gap-3 text-center">
         <a
           href="https://protec-sa.com/"
           target="_blank"

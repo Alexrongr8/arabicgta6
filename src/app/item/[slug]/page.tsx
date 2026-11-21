@@ -17,12 +17,24 @@ import { CoverFigure } from "@/components/Cover";
 import { Videos } from "@/components/Videos";
 import { imageCredit } from "@/lib/image";
 
+const SITE = process.env.NEXT_PUBLIC_SITE_URL ?? "https://arabicgta6.com";
+
 export async function generateMetadata({ params }: PageProps<"/item/[slug]">): Promise<Metadata> {
   const { slug } = await params;
   const locale = await getLocale();
-  const teaser = await itemExists(slug);
-  if (!teaser) return {};
-  return { title: locale === "ar" ? teaser.title_ar : teaser.title_en };
+  const item = await getItem(slug, true);
+  if (!item) return {};
+  const title = locale === "ar" ? item.title_ar : item.title_en;
+  const description = locale === "ar" ? item.summary_ar : item.summary_en;
+  const image = item.image ? (item.image.startsWith("/") ? `${SITE}${item.image}` : item.image) : undefined;
+  return {
+    title,
+    description,
+    keywords: [...item.aliases, "GTA 6", "قراند 6"],
+    alternates: { canonical: `${SITE}/item/${slug}` },
+    openGraph: { title, description, type: "article", url: `${SITE}/item/${slug}`, images: image ? [{ url: image }] : undefined },
+    twitter: { card: "summary_large_image", title, description, images: image ? [image] : undefined },
+  };
 }
 
 export default async function ItemPage({ params }: PageProps<"/item/[slug]">) {
@@ -49,8 +61,22 @@ export default async function ItemPage({ params }: PageProps<"/item/[slug]">) {
   const related = await getBySlugs(item.related);
   const body = pick(item, "body", locale);
 
+  const ld = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: item.title_ar,
+    alternativeHeadline: item.title_en,
+    description: item.summary_ar,
+    inLanguage: "ar",
+    datePublished: item.published_at,
+    image: item.image ? (item.image.startsWith("/") ? `${SITE}${item.image}` : item.image) : undefined,
+    mainEntityOfPage: `${SITE}/item/${item.slug}`,
+    publisher: { "@type": "Organization", name: "Arabic GTA 6" },
+  };
+
   return (
     <main className="mx-auto max-w-5xl px-4 pt-5">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
       <nav className="mb-4 flex items-center gap-2 text-xs text-dim">
         <Link href="/explore" className="hover:text-fg">{t(locale, "explore")}</Link>
         <span>/</span>
@@ -82,6 +108,14 @@ export default async function ItemPage({ params }: PageProps<"/item/[slug]">) {
                 </Link>
               )}
               <ShareButton title={pick(item, "title", locale)} label={locale === "ar" ? "مشاركة" : "Share"} />
+              <a
+                href={`https://wa.me/?text=${encodeURIComponent(`${pick(item, "title", locale)} ${SITE}/item/${item.slug}`)}`}
+                target="_blank"
+                rel="noopener"
+                className="inline-flex h-10 items-center gap-2 rounded-xl bg-[#25D366] px-4 text-sm font-extrabold text-white"
+              >
+                {locale === "ar" ? "واتساب" : "WhatsApp"}
+              </a>
             </div>
           </header>
 

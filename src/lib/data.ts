@@ -190,3 +190,12 @@ export const getTipCards = cache(async (): Promise<TipCard[]> => {
   const { data } = await supabase.rpc("tip_cards");
   return (data ?? []) as TipCard[];
 });
+
+/** Pool for "Secret of the day": secrets, strange things, tips and funny moments. */
+export async function getDailyPool(): Promise<ItemCard[]> {
+  const cats: CategorySlug[] = ["secrets", "strange", "tips", "funny"];
+  if (!supabaseConfigured()) return SEED.filter((i) => cats.includes(i.category)).sort((a, b) => a.slug.localeCompare(b.slug)).map(toCard);
+  const supabase = await createClient();
+  const { data } = await supabase.from("items").select(CARD_COLS).in("category", cats).order("slug").limit(1000);
+  return (data ?? []) as ItemCard[];
+}

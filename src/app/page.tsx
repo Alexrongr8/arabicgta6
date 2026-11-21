@@ -1,7 +1,9 @@
 import Link from "next/link";
 import { Bidi } from "@/components/Bidi";
 import { CATEGORY_MAP } from "@/lib/categories";
-import { getCounts, getFeatured, getLatest } from "@/lib/data";
+import { getCounts, getDailyPool, getFeatured, getLatest } from "@/lib/data";
+import { pickDaily, weeklyChallenge } from "@/lib/daily";
+import { DailyCards } from "@/components/DailyCards";
 import { pick, t } from "@/lib/i18n";
 import { getLocale, getViewer } from "@/lib/session";
 import { Hero } from "@/components/Hero";
@@ -17,10 +19,13 @@ export default async function Home() {
   const counts = await getCounts();
   const total = Object.values(counts).reduce((a, b) => a + b, 0);
 
-  const [featured, latest, news] = await Promise.all([getFeatured(), getLatest(10), getLatest(6, "news")]);
+  const [featured, latest, news, pool] = await Promise.all([getFeatured(), getLatest(10), getLatest(6, "news"), getDailyPool()]);
+  const secret = pickDaily(pool);
+  const challenge = weeklyChallenge();
   return (
     <main>
       <Hero locale={locale} total={total} />
+      <DailyCards secret={secret} challenge={challenge} locale={locale} />
 
       <Section title={t(locale, "featured")} locale={locale}>
         <div className="no-scrollbar -mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-2">
