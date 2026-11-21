@@ -39,7 +39,7 @@ export function isCategory(s: string): s is CategorySlug {
 }
 
 export const STATUS_META: Record<Status, { ar: string; en: string; color: string; hintAr: string; hintEn: string }> = {
-  official: { ar: "رسمي", en: "Official", color: "#22c55e", hintAr: "صادر من Rockstar أو Take-Two", hintEn: "From Rockstar or Take-Two" },
+  official: { ar: "رسمي", en: "Official", color: "#22c55e", hintAr: "من الناشر أو الشركة المصنّعة، حسب المصدر المرفق", hintEn: "From the publisher or device manufacturer, as linked in the sources" },
   confirmed: { ar: "مؤكد باللعبة", en: "In-game", color: "#38bdf8", hintAr: "تحقق منه اللاعبون داخل اللعبة", hintEn: "Verified by players in the game" },
   leak: { ar: "تسريب", en: "Leak", color: "#f59e0b", hintAr: "من تسريبات غير رسمية", hintEn: "From unofficial leaks" },
   rumor: { ar: "غير مؤكد", en: "Unverified", color: "#f43f5e", hintAr: "إشاعة أو معلومة لم تتأكد بعد", hintEn: "Rumour or not yet verified" },
