@@ -12,7 +12,8 @@
     "digest": "tsx scripts/digest.ts",
     "check:seed": "tsx scripts/check-seed.ts",
     "typecheck": "tsc --noEmit",
-    "enrich": "tsx scripts/enrich.ts"
+    "enrich": "tsx scripts/enrich.ts",
+    "catalog-images": "tsx scripts/catalog-images-ai.ts"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.7",

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { imageOf } from "@/lib/image";
 import { Bidi } from "@/components/Bidi";
 import { CATEGORY_MAP } from "@/lib/categories";
 import { formatDate, pick } from "@/lib/i18n";
@@ -20,7 +21,7 @@ export function ItemCard({ item, locale, showCategory = true, index = 0 }: { ite
         style={{ background: `${cat.color}22`, color: cat.color, boxShadow: `inset 0 0 0 1px ${cat.color}44` }}
       >
         <CategoryIcon category={item.category} className="size-6" />
-        {item.image && <Cover src={item.image} className="absolute inset-0 size-full object-cover" />}
+        <Cover src={imageOf(item)} className="absolute inset-0 size-full object-cover" />
       </span>
       <span className="min-w-0 flex-1">
         <span className="mb-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] text-dim">

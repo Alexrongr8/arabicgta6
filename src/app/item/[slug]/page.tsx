@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { imageOf } from "@/lib/image";
 import { Bidi } from "@/components/Bidi";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -91,7 +92,7 @@ export default async function ItemPage({ params }: PageProps<"/item/[slug]">) {
 
       <article className="grid gap-6 lg:grid-cols-[1fr_300px]">
         <div className="min-w-0">
-          {item.image && <CoverFigure src={item.image} alt={pick(item, "title", locale)} credit={imageCredit(item.image)} />}
+          <CoverFigure src={imageOf(item)} alt={pick(item, "title", locale)} credit={imageCredit(imageOf(item))} />
           <header className="relative mb-5 overflow-hidden rounded-3xl border border-line p-5 shadow-sm md:p-7" style={{ background: `linear-gradient(150deg, ${c.color}30, var(--card) 70%)` }}>
             <CategoryIcon category={item.category} className="absolute -end-4 -top-4 size-32 opacity-15" style={{ color: c.color }} />
             <div className="relative mb-3 flex flex-wrap items-center gap-2">

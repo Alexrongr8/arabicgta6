@@ -8,6 +8,8 @@ export interface CatalogRow {
   stats: number[] | null;
   badge?: string | null;
   sub?: string | null;
+  image?: { url: string; credit: string } | null;
+  emoji?: string;
 }
 
 /** Filterable, sortable catalog with stat bars (all stats out of 10). */
@@ -64,7 +66,16 @@ export function Catalog({
       </div>
       <ol className="grid gap-2.5 md:grid-cols-2">
         {shown.map((r) => (
-          <li key={r.name} className="card p-3.5">
+          <li key={r.name} className="card overflow-hidden p-0">
+            <div className="relative aspect-[16/9] w-full overflow-hidden" style={{ background: "linear-gradient(135deg,var(--chip-2),var(--chip))" }}>
+              <span className="absolute inset-0 grid place-items-center text-6xl opacity-60">{r.emoji ?? "✨"}</span>
+              {r.image && (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={r.image.url} alt={r.name} loading="lazy" referrerPolicy="no-referrer" className="absolute inset-0 size-full object-cover" onError={(e) => (e.currentTarget.style.display = "none")} />
+              )}
+              {r.image && <span className="absolute bottom-1.5 end-1.5 rounded-full bg-black/55 px-2 py-0.5 text-[9.5px] text-white/85" dir="ltr">📷 {r.image.credit}</span>}
+            </div>
+            <div className="p-3.5">
             <div className="mb-1 flex flex-wrap items-center gap-1.5">
               <span className="font-display text-[16px] tracking-wide" dir="ltr">
                 {r.name}
@@ -94,6 +105,7 @@ export function Catalog({
             ) : (
               <p className="text-[12px] text-dim">{ar ? "الإحصائيات لسه ما انشرت — بنضيفها أول ما تتوفر." : "Stats not published yet — added as soon as they are."}</p>
             )}
+            </div>
           </li>
         ))}
       </ol>

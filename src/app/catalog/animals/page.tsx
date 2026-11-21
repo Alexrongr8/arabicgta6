@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ANIMALS, ANIMAL_SOURCES, type AGroup } from "../../../../data/catalog-animals";
 import { getLocale } from "@/lib/session";
+import { catalogImage } from "@/lib/catalog-images";
 
 export async function generateMetadata(): Promise<Metadata> {
   const ar = (await getLocale()) === "ar";
@@ -14,6 +15,7 @@ const GROUPS: { id: AGroup; ar: string; en: string; emoji: string }[] = [
   { id: "bird", ar: "طيور", en: "Birds", emoji: "🦩" },
   { id: "sea", ar: "كائنات بحرية", en: "Sea life", emoji: "🦈" },
   { id: "fish", ar: "أسماك", en: "Fish", emoji: "🐟" },
+  { id: "farm", ar: "حيوانات المزارع", en: "Farm animals", emoji: "🐄" },
   { id: "pet", ar: "قطط وكلاب", en: "Cats & dogs", emoji: "🐕" },
   { id: "cryptid", ar: "مخلوقات غامضة", en: "Cryptids", emoji: "👣" },
 ];
@@ -26,7 +28,7 @@ export default async function AnimalsCatalog() {
         <h1 className="text-[28px] leading-tight">{ar ? "حيوانات GTA 6 🐊" : "GTA 6 animals 🐊"}</h1>
         <p className="mt-2 text-[14px] text-white/90">
           {ar
-            ? "دفتر الحيوانات في اللعبة فيه 255 خانة في 8 أقسام (الصيد 61، صيد السمك 35، الطيور 60…). هنا أبرز الحيوانات اللي انكشفت: وين تلقاها، وش تقدر تصطاد، ووش اللي لازم تبعد عنه."
+            ? "Rockstar ما نشرت قائمة رسمية للحيوانات. دفتر الحيوانات داخل اللعبة فيه 255 خانة في 8 أقسام (الصيد 61، صيد السمك 35، الطيور 60، القطط والكلاب 34…). هنا كل حيوان تأكد ظهوره لين الحين: وين تلقاه، وش تقدر تصطاد، ووش اللي لازم تبعد عنه."
             : "The in-game wildlife tracker has 255 entries across 8 tabs (Hunting 61, Fishing 35, Birds 60…). Here are the animals revealed so far: where to find them, what you can hunt and what to avoid."}
         </p>
         <div className="mt-3 flex flex-wrap gap-2 text-[12px] font-extrabold">
@@ -44,8 +46,19 @@ export default async function AnimalsCatalog() {
               {g.emoji} {ar ? g.ar : g.en} <span className="text-[14px] text-dim">({list.length})</span>
             </h2>
             <ul className="grid gap-2.5 md:grid-cols-2">
-              {list.map((a) => (
-                <li key={a.en} className="card p-3.5">
+              {list.map((a) => {
+                const img = catalogImage("animal", a.en);
+                return (
+                <li key={a.en} className="card overflow-hidden p-0">
+                  <div className="relative aspect-[16/9] w-full overflow-hidden bg-chip">
+                    <span className="absolute inset-0 grid place-items-center text-6xl opacity-60">{g.emoji}</span>
+                    {img && (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={img.url} alt={a.en} loading="lazy" referrerPolicy="no-referrer" className="absolute inset-0 size-full object-cover" />
+                    )}
+                    {img && <span className="absolute bottom-1.5 end-1.5 rounded-full bg-black/55 px-2 py-0.5 text-[9.5px] text-white/85" dir="ltr">📷 {img.credit} ({ar ? "صورة حقيقية" : "real-world photo"})</span>}
+                  </div>
+                  <div className="p-3.5">
                   <div className="flex flex-wrap items-center gap-1.5">
                     <span className="font-extrabold">{ar ? a.ar : a.en}</span>
                     {ar && <span className="text-[12px] text-dim" dir="ltr">{a.en}</span>}
@@ -59,8 +72,10 @@ export default async function AnimalsCatalog() {
                       {ar ? "الدليل المرتبط ←" : "Related guide →"}
                     </Link>
                   )}
+                  </div>
                 </li>
-              ))}
+                );
+              })}
             </ul>
           </section>
         );

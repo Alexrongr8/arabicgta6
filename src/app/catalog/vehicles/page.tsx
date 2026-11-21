@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { VEHICLES, VEHICLE_SOURCES } from "../../../../data/catalog-vehicles";
 import { getLocale } from "@/lib/session";
 import { Catalog } from "@/components/Catalog";
+import { catalogImage } from "@/lib/catalog-images";
 
 export async function generateMetadata(): Promise<Metadata> {
   const ar = (await getLocale()) === "ar";
@@ -26,7 +27,7 @@ export default async function VehiclesCatalog() {
     { id: "service", label: ar ? "خدمات وشرطة" : "Service & police", emoji: "🚓" },
     { id: "special", label: ar ? "خاصة" : "Special", emoji: "🛞" },
   ];
-  const rows = VEHICLES.map(([name, cls, note, stats]) => ({ name, cls, note, stats, badge: null, sub: null }));
+  const rows = VEHICLES.map(([name, cls, note, stats]) => ({ name, cls, note, stats, badge: null, sub: null, image: catalogImage("vehicle", name), emoji: classes.find((c) => c.id === cls)?.emoji }));
   const withStats = VEHICLES.filter((v) => v[3]).length;
   return (
     <main className="mx-auto max-w-5xl px-4 pt-5">

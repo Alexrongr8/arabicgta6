@@ -1,0 +1,372 @@
+{
+ "animal:American Alligator": {
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/03/American_Alligator.jpg/330px-American_Alligator.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "credit": "Wikipedia / Wikimedia Commons",
+  "page": "https://en.wikipedia.org/wiki/American_alligator"
+ },
+ "animal:Juvenile American Alligator": {
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/03/American_Alligator.jpg/330px-American_Alligator.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "credit": "Wikipedia / Wikimedia Commons",
+  "page": "https://en.wikipedia.org/wiki/American_alligator"
+ },
+ "animal:American Crocodile": {
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f2/Crocodylus_acutus_mexico_02-edit1.jpg/330px-Crocodylus_acutus_mexico_02-edit1.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "credit": "Wikipedia / Wikimedia Commons",
+  "page": "https://en.wikipedia.org/wiki/American_crocodile"
+ },
+ "animal:Green Iguana": {
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/21/Iguana_iguana_%28male_resting%29.jpg/330px-Iguana_iguana_%28male_resting%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "credit": "Wikipedia / Wikimedia Commons",
+  "page": "https://en.wikipedia.org/wiki/Green_iguana"
+ },
+ "animal:Sea Turtle": {
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6e/Chelonia_mydas_is_going_for_the_air_edit.jpg/330px-Chelonia_mydas_is_going_for_the_air_edit.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "credit": "Wikipedia / Wikimedia Commons",
+  "page": "https://en.wikipedia.org/wiki/Sea_turtle"
+ },
+ "animal:Snakes": {
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/60/Trimeresurus_sabahi_fucatus%2C_Banded_pit_viper_-_Takua_Pa_District%2C_Phang-nga_Province_%2846710893582%29.jpg/330px-Trimeresurus_sabahi_fucatus%2C_Banded_pit_viper_-_Takua_Pa_District%2C_Phang-nga_Province_%2846710893582%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "credit": "Wikipedia / Wikimedia Commons",
+  "page": "https://en.wikipedia.org/wiki/Snake"
+ },
+ "animal:Cane Toad": {
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/99/Canetoadmale.jpg/330px-Canetoadmale.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "credit": "Wikipedia / Wikimedia Commons",
+  "page": "https://en.wikipedia.org/wiki/Cane_toad"
+ },
+ "animal:Dolphins": {
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/bc/Tursiops_truncatus_01-cropped.jpg/330px-Tursiops_truncatus_01-cropped.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "credit": "Wikipedia / Wikimedia Commons",
+  "page": "https://en.wikipedia.org/wiki/Common_bottlenose_dolphin"
+ },
+ "animal:Sharks (incl. hammerhead)": {
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/bd/Great_hammerhead2.jpg/330px-Great_hammerhead2.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "credit": "Wikipedia / Wikimedia Commons",
+  "page": "https://en.wikipedia.org/wiki/Great_hammerhead"
+ },
+ "animal:Whales": {
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d7/Humpback_whale_breaching_off_Cabo_San_Lucas.jpg/330px-Humpback_whale_breaching_off_Cabo_San_Lucas.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "credit": "Wikipedia / Wikimedia Commons",
+  "page": "https://en.wikipedia.org/wiki/Humpback_whale"
+ },
+ "animal:Manta Rays": {
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/30/Dharavandhoo_Thila_-_Manata_Black_Pearl.JPG/330px-Dharavandhoo_Thila_-_Manata_Black_Pearl.JPG?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "credit": "Wikipedia / Wikimedia Commons",
+  "page": "https://en.wikipedia.org/wiki/Manta_ray"
+ },
+ "animal:Jellyfish": {
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/44/Jelly_cc11.jpg/330px-Jelly_cc11.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "credit": "Wikipedia / Wikimedia Commons",
+  "page": "https://en.wikipedia.org/wiki/Jellyfish"
+ },
+ "animal:Manatee": {
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/99/Manatee_with_calf.PD_-_colour_corrected.jpg/330px-Manatee_with_calf.PD_-_colour_corrected.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "credit": "Wikipedia / Wikimedia Commons",
+  "page": "https://en.wikipedia.org/wiki/West_Indian_manatee"
+ },
+ "animal:Lionfish": {
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/bf/Pterois_volitans_Manado-e_edit.jpg/330px-Pterois_volitans_Manado-e_edit.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "credit": "Wikipedia / Wikimedia Commons",
+  "page": "https://en.wikipedia.org/wiki/Red_lionfish"
+ },
+ "animal:Eel": {
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/33/GreenMorayEel.JPG/330px-GreenMorayEel.JPG?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "credit": "Wikipedia / Wikimedia Commons",
+  "page": "https://en.wikipedia.org/wiki/Green_moray"
+ },
+ "animal:Reef fish": {
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ed/Underwater_World.jpg/330px-Underwater_World.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "credit": "Wikipedia / Wikimedia Commons",
+  "page": "https://en.wikipedia.org/wiki/Coral_reef_fish"
+ },
+ "animal:Atlantic Spanish Mackerel": {
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/01/Spanish_mack_photo3_exp.jpg/330px-Spanish_mack_photo3_exp.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "credit": "Wikipedia / Wikimedia Commons",
+  "page": "https://en.wikipedia.org/wiki/Atlantic_Spanish_mackerel"
+ },
+ "animal:Stoplight Parrotfish": {
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f3/Stoplight-parrotfish.jpg/330px-Stoplight-parrotfish.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "credit": "Wikipedia / Wikimedia Commons",
+  "page": "https://en.wikipedia.org/wiki/Stoplight_parrotfish"
+ },
+ "animal:Flamingo": {
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/21/American_Flamingo_JG.jpg/330px-American_Flamingo_JG.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "credit": "Wikipedia / Wikimedia Commons",
+  "page": "https://en.wikipedia.org/wiki/American_flamingo"
+ },
+ "animal:Great Egret": {
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a7/Great_Egret_%28Ardea_alba%29_in_Breeding_Plumage%2C_Cape_May_County%2C_New_Jersey%2C_USA_%28cropped%29.png/330px-Great_Egret_%28Ardea_alba%29_in_Breeding_Plumage%2C_Cape_May_County%2C_New_Jersey%2C_USA_%28cropped%29.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "credit": "Wikipedia / Wikimedia Commons",
+  "page": "https://en.wikipedia.org/wiki/Great_egret"
+ },
+ "animal:Great Blue Heron": {
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f1/GreatBlueHeronInARiver.jpg/330px-GreatBlueHeronInARiver.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "credit": "Wikipedia / Wikimedia Commons",
+  "page": "https://en.wikipedia.org/wiki/Great_blue_heron"
+ },
+ "animal:Roseate Spoonbill": {
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/ba/Roseate_Spoonbill_-_Myakka_River_State_Park.jpg/330px-Roseate_Spoonbill_-_Myakka_River_State_Park.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "credit": "Wikipedia / Wikimedia Commons",
+  "page": "https://en.wikipedia.org/wiki/Roseate_spoonbill"
+ },
+ "animal:Caspian Tern": {
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/72/Sterna-caspia-010.jpg/330px-Sterna-caspia-010.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "credit": "Wikipedia / Wikimedia Commons",
+  "page": "https://en.wikipedia.org/wiki/Caspian_tern"
+ },
+ "animal:Black Vulture": {
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/cc/Black_vulture_%28Coragyps_atratus_brasiliensis%29_Peten.jpg/330px-Black_vulture_%28Coragyps_atratus_brasiliensis%29_Peten.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "credit": "Wikipedia / Wikimedia Commons",
+  "page": "https://en.wikipedia.org/wiki/Black_vulture"
+ },
+ "animal:Mottled Duck": {
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/86/MottledDuck_Gam.jpg/330px-MottledDuck_Gam.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "credit": "Wikipedia / Wikimedia Commons",
+  "page": "https://en.wikipedia.org/wiki/Mottled_duck"
+ },
+ "animal:Pelican": {
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/06/Brown_pelican_in_flight_%28Bodega_Bay%29.jpg/330px-Brown_pelican_in_flight_%28Bodega_Bay%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "credit": "Wikipedia / Wikimedia Commons",
+  "page": "https://en.wikipedia.org/wiki/Brown_pelican"
+ },
+ "animal:Pigeon": {
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/10/Columba_livia_%28Rock_Dove%2C_wild%29%2C_Duncansby_Head%2C_Caithness%2C_Scotland_1.jpg/330px-Columba_livia_%28Rock_Dove%2C_wild%29%2C_Duncansby_Head%2C_Caithness%2C_Scotland_1.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "credit": "Wikipedia / Wikimedia Commons",
+  "page": "https://en.wikipedia.org/wiki/Rock_dove"
+ },
+ "animal:Peacock": {
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7f/Peacock_on_tree_%2852077240794%29.jpg/330px-Peacock_on_tree_%2852077240794%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "credit": "Wikipedia / Wikimedia Commons",
+  "page": "https://en.wikipedia.org/wiki/Indian_peafowl"
+ },
+ "animal:Northern Raccoon": {
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3e/Raccoon_in_Central_Park_%2835264%29.jpg/330px-Raccoon_in_Central_Park_%2835264%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "credit": "Wikipedia / Wikimedia Commons",
+  "page": "https://en.wikipedia.org/wiki/Raccoon"
+ },
+ "animal:Bobcat": {
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4e/Bobcat_at_Columbus_Zoo_Boo.jpg/330px-Bobcat_at_Columbus_Zoo_Boo.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "credit": "Wikipedia / Wikimedia Commons",
+  "page": "https://en.wikipedia.org/wiki/Bobcat"
+ },
+ "animal:Armadillo": {
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a7/Dasypus_novemcinctus_en_Zool%C3%B3gico_de_Paraguan%C3%A1.jpg/330px-Dasypus_novemcinctus_en_Zool%C3%B3gico_de_Paraguan%C3%A1.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "credit": "Wikipedia / Wikimedia Commons",
+  "page": "https://en.wikipedia.org/wiki/Nine-banded_armadillo"
+ },
+ "animal:Rhesus Macaque": {
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e1/Macaca_mulatta_%2822886604281%29.jpg/330px-Macaca_mulatta_%2822886604281%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "credit": "Wikipedia / Wikimedia Commons",
+  "page": "https://en.wikipedia.org/wiki/Rhesus_macaque"
+ },
+ "animal:Bengal Cat": {
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/ba/Paintedcats_Red_Star_standing.jpg/330px-Paintedcats_Red_Star_standing.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "credit": "Wikipedia / Wikimedia Commons",
+  "page": "https://en.wikipedia.org/wiki/Bengal_cat"
+ },
+ "animal:Labrador Retriever": {
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/34/Labrador_on_Quantock_%282175262184%29.jpg/330px-Labrador_on_Quantock_%282175262184%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "credit": "Wikipedia / Wikimedia Commons",
+  "page": "https://en.wikipedia.org/wiki/Labrador_Retriever"
+ },
+ "weapon:Girardi ES9": {
+  "url": "https://static.wikia.nocookie.net/gtawiki/images/7/73/Es9.jpg/revision/latest/scale-to-width-down/600?cb=20261119130518",
+  "credit": "GTA Wiki (Fandom)",
+  "page": "https://gta.fandom.com/wiki/ES9"
+ },
+ "weapon:Mahi Nipper .38": {
+  "url": "https://static.wikia.nocookie.net/gtawiki/images/c/c9/Nipper-38.jpg/revision/latest/scale-to-width-down/600?cb=20261119130520",
+  "credit": "GTA Wiki (Fandom)",
+  "page": "https://gta.fandom.com/wiki/Nipper_.38"
+ },
+ "weapon:Turnt Nipper .38": {
+  "url": "https://static.wikia.nocookie.net/gtawiki/images/c/c9/Nipper-38.jpg/revision/latest/scale-to-width-down/600?cb=20261119130520",
+  "credit": "GTA Wiki (Fandom)",
+  "page": "https://gta.fandom.com/wiki/Nipper_.38"
+ },
+ "weapon:Assassin Nipper .38": {
+  "url": "https://static.wikia.nocookie.net/gtawiki/images/c/c9/Nipper-38.jpg/revision/latest/scale-to-width-down/600?cb=20261119130520",
+  "credit": "GTA Wiki (Fandom)",
+  "page": "https://gta.fandom.com/wiki/Nipper_.38"
+ },
+ "weapon:Mustang .357": {
+  "url": "https://static.wikia.nocookie.net/gtawiki/images/c/c8/Mustang357-GTAVI-OfficialScreenshot-Ambrosia03.png/revision/latest/scale-to-width-down/600?cb=20250815183522",
+  "credit": "GTA Wiki (Fandom)",
+  "page": "https://gta.fandom.com/wiki/Mustang_.357"
+ },
+ "vehicle:Schyster PMP 700": {
+  "url": "https://static.wikia.nocookie.net/gtawiki/images/f/f3/PMP700-GTAVI-Trailer1.png/revision/latest/scale-to-width-down/600?cb=20250823071953",
+  "credit": "GTA Wiki (Fandom)",
+  "page": "https://gta.fandom.com/wiki/PMP_700"
+ },
+ "vehicle:Vapid Ganado": {
+  "url": "https://static.wikia.nocookie.net/gtawiki/images/f/f9/GTAVI-Vapid-Ganado.jpg/revision/latest/scale-to-width-down/600?cb=20261105133251",
+  "credit": "GTA Wiki (Fandom)",
+  "page": "https://gta.fandom.com/wiki/Ganado"
+ },
+ "vehicle:Maibatsu Sanchez": {
+  "url": "https://static.wikia.nocookie.net/gtawiki/images/0/0a/Sanchez-GTAVI-Trailer1.png/revision/latest/scale-to-width-down/600?cb=20250923002752",
+  "credit": "GTA Wiki (Fandom)",
+  "page": "https://gta.fandom.com/wiki/Sanchez"
+ },
+ "vehicle:Pegassi Vitello": {
+  "url": "https://static.wikia.nocookie.net/gtawiki/images/1/1e/UnnamedPegassiSportsCar-GTAVI-Trailer2-1.png/revision/latest/scale-to-width-down/600?cb=20250516212648",
+  "credit": "GTA Wiki (Fandom)",
+  "page": "https://gta.fandom.com/wiki/Vitello"
+ },
+ "vehicle:'67 Vapid Dominator Buggy": {
+  "url": "https://static.wikia.nocookie.net/gtawiki/images/f/f8/Vapid-Dominator-Buggy.jpg/revision/latest/scale-to-width-down/600?cb=20261110125737",
+  "credit": "GTA Wiki (Fandom)",
+  "page": "https://gta.fandom.com/wiki/Dominator_Buggy"
+ },
+ "vehicle:Clarion": {
+  "url": "https://static.wikia.nocookie.net/gtawiki/images/b/b4/UnnamedCigarette38TopGunBoat-GTAVI-Trailer1.png/revision/latest/scale-to-width-down/600?cb=20250808210410",
+  "credit": "GTA Wiki (Fandom)",
+  "page": "https://gta.fandom.com/wiki/Unnamed_GTA_VI_Cigarette_38'_Top_Gun-inspired_boat"
+ },
+ "animal:Albino American Alligator": {
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/03/American_Alligator.jpg/330px-American_Alligator.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "credit": "Wikipedia / Wikimedia Commons",
+  "page": "https://en.wikipedia.org/wiki/American_alligator"
+ },
+ "animal:Frog": {
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/aa/North-American-bullfrog1.jpg/330px-North-American-bullfrog1.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "credit": "Wikipedia / Wikimedia Commons",
+  "page": "https://en.wikipedia.org/wiki/American_bullfrog"
+ },
+ "animal:Land Turtle": {
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f6/Gopher_Tortoise_-_Gopherus_polyphemus%2C_Lake_June-in-Winter_Scrub_State_Park%2C_Lake_Placid%2C_Florida_-_31527638716.jpg/330px-Gopher_Tortoise_-_Gopherus_polyphemus%2C_Lake_June-in-Winter_Scrub_State_Park%2C_Lake_Placid%2C_Florida_-_31527638716.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "credit": "Wikipedia / Wikimedia Commons",
+  "page": "https://en.wikipedia.org/wiki/Gopher_tortoise"
+ },
+ "animal:Crayfish": {
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/8d/Paranephrops.jpg/330px-Paranephrops.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "credit": "Wikipedia / Wikimedia Commons",
+  "page": "https://en.wikipedia.org/wiki/Crayfish"
+ },
+ "animal:Seagull": {
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ed/Leucophaeus_atricilla_Caye_Caulker_04.JPG/330px-Leucophaeus_atricilla_Caye_Caulker_04.JPG?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "credit": "Wikipedia / Wikimedia Commons",
+  "page": "https://en.wikipedia.org/wiki/Laughing_gull"
+ },
+ "animal:Whooping Crane": {
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7f/Grus_americana_Sasata.jpg/330px-Grus_americana_Sasata.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "credit": "Wikipedia / Wikimedia Commons",
+  "page": "https://en.wikipedia.org/wiki/Whooping_crane"
+ },
+ "animal:Woodpecker": {
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/12/PileatedWoodpeckerFeedingonTree%2C_crop.jpg/330px-PileatedWoodpeckerFeedingonTree%2C_crop.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "credit": "Wikipedia / Wikimedia Commons",
+  "page": "https://en.wikipedia.org/wiki/Pileated_woodpecker"
+ },
+ "animal:Cougar / Florida Panther": {
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/37/Everglades_National_Park_Florida_Panther.jpg/330px-Everglades_National_Park_Florida_Panther.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "credit": "Wikipedia / Wikimedia Commons",
+  "page": "https://en.wikipedia.org/wiki/Florida_panther"
+ },
+ "animal:White-tailed Deer": {
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b7/White-tailed_deer.jpg/330px-White-tailed_deer.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "credit": "Wikipedia / Wikimedia Commons",
+  "page": "https://en.wikipedia.org/wiki/White-tailed_deer"
+ },
+ "animal:Eastern Cottontail Rabbit": {
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0e/Eastern_cottontail_%28Sylvilagus_floridanus%29_foraging_on_ground_vegetation.jpg/330px-Eastern_cottontail_%28Sylvilagus_floridanus%29_foraging_on_ground_vegetation.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "credit": "Wikipedia / Wikimedia Commons",
+  "page": "https://en.wikipedia.org/wiki/Eastern_cottontail"
+ },
+ "animal:Wild Boar / Feral Hog": {
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d2/Wildschwein%2C_N%C3%A4he_Pulverstampftor_%28cropped%29.jpg/330px-Wildschwein%2C_N%C3%A4he_Pulverstampftor_%28cropped%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "credit": "Wikipedia / Wikimedia Commons",
+  "page": "https://en.wikipedia.org/wiki/Wild_boar"
+ },
+ "animal:Black Bear": {
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/08/01_Schwarzb%C3%A4r.jpg/330px-01_Schwarzb%C3%A4r.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "credit": "Wikipedia / Wikimedia Commons",
+  "page": "https://en.wikipedia.org/wiki/American_black_bear"
+ },
+ "animal:Fox": {
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a3/Gray_fox.jpg/330px-Gray_fox.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "credit": "Wikipedia / Wikimedia Commons",
+  "page": "https://en.wikipedia.org/wiki/Gray_fox"
+ },
+ "animal:Beaver": {
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6b/American_Beaver.jpg/330px-American_Beaver.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "credit": "Wikipedia / Wikimedia Commons",
+  "page": "https://en.wikipedia.org/wiki/North_American_beaver"
+ },
+ "animal:Cow": {
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/8c/Cow_%28Fleckvieh_breed%29_Oeschinensee_Slaunger_2009-07-07.jpg/330px-Cow_%28Fleckvieh_breed%29_Oeschinensee_Slaunger_2009-07-07.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "credit": "Wikipedia / Wikimedia Commons",
+  "page": "https://en.wikipedia.org/wiki/Cattle"
+ },
+ "animal:Chihuahua": {
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4c/Chihuahua1_bvdb.jpg/330px-Chihuahua1_bvdb.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "credit": "Wikipedia / Wikimedia Commons",
+  "page": "https://en.wikipedia.org/wiki/Chihuahua_(dog_breed)"
+ },
+ "animal:Doberman": {
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/ac/Dobermann_handling.jpg/330px-Dobermann_handling.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "credit": "Wikipedia / Wikimedia Commons",
+  "page": "https://en.wikipedia.org/wiki/Dobermann"
+ },
+ "animal:Otter": {
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/40/Northern_River_Otter_on_Seedskadee_NWR_%2822802102984%29.jpg/330px-Northern_River_Otter_on_Seedskadee_NWR_%2822802102984%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "credit": "Wikipedia / Wikimedia Commons",
+  "page": "https://en.wikipedia.org/wiki/North_American_river_otter"
+ },
+ "animal:Possum": {
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/27/Opossum_2.jpg/330px-Opossum_2.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "credit": "Wikipedia / Wikimedia Commons",
+  "page": "https://en.wikipedia.org/wiki/Virginia_opossum"
+ },
+ "animal:Skunk": {
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1f/Skunk_about_to_spray.jpg/330px-Skunk_about_to_spray.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "credit": "Wikipedia / Wikimedia Commons",
+  "page": "https://en.wikipedia.org/wiki/Striped_skunk"
+ },
+ "animal:Rat": {
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/44/Brown_Rat_%28Rattus_norvegicus%29.jpg/330px-Brown_Rat_%28Rattus_norvegicus%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "credit": "Wikipedia / Wikimedia Commons",
+  "page": "https://en.wikipedia.org/wiki/Brown_rat"
+ },
+ "animal:Sheep": {
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2c/Flock_of_sheep.jpg/330px-Flock_of_sheep.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "credit": "Wikipedia / Wikimedia Commons",
+  "page": "https://en.wikipedia.org/wiki/Sheep"
+ },
+ "animal:Squirrel": {
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/15/EasternGraySquirrel_GAm.jpg/330px-EasternGraySquirrel_GAm.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "credit": "Wikipedia / Wikimedia Commons",
+  "page": "https://en.wikipedia.org/wiki/Eastern_gray_squirrel"
+ },
+ "animal:American Foxhound": {
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e7/AmericanFoxhound2.jpg/330px-AmericanFoxhound2.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "credit": "Wikipedia / Wikimedia Commons",
+  "page": "https://en.wikipedia.org/wiki/American_Foxhound"
+ },
+ "animal:American Pit Bull Terrier": {
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b0/001_American_Pit_Bull_Terrier.jpg/330px-001_American_Pit_Bull_Terrier.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "credit": "Wikipedia / Wikimedia Commons",
+  "page": "https://en.wikipedia.org/wiki/American_Pit_Bull_Terrier"
+ },
+ "animal:Australian Shepherd": {
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/80/Australian_Shepherd_red_bi.JPG/330px-Australian_Shepherd_red_bi.JPG?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "credit": "Wikipedia / Wikimedia Commons",
+  "page": "https://en.wikipedia.org/wiki/Australian_Shepherd"
+ },
+ "animal:Rottweiler": {
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/26/Rottweiler_standing_facing_left.jpg/330px-Rottweiler_standing_facing_left.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "credit": "Wikipedia / Wikimedia Commons",
+  "page": "https://en.wikipedia.org/wiki/Rottweiler"
+ },
+ "animal:Police K-9 (German Shepherd)": {
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d0/German_Shepherd_-_DSC_0346_%2810096362833%29.jpg/330px-German_Shepherd_-_DSC_0346_%2810096362833%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "credit": "Wikipedia / Wikimedia Commons",
+  "page": "https://en.wikipedia.org/wiki/German_Shepherd"
+ },
+ "animal:Skunk Ape": {
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/ac/The_Florida_Skunk_Ape_-_panoramio.jpg/330px-The_Florida_Skunk_Ape_-_panoramio.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "credit": "Wikipedia / Wikimedia Commons",
+  "page": "https://en.wikipedia.org/wiki/Skunk_ape"
+ }
+}

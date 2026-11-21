@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { WEAPONS, WEAPON_SOURCE } from "../../../../data/catalog-weapons";
 import { getLocale } from "@/lib/session";
 import { Catalog } from "@/components/Catalog";
+import { catalogImage } from "@/lib/catalog-images";
 
 export async function generateMetadata(): Promise<Metadata> {
   const ar = (await getLocale()) === "ar";
@@ -31,6 +32,8 @@ export default async function WeaponsCatalog() {
     stats,
     badge: unique ? (ar ? "فريد" : "Unique") : null,
     sub: mods ? (ar ? "الأرقام مع الإضافات المركّبة" : "Stats shown with mods fitted") : null,
+    image: catalogImage("weapon", name),
+    emoji: classes.find((c) => c.id === cls)?.emoji,
   }));
   return (
     <main className="mx-auto max-w-5xl px-4 pt-5">
