@@ -1,0 +1,202 @@
+{
+  "reviewedAt": "2026-11-21T23:28:02.717324+00:00",
+  "method": "Exact-name model page + source image; GET/decode/visual checks. Statistics are unknown, never zero.",
+  "entries": [
+    {
+      "name": "JoBuilt MB2-10",
+      "sources": [
+        {
+          "title": "GTABase — individual GTA VI model page",
+          "url": "https://www.gtabase.com/gta-6/vehicles/mb2-10"
+        },
+        {
+          "title": "NiaMeowDB — corresponding named vehicle card",
+          "url": "https://meowdb.com/gta6/vehicles",
+          "nameOnSource": "JoBuilt MB2-10"
+        },
+        {
+          "title": "Gameta — individual model page and game menu image",
+          "url": "https://gameta.gg/gta6/vehicles/jobuilt-mb2-10/"
+        }
+      ],
+      "imagePage": "https://gameta.gg/gta6/vehicles/jobuilt-mb2-10/",
+      "imageSha256": "0062717472672e9f08de426c635dba4b32c2496904701035157ec15164c51b58"
+    },
+    {
+      "name": "Vapid Guardian TX2",
+      "sources": [
+        {
+          "title": "GTABase — individual GTA VI model page",
+          "url": "https://www.gtabase.com/gta-6/vehicles/guardian"
+        },
+        {
+          "title": "NiaMeowDB — corresponding named vehicle card",
+          "url": "https://meowdb.com/gta6/vehicles",
+          "nameOnSource": "Vapid Guardian TX2"
+        },
+        {
+          "title": "Gameta — individual model page and game menu image",
+          "url": "https://gameta.gg/gta6/vehicles/vapid-guardian-tx2/"
+        }
+      ],
+      "imagePage": "https://gameta.gg/gta6/vehicles/vapid-guardian-tx2/",
+      "imageSha256": "e5846189ba3d78badc531035aac7caa72772d67e54c8402dda1b97f04474fcfa"
+    },
+    {
+      "name": "Benefactor Schutzen",
+      "sources": [
+        {
+          "title": "GTABase — individual GTA VI model page",
+          "url": "https://www.gtabase.com/gta-6/vehicles/schutzen"
+        },
+        {
+          "title": "NiaMeowDB — corresponding named vehicle card",
+          "url": "https://meowdb.com/gta6/vehicles",
+          "nameOnSource": "Benefactor Schutzen"
+        },
+        {
+          "title": "Gameta — individual model page and game menu image",
+          "url": "https://gameta.gg/gta6/vehicles/benefactor-schutzen/"
+        }
+      ],
+      "imagePage": "https://gameta.gg/gta6/vehicles/benefactor-schutzen/",
+      "imageSha256": "5c607c88ea1edc5474cfc1b1aa5f15f75c8edeff603f307e0e6cab84bb9cf173"
+    },
+    {
+      "name": "Hauners P-996 Lazer",
+      "sources": [
+        {
+          "title": "GTABase — individual GTA VI model page",
+          "url": "https://www.gtabase.com/gta-6/vehicles/p-996-lazer"
+        },
+        {
+          "title": "NiaMeowDB — corresponding named vehicle card",
+          "url": "https://meowdb.com/gta6/vehicles",
+          "nameOnSource": "Hauners P-996 Lazer"
+        },
+        {
+          "title": "Gameta — individual model page and game menu image",
+          "url": "https://gameta.gg/gta6/vehicles/hauners-p-996-lazer/"
+        }
+      ],
+      "imagePage": "https://gameta.gg/gta6/vehicles/hauners-p-996-lazer/",
+      "imageSha256": "a569b577192473517335104a5a14cd3b419877c615fb7e6b9350e0ed6efe78d2"
+    },
+    {
+      "name": "Maibatsu Mule",
+      "sources": [
+        {
+          "title": "GTABase — individual GTA VI model page",
+          "url": "https://www.gtabase.com/gta-6/vehicles/mule"
+        },
+        {
+          "title": "NiaMeowDB — corresponding named vehicle card",
+          "url": "https://meowdb.com/gta6/vehicles",
+          "nameOnSource": "Maibatsu Mule"
+        },
+        {
+          "title": "Gameta — individual model page and game menu image",
+          "url": "https://gameta.gg/gta6/vehicles/maibatsu-mule/"
+        }
+      ],
+      "imagePage": "https://gameta.gg/gta6/vehicles/maibatsu-mule/",
+      "imageSha256": "b1409db73387082e5af3b3fce3331f9a48d95a8ff34abc285b23b43b98ba01d4"
+    },
+    {
+      "name": "Interstate '97 Benson",
+      "sources": [
+        {
+          "title": "GTABase — individual GTA VI model page",
+          "url": "https://www.gtabase.com/gta-6/vehicles/benson"
+        },
+        {
+          "title": "NiaMeowDB — corresponding named vehicle card",
+          "url": "https://meowdb.com/gta6/vehicles",
+          "nameOnSource": "Interstate '97 Benson"
+        },
+        {
+          "title": "Gameta — individual model page and game menu image",
+          "url": "https://gameta.gg/gta6/vehicles/97-interstate-benson/"
+        }
+      ],
+      "imagePage": "https://gameta.gg/gta6/vehicles/97-interstate-benson/",
+      "imageSha256": "3209775d9c451c9361d13ac527c4818b6131582e121d5ea5a6c839bda17076d8"
+    },
+    {
+      "name": "Maibatsu Caddy",
+      "sources": [
+        {
+          "title": "NiaMeowDB — corresponding named vehicle card",
+          "url": "https://meowdb.com/gta6/vehicles",
+          "nameOnSource": "Maibatsu Caddy"
+        },
+        {
+          "title": "Gameta — individual model page and game menu image",
+          "url": "https://gameta.gg/gta6/vehicles/maibatsu-caddy/"
+        }
+      ],
+      "imagePage": "https://gameta.gg/gta6/vehicles/maibatsu-caddy/",
+      "imageSha256": "78e97a841e35afd4bbb3e57d1bfb40cef7c1752c788d55cdd2e1938f80955eda"
+    },
+    {
+      "name": "Del Perro Erode",
+      "sources": [
+        {
+          "title": "GTABase — individual GTA VI model page",
+          "url": "https://www.gtabase.com/gta-6/vehicles/erode"
+        },
+        {
+          "title": "Gameta — individual model page and game menu image",
+          "url": "https://gameta.gg/gta6/vehicles/del-perro-erode/"
+        }
+      ],
+      "imagePage": "https://gameta.gg/gta6/vehicles/del-perro-erode/",
+      "imageSha256": "0a2831c27e63b9d510a81654aa36e76f498a85a3a8a35e5dbef3f1b1c108e469"
+    },
+    {
+      "name": "MTL CR5013",
+      "sources": [
+        {
+          "title": "GTABase — individual GTA VI model page",
+          "url": "https://www.gtabase.com/gta-6/vehicles/cr5013"
+        },
+        {
+          "title": "Gameta — individual model page and game menu image",
+          "url": "https://gameta.gg/gta6/vehicles/mtl-cr5013/"
+        }
+      ],
+      "imagePage": "https://gameta.gg/gta6/vehicles/mtl-cr5013/",
+      "imageSha256": "6b42ccaf2baad8bf9b113c9f596ebf51c6a155593adebacbfe2c4631c10b3b0d"
+    },
+    {
+      "name": "HVY TH42 Telehandler",
+      "sources": [
+        {
+          "title": "GTABase — individual GTA VI model page",
+          "url": "https://www.gtabase.com/gta-6/vehicles/th42-telehandler"
+        },
+        {
+          "title": "Gameta — individual model page and game menu image",
+          "url": "https://gameta.gg/gta6/vehicles/th42-telehandler/"
+        }
+      ],
+      "imagePage": "https://gameta.gg/gta6/vehicles/th42-telehandler/",
+      "imageSha256": "29aba09bdcff8973ce23eb77155750a7567d1d7ab17771387a438d6bc7db473d"
+    },
+    {
+      "name": "Brute Ripley",
+      "sources": [
+        {
+          "title": "GTABase — individual GTA VI model page",
+          "url": "https://www.gtabase.com/gta-6/vehicles/ripley"
+        },
+        {
+          "title": "Gameta — individual model page and game menu image",
+          "url": "https://gameta.gg/gta6/vehicles/brute-ripley/"
+        }
+      ],
+      "imagePage": "https://gameta.gg/gta6/vehicles/brute-ripley/",
+      "imageSha256": "d0c7627f0897bff5002fe0af7310d8343873bd5d2bc0c8ab0225fd5659eb4f14"
+    }
+  ]
+}

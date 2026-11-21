@@ -22,6 +22,7 @@ export default async function VehiclesCatalog({ searchParams }: PageProps<"/cata
     { id: "suv", label: ar ? "SUV وفانات" : "SUVs & vans", emoji: "🚙" },
     { id: "truck", label: ar ? "بيك أب وشاحنات" : "Trucks", emoji: "🛻" },
     { id: "motorcycle", label: ar ? "دبابات" : "Motorcycles", emoji: "🏍️" },
+    { id: "bicycle", label: ar ? "دراجات هوائية" : "Bicycles", emoji: "🚲" },
     { id: "boat", label: ar ? "قوارب" : "Boats", emoji: "🚤" },
     { id: "plane", label: ar ? "طيارات" : "Planes", emoji: "✈️" },
     { id: "helicopter", label: ar ? "هليكوبتر" : "Helicopters", emoji: "🚁" },
@@ -34,11 +35,11 @@ export default async function VehiclesCatalog({ searchParams }: PageProps<"/cata
   return (
     <main className="mx-auto max-w-5xl px-4 pt-5">
       <header className="mb-5 rounded-3xl p-5 text-white shadow-lg" style={{ background: "linear-gradient(135deg,#0f9f97,#2a1240)" }}>
-        <h1 className="text-[28px] leading-tight">{ar ? "كل مركبات GTA 6 🏎️" : "Every GTA 6 vehicle 🏎️"}</h1>
+        <h1 className="text-[28px] leading-tight">{ar ? "كتالوج مركبات GTA 6 🏎️" : "GTA 6 vehicle catalog 🏎️"}</h1>
         <p className="mt-2 text-[14px] text-white/90">
           {ar
-            ? `${VEHICLES.length} مركبة: سيارات، دبابات، قوارب، طيارات، هليكوبترات وعسكرية. ${withStats} منها بأرقام قائمة التعديل داخل اللعبة (من 10)، والباقي بنضيف أرقامها أول ما تنشر.`
-            : `${VEHICLES.length} vehicles: cars, bikes, boats, planes, helicopters and military. ${withStats} have the in-game tuning stats (out of 10); the rest get stats as they're published.`}
+            ? `قائمة متنامية تضم ${VEHICLES.length} مركبة: سيارات، دبابات، دراجات هوائية، قوارب، طيارات ومركبات عسكرية. ${withStats} منها بأرقام قائمة التعديل داخل اللعبة (من 10)، والباقي بنضيف أرقامها أول ما تنشر.`
+            : `A growing list of ${VEHICLES.length} vehicles: cars, motorcycles, bicycles, boats, aircraft and military vehicles. ${withStats} have the in-game tuning stats (out of 10); the rest get stats as they're published.`}
         </p>
       </header>
       <Catalog

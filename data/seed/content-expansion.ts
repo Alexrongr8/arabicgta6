@@ -2,6 +2,7 @@
 // Intended destination: data/seed/content-expansion.ts. No database writes here.
 // Platform guides explicitly describe console features, not unverified GTA VI menus.
 import { build, type SeedInput } from "./helpers";
+import { officialRemotePlayAddition } from "./remote-play-experiment";
 import type { CategorySlug } from "../../src/lib/types";
 
 type ResearchEntry = SeedInput & { category: CategorySlug };
@@ -675,4 +676,16 @@ This console feature combines inputs for one player. It does not establish a sec
   },
 ];
 
-export default entries.flatMap(({ category, ...entry }) => build(category, [entry]));
+export default entries.flatMap(({ category, ...entry }) => {
+  if (entry.slug === officialRemotePlayAddition.slug) {
+    const addition = officialRemotePlayAddition;
+    entry = {
+      ...entry,
+      bEn: `${entry.bEn}\n\n${addition.bEn}`,
+      bAr: `${entry.bAr}\n\n${addition.bAr}`,
+      srcUrls: [...(entry.srcUrls ?? []), ...addition.srcUrls].filter(([_, url], index, all) => all.findIndex((source) => source[1] === url) === index),
+      related: [...new Set([...(entry.related ?? []), ...addition.related])],
+    };
+  }
+  return build(category, [entry]);
+});

@@ -3,7 +3,7 @@
  * Speed, Acceleration, Asphalt handling, Off-road handling, Strength — compiled by MeowDB.
  * Only a few vehicles have published stats so far; the rest are listed by class and updated over time.
  */
-export type VClass = "super" | "car" | "suv" | "truck" | "motorcycle" | "boat" | "plane" | "helicopter" | "military" | "special" | "service";
+export type VClass = "super" | "car" | "suv" | "truck" | "motorcycle" | "bicycle" | "boat" | "plane" | "helicopter" | "military" | "special" | "service";
 export type V = [name: string, cls: VClass, note: string | null, stats: [number, number, number, number, number] | null];
 
 export const VEHICLE_SOURCES = [
@@ -170,4 +170,16 @@ export const VEHICLES: V[] = [
   ["Buzzard Attack Chopper", "helicopter", "Armed helicopter", null],
   ["Rhino Tank", "military", "Tank", null],
   ["Mammoth Patriot Mil-Spec", "military", "Military utility vehicle", null],
+  // Exact-name model pages and source images reviewed 22 Nov 2026; unknown stats stay null.
+  ["JoBuilt MB2-10", "truck", null, null],
+  ["Vapid Guardian TX2", "truck", null, null],
+  ["Benefactor Schutzen", "car", null, null],
+  ["Hauners P-996 Lazer", "plane", null, null],
+  ["Maibatsu Mule", "truck", null, null],
+  ["Interstate '97 Benson", "truck", null, null],
+  ["Maibatsu Caddy", "special", null, null],
+  ["Del Perro Erode", "bicycle", null, null],
+  ["MTL CR5013", "special", null, null],
+  ["HVY TH42 Telehandler", "special", null, null],
+  ["Brute Ripley", "special", null, null],
 ];

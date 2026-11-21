@@ -30,6 +30,9 @@ export const SEO_PAGES: SeoPage[] = [
       "input-assists-taps-holds-minigames", "display-flashes-contrast-effects",
       "tv-motion-smoothing-not-native-60fps", "samsung-game-motion-plus-comparison", "lg-trumotion-gaming-comparison",
       "sony-motionflow-game-mode", "ps5-vrr-allm-tv-smoothing", "ps5-hdr-setup-for-gta-vi",
+      "ps5-audio-focus-dialogue-headphones", "gta-vi-remote-play-from-ps5", "ps5-pc-frame-generation-remote-play-experiment",
+      "translate-game-text-google-camera", "iphone-translate-game-camera-live-text",
+      "android-circle-search-game-screenshot-translation", "phone-game-dialogue-translation-limits",
     ],
   },
   {

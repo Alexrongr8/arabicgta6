@@ -19,6 +19,9 @@ import contentExpansion from "./content-expansion";
 import gameplayImprovements from "./gameplay-improvements";
 import tvExperience from "./tv-experience";
 import strangeDiscoveries from "./strange-discoveries";
+import phoneTranslation from "./phone-translation";
+import audioFocus from "./audio-focus";
+import remotePlayExperiment from "./remote-play-experiment";
 
 export const SEED_ITEMS: Item[] = [
   ...news,
@@ -43,4 +46,7 @@ export const SEED_ITEMS: Item[] = [
   ...gameplayImprovements,
   ...tvExperience,
   ...strangeDiscoveries,
+  ...phoneTranslation,
+  ...audioFocus,
+  ...remotePlayExperiment,
 ];
