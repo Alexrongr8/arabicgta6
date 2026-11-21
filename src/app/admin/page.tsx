@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { adminClient, adminConfigured, isOwner } from "@/lib/admin";
+import { hideContentForm } from "@/lib/community/actions";
 import { formatDate } from "@/lib/i18n";
 import { getLocale, getViewer } from "@/lib/session";
 
@@ -199,6 +200,8 @@ export default async function Admin() {
         })}
       </div>
 
+      <Moderation ar={ar} />
+
       <h2 className="mt-8 mb-3 text-lg font-extrabold">{ar ? "التحديثات التلقائية" : "Auto-updates"}</h2>
       <div className="card divide-y divide-line">
         {(runs ?? []).map((r) => (
@@ -233,5 +236,35 @@ function TopList({ title, rows }: { title: string; rows: [string, number][] }) {
         ))}
       </ul>
     </div>
+  );
+}
+
+async function Moderation({ ar }: { ar: boolean }) {
+  const db = adminClient();
+  const [{ data: subs }, { data: comments }] = await Promise.all([
+    db.from("submissions").select("id,author_name,title,created_at").eq("hidden", false).order("created_at", { ascending: false }).limit(30),
+    db.from("comments").select("id,author_name,body,target,created_at").eq("hidden", false).order("created_at", { ascending: false }).limit(40),
+  ]);
+  return (
+    <section className="mt-8 grid gap-3 md:grid-cols-2">
+      <div className="card p-4">
+        <p className="mb-2 text-sm font-extrabold">{ar ? "آخر مشاركات اللاعبين" : "Latest submissions"}</p>
+        {(subs ?? []).map((x) => (
+          <form key={x.id} action={hideContentForm.bind(null, "submission", x.id)} className="flex items-center gap-2 border-t border-line py-2 text-[12.5px]">
+            <span className="flex-1 truncate"><b>{x.author_name}</b>: {x.title}</span>
+            <button className="rounded-lg bg-[#ef4444] px-2 py-1 text-[11px] font-bold text-white">{ar ? "إخفاء" : "Hide"}</button>
+          </form>
+        ))}
+      </div>
+      <div className="card p-4">
+        <p className="mb-2 text-sm font-extrabold">{ar ? "آخر التعليقات" : "Latest comments"}</p>
+        {(comments ?? []).map((x) => (
+          <form key={x.id} action={hideContentForm.bind(null, "comment", x.id)} className="flex items-center gap-2 border-t border-line py-2 text-[12.5px]">
+            <span className="flex-1 truncate"><b>{x.author_name}</b>: {x.body}</span>
+            <button className="rounded-lg bg-[#ef4444] px-2 py-1 text-[11px] font-bold text-white">{ar ? "إخفاء" : "Hide"}</button>
+          </form>
+        ))}
+      </div>
+    </section>
   );
 }

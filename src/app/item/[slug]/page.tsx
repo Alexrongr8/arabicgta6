@@ -15,6 +15,9 @@ import { StatusBadge } from "@/components/StatusBadge";
 import { ShareButton } from "@/components/ShareButton";
 import { CoverFigure } from "@/components/Cover";
 import { Videos } from "@/components/Videos";
+import { VoteBar } from "@/components/community/VoteBar";
+import { Comments } from "@/components/community/Comments";
+import { getVotes } from "@/lib/community/data";
 import { imageCredit } from "@/lib/image";
 
 const SITE = process.env.NEXT_PUBLIC_SITE_URL ?? "https://arabicgta6.com";
@@ -59,6 +62,7 @@ export default async function ItemPage({ params }: PageProps<"/item/[slug]">) {
 
   const c = CATEGORY_MAP[item.category];
   const related = await getBySlugs(item.related);
+  const votes = (await getVotes([`item:${item.slug}`], viewer.id))[`item:${item.slug}`];
   const body = pick(item, "body", locale);
 
   const ld = {
@@ -154,6 +158,9 @@ export default async function ItemPage({ params }: PageProps<"/item/[slug]">) {
 
           <div className="card p-5 md:p-7">
             <Prose text={body} />
+            <div className="mt-5 border-t border-line pt-4">
+              <VoteBar target={`item:${item.slug}`} votes={votes} path={`/item/${item.slug}`} ar={locale === "ar"} />
+            </div>
           </div>
 
           {item.sources.length > 0 && (
@@ -176,6 +183,8 @@ export default async function ItemPage({ params }: PageProps<"/item/[slug]">) {
           <Infobox item={item} locale={locale} className="sticky top-20" />
         </aside>
       </article>
+
+      <Comments target={`item:${item.slug}`} path={`/item/${item.slug}`} locale={locale} signedIn={viewer.signedIn} />
 
       {related.length > 0 && (
         <section className="mt-8">

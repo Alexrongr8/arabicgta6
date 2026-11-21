@@ -71,6 +71,16 @@ export default async function Home() {
         </Link>
       </section>
 
+      <section className="mx-auto mt-3 max-w-6xl px-4">
+        <Link href="/community" className="card-hover flex items-center gap-4 overflow-hidden rounded-3xl p-4 text-white shadow-lg" style={{ background: "linear-gradient(135deg,#0f9f97,#7c3aed)" }}>
+          <span className="grid size-14 shrink-0 place-items-center rounded-2xl bg-white/15 text-3xl">🕵️</span>
+          <span className="flex-1">
+            <span className="font-head block text-[20px] leading-tight">{locale === "ar" ? "اكتشافات اللاعبين" : "Player discoveries"}</span>
+            <span className="mt-0.5 block text-[12.5px] text-white/85">{locale === "ar" ? "لقيت سر أو قلتش؟ انشره باسمك وخل اللاعبين يصوتون" : "Found a secret or glitch? Post it under your name"}</span>
+          </span>
+        </Link>
+      </section>
+
       {!viewer.signedIn && (
         <div className="mx-auto mt-8 max-w-6xl px-4">
           <SignInGate locale={locale} />

@@ -190,3 +190,76 @@ alter table public.page_views add column if not exists source text;
 alter table public.page_views add column if not exists utm_campaign text;
 alter table public.page_views add column if not exists lang text;
 create index if not exists page_views_visitor_idx on public.page_views (visitor_id, created_at desc);
+
+-- ───────────────────────── community ─────────────────────────
+-- Player submissions (discoveries, glitches, funny moments), comments and votes.
+-- Reading is public; writing needs Google sign-in; the owner can hide anything from /admin.
+create table if not exists public.submissions (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references auth.users (id) on delete cascade,
+  author_name text not null,
+  author_avatar text,
+  category text not null default 'secrets',
+  title text not null check (char_length(title) between 5 and 140),
+  body text not null check (char_length(body) between 20 and 4000),
+  place text,
+  video_url text,
+  hidden boolean not null default false,
+  created_at timestamptz not null default now()
+);
+create index if not exists submissions_created_idx on public.submissions (created_at desc);
+
+create table if not exists public.comments (
+  id uuid primary key default gen_random_uuid(),
+  target text not null, -- 'item:<slug>' or 'sub:<uuid>'
+  user_id uuid not null references auth.users (id) on delete cascade,
+  author_name text not null,
+  author_avatar text,
+  body text not null check (char_length(body) between 2 and 1500),
+  hidden boolean not null default false,
+  created_at timestamptz not null default now()
+);
+create index if not exists comments_target_idx on public.comments (target, created_at);
+
+create table if not exists public.votes (
+  target text not null,
+  user_id uuid not null references auth.users (id) on delete cascade,
+  value smallint not null check (value in (-1, 1)),
+  created_at timestamptz not null default now(),
+  primary key (target, user_id)
+);
+
+alter table public.submissions enable row level security;
+alter table public.comments enable row level security;
+alter table public.votes enable row level security;
+
+drop policy if exists "read visible submissions" on public.submissions;
+create policy "read visible submissions" on public.submissions for select to anon, authenticated using (not hidden);
+drop policy if exists "insert own submissions" on public.submissions;
+create policy "insert own submissions" on public.submissions for insert to authenticated with check (auth.uid() = user_id and not hidden);
+drop policy if exists "delete own submissions" on public.submissions;
+create policy "delete own submissions" on public.submissions for delete to authenticated using (auth.uid() = user_id);
+
+drop policy if exists "read visible comments" on public.comments;
+create policy "read visible comments" on public.comments for select to anon, authenticated using (not hidden);
+drop policy if exists "insert own comments" on public.comments;
+create policy "insert own comments" on public.comments for insert to authenticated with check (auth.uid() = user_id and not hidden);
+drop policy if exists "delete own comments" on public.comments;
+create policy "delete own comments" on public.comments for delete to authenticated using (auth.uid() = user_id);
+
+drop policy if exists "read votes" on public.votes;
+create policy "read votes" on public.votes for select to anon, authenticated using (true);
+drop policy if exists "upsert own votes" on public.votes;
+create policy "upsert own votes" on public.votes for insert to authenticated with check (auth.uid() = user_id);
+drop policy if exists "update own votes" on public.votes;
+create policy "update own votes" on public.votes for update to authenticated using (auth.uid() = user_id) with check (auth.uid() = user_id);
+drop policy if exists "delete own votes" on public.votes;
+create policy "delete own votes" on public.votes for delete to authenticated using (auth.uid() = user_id);
+
+create or replace function public.vote_totals(p_targets text[])
+returns table (target text, up bigint, down bigint)
+language sql stable security definer set search_path = public as $$
+  select target, count(*) filter (where value = 1), count(*) filter (where value = -1)
+  from public.votes where target = any(p_targets) group by target;
+$$;
+grant execute on function public.vote_totals(text[]) to anon, authenticated;
