@@ -236,15 +236,26 @@ function localSearch(items: Item[], terms: string[], limit: number): Item[] {
   return pool.sort((a, b) => b.n - a.n || b.s - a.s || byDate(a.i, b.i)).slice(0, limit).map((x) => x.i);
 }
 
-export type TipCard = Pick<Item, "slug" | "title_en" | "title_ar" | "summary_en" | "summary_ar">;
+export type TipCard = Pick<Item, "slug" | "category" | "status" | "tags" | "title_en" | "title_ar" | "summary_en" | "summary_ar">;
 
 export const getTipCards = cache(async (): Promise<TipCard[]> => {
+  const visible = (i: TipCard) => i.category === "tips"
+    && (i.tags == null || (Array.isArray(i.tags) && i.tags.every((tag) => typeof tag === "string")))
+    && !isSpoiler(i);
   if (!supabaseConfigured()) {
-    return SEED.filter((i) => i.category === "tips").map(({ slug, title_en, title_ar, summary_en, summary_ar }) => ({ slug, title_en, title_ar, summary_en, summary_ar }));
+    return SEED.filter(visible).sort(byDate).slice(0, 200)
+      .map(({ slug, category, status, tags, title_en, title_ar, summary_en, summary_ar }) => ({ slug, category, status, tags, title_en, title_ar, summary_en, summary_ar }));
   }
   const supabase = await createClient();
-  const { data } = await supabase.rpc("tip_cards");
-  return (data ?? []) as TipCard[];
+  const { data, error } = await supabase.from("items")
+    .select("slug,category,status,tags,title_en,title_ar,summary_en,summary_ar")
+    .eq("category", "tips")
+    .order("published_at", { ascending: false })
+    .order("slug", { ascending: true })
+    .limit(200)
+    .abortSignal(AbortSignal.timeout(4000));
+  if (error) throw error;
+  return ((data ?? []) as TipCard[]).filter(visible);
 });
 
 /** Pool for "Secret of the day": secrets, strange things, tips and funny moments. */

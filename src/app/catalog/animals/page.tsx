@@ -30,7 +30,7 @@ export default async function AnimalsCatalog({ searchParams }: PageProps<"/catal
   const total = ANIMALS.filter(matches).length;
   return (
     <main className="mx-auto max-w-5xl px-4 pt-5">
-      <header className="mb-5 rounded-3xl p-5 text-white shadow-lg" style={{ background: "linear-gradient(135deg,#16a34a,#0f766e)" }}>
+      <header className="mb-5 rounded-3xl p-5 text-white shadow-lg" style={{ background: "linear-gradient(#0006,#0006), linear-gradient(135deg,#16a34a,#0f766e)" }}>
         <h1 className="text-[28px] leading-tight">{ar ? "حيوانات GTA 6 🐊" : "GTA 6 animals 🐊"}</h1>
         <p className="mt-2 text-[14px] text-white/90">
           {ar
@@ -48,7 +48,7 @@ export default async function AnimalsCatalog({ searchParams }: PageProps<"/catal
           <span className="flex-1">
             {ar ? `نتائج "${q}": ${total}` : `Results for "${q}": ${total}`}
           </span>
-          <Link href="/catalog/animals" className="rounded-xl bg-pink px-3 py-1.5 text-[13px] font-extrabold text-white">
+          <Link href="/catalog/animals" className="rounded-xl bg-pink px-3 py-1.5 text-[13px] font-extrabold text-black">
             {ar ? "اعرض كل الحيوانات" : "Show all animals"}
           </Link>
         </div>
@@ -82,9 +82,9 @@ export default async function AnimalsCatalog({ searchParams }: PageProps<"/catal
                     {a.fish && <span className="rounded-full bg-chip2 px-2 py-0.5 text-[11px] font-bold">🎣 {ar ? "صيد" : "Fish"}</span>}
                   </div>
                   {(a.whereAr || a.whereEn) && <p className="mt-1 text-[13px] text-muted">📍 {ar ? a.whereAr : a.whereEn}</p>}
-                  {(a.dangerAr || a.dangerEn) && <p className="mt-1 text-[12.5px] font-bold text-[#dc2626]">⚠️ {ar ? a.dangerAr : a.dangerEn}</p>}
+                  {(a.dangerAr || a.dangerEn) && <p className="mt-1 text-[12.5px] font-bold text-error">⚠️ {ar ? a.dangerAr : a.dangerEn}</p>}
                   {a.link && (
-                    <Link href={`/item/${a.link}`} className="mt-1 inline-block text-[12.5px] font-bold text-pink">
+                    <Link href={`/item/${a.link}`} className="mt-1 inline-block text-[12.5px] font-bold text-accent">
                       {ar ? "الدليل المرتبط ←" : "Related guide →"}
                     </Link>
                   )}
@@ -99,7 +99,7 @@ export default async function AnimalsCatalog({ searchParams }: PageProps<"/catal
       <p className="text-[12px] leading-relaxed text-dim">
         {ar ? "ملاحظة: المصادر مختلفة في العدد (255 خانة مقابل 170+ نوع)، والدب الأسود لسه مو مؤكد. المصادر: " : "Note: sources disagree on totals (255 entries vs 170+ species) and the black bear isn't confirmed. Sources: "}
         {ANIMAL_SOURCES.map((s, i) => (
-          <a key={s.url} href={s.url} target="_blank" rel="noopener noreferrer nofollow" className="text-teal underline">
+          <a key={s.url} href={s.url} target="_blank" rel="noopener noreferrer nofollow" className="text-success underline">
             {s.title.split(" — ")[0]}
             {i < ANIMAL_SOURCES.length - 1 ? "، " : ""}
           </a>

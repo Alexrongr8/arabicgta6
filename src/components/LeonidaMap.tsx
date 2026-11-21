@@ -4,7 +4,7 @@ import { Bidi } from "@/components/Bidi";
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import L from "leaflet";
-import { ImageOverlay, MapContainer, Marker, Tooltip, useMap, useMapEvents } from "react-leaflet";
+import { ImageOverlay, MapContainer, Marker, useMap, useMapEvents } from "react-leaflet";
 import { renderToStaticMarkup } from "react-dom/server";
 import { ArrowLeft, ArrowRight, ChevronDown, Layers, LocateFixed, X } from "lucide-react";
 import { CATEGORIES, CATEGORY_MAP } from "@/lib/categories";
@@ -40,9 +40,15 @@ function dotIcon(cat: CategorySlug, active: boolean) {
   return iconCache.get(key)!;
 }
 
-function ZoomWatcher({ onZoom }: { onZoom: (z: number) => void }) {
-  const map = useMapEvents({ zoomend: () => onZoom(map.getZoom()) });
-  useEffect(() => onZoom(map.getZoom()), [map, onZoom]);
+function ZoomWatcher({ onZoom, onDetail }: { onZoom: (z: number) => void; onDetail: (loaded: boolean) => void }) {
+  const map = useMapEvents({ zoomend: () => {
+    onZoom(map.getZoom());
+    if (map.getZoom() >= -1.5) onDetail(true);
+  } });
+  useEffect(() => {
+    onZoom(map.getZoom());
+    if (map.getZoom() >= -1.5) onDetail(true);
+  }, [map, onZoom, onDetail]);
   return null;
 }
 
@@ -51,7 +57,7 @@ function pinIcon(cat: CategorySlug, active: boolean) {
   const html = renderToStaticMarkup(
     <div className={`pin ${active ? "active" : ""}`} style={{ background: c.color }}>
       <span>
-        <CategoryIcon category={cat} size={16} color="#fff" strokeWidth={2.4} />
+        <CategoryIcon category={cat} size={16} color="#000" strokeWidth={2.4} />
       </span>
     </div>,
   );
@@ -96,6 +102,12 @@ function FitOnLoad() {
 
 type Pin = ItemCard & { key: string; spotLabel?: { en: string; ar: string; n: number } };
 
+function pinLabel(pin: Pin, locale: Locale) {
+  const title = locale === "ar" ? pin.title_ar : pin.title_en;
+  const spot = pin.spotLabel?.[locale];
+  return spot ? `${title} — ${spot}` : title;
+}
+
 function toPins(items: ItemCard[]): Pin[] {
   const pins: Pin[] = [];
   for (const i of items) {
@@ -115,6 +127,7 @@ export default function LeonidaMap({ items: cards, locale, focus, spot, labels }
   );
   const [legendOpen, setLegendOpen] = useState(false);
   const [zoom, setZoom] = useState(-3);
+  const [loadFullMap, setLoadFullMap] = useState(false);
   const mapRef = useRef<L.Map | null>(null);
 
   const cats = useMemo(() => CATEGORIES.filter((c) => items.some((i) => i.category === c.slug)), [items]);
@@ -149,13 +162,15 @@ export default function LeonidaMap({ items: cards, locale, focus, spot, labels }
         className="h-full w-full"
       >
         <FitOnLoad />
-        <ZoomWatcher onZoom={setZoom} />
+        <ZoomWatcher onZoom={setZoom} onDetail={setLoadFullMap} />
         <FlyTo target={selected} />
         <ImageOverlay url="/map/leonida-official-small.webp" bounds={BOUNDS} />
-        <ImageOverlay url="/map/leonida-official.webp" bounds={BOUNDS} />
+        {loadFullMap && <ImageOverlay url="/map/leonida-official.webp" bounds={BOUNDS} />}
         {visible.map((i) => (
           <Marker
             key={i.key}
+            title={pinLabel(i, locale)}
+            alt={pinLabel(i, locale)}
             position={toLatLng(i.location!)}
             icon={zoom >= -1.25 || selected?.key === i.key ? pinIcon(i.category, selected?.key === i.key) : dotIcon(i.category, false)}
             eventHandlers={{ click: () => setSelected(i) }}
@@ -175,6 +190,7 @@ export default function LeonidaMap({ items: cards, locale, focus, spot, labels }
             <button
               type="button"
               onClick={() => setActive(new Set())}
+              aria-pressed={active.size === 0}
               className={`glass h-10 shrink-0 rounded-full border px-4 text-[13px] font-bold ${active.size === 0 ? "border-pink text-fg" : "border-line text-muted"}`}
             >
               {labels.all} · {items.length}
@@ -186,7 +202,8 @@ export default function LeonidaMap({ items: cards, locale, focus, spot, labels }
                   key={c.slug}
                   type="button"
                   onClick={() => toggle(c.slug)}
-                  className={`h-10 shrink-0 rounded-full border px-3.5 text-[13px] font-bold ${on ? "border-transparent text-white" : "glass border-line text-muted"}`}
+                  aria-pressed={on}
+                  className={`h-10 shrink-0 rounded-full border px-3.5 text-[13px] font-bold ${on ? "border-transparent text-black" : "glass border-line text-muted"}`}
                   style={on ? { background: c.color } : undefined}
                 >
                   <span className="inline-flex items-center gap-1.5">
@@ -202,18 +219,18 @@ export default function LeonidaMap({ items: cards, locale, focus, spot, labels }
 
       {/* right controls */}
       <div className={`absolute end-3 bottom-8 z-[500] flex-col gap-2 ${selected ? "hidden" : "flex"}`}>
-        <button type="button" onClick={() => mapRef.current?.zoomIn()} className="glass grid size-10 place-items-center rounded-full border border-line text-xl font-bold">+</button>
-        <button type="button" onClick={() => mapRef.current?.zoomOut()} className="glass grid size-10 place-items-center rounded-full border border-line text-xl font-bold">−</button>
-        <button type="button" onClick={() => mapRef.current?.fitBounds(BOUNDS)} className="glass grid size-10 place-items-center rounded-full border border-line" aria-label="reset">
+        <button type="button" onClick={() => mapRef.current?.zoomIn()} aria-label={locale === "ar" ? "تكبير الخريطة" : "Zoom in"} className="glass grid size-10 place-items-center rounded-full border border-line text-xl font-bold">+</button>
+        <button type="button" onClick={() => mapRef.current?.zoomOut()} aria-label={locale === "ar" ? "تصغير الخريطة" : "Zoom out"} className="glass grid size-10 place-items-center rounded-full border border-line text-xl font-bold">−</button>
+        <button type="button" onClick={() => mapRef.current?.fitBounds(BOUNDS)} className="glass grid size-10 place-items-center rounded-full border border-line" aria-label={locale === "ar" ? "إعادة ضبط عرض الخريطة" : "Reset map view"}>
           <LocateFixed className="size-5" />
         </button>
-        <button type="button" onClick={() => setLegendOpen((v) => !v)} className="glass grid size-10 place-items-center rounded-full border border-line" aria-label={labels.legend}>
+        <button type="button" onClick={() => setLegendOpen((v) => !v)} className="glass grid size-10 place-items-center rounded-full border border-line" aria-label={labels.legend} aria-expanded={legendOpen} aria-controls="map-legend">
           <Layers className="size-5" />
         </button>
       </div>
 
       {legendOpen && (
-        <div className="glass absolute end-16 bottom-8 z-[500] w-52 rounded-2xl border border-line p-3 text-[12.5px]">
+        <div id="map-legend" className="glass absolute end-16 bottom-8 z-[500] w-52 rounded-2xl border border-line p-3 text-[12.5px]">
           <p className="mb-2 font-extrabold">{labels.legend}</p>
           {cats.map((c) => (
             <p key={c.slug} className="flex items-center gap-2 py-0.5">
@@ -228,7 +245,7 @@ export default function LeonidaMap({ items: cards, locale, focus, spot, labels }
       <div className={`absolute inset-x-0 bottom-0 z-[600] transition-transform duration-300 ${selected ? "translate-y-0" : "translate-y-full"}`}>
         {selected && (
           <div className="glass pb-safe mx-auto max-w-lg rounded-t-3xl border border-b-0 border-line px-5 pt-2">
-            <button type="button" onClick={() => setSelected(null)} className="mx-auto mb-2 flex h-6 w-full items-center justify-center" aria-label="close">
+            <button type="button" onClick={() => setSelected(null)} className="mx-auto mb-2 flex h-6 w-full items-center justify-center" aria-label={locale === "ar" ? "إغلاق التفاصيل" : "Close details"}>
               <ChevronDown className="size-5 text-dim" />
             </button>
             <div className="flex items-start gap-3">
@@ -245,17 +262,17 @@ export default function LeonidaMap({ items: cards, locale, focus, spot, labels }
                 </div>
                 <h3 className="text-[17px] leading-snug font-extrabold"><Bidi text={locale === "ar" ? selected.title_ar : selected.title_en} /></h3>
                 {selected.spotLabel && (
-                  <p className="mt-1.5 rounded-xl bg-chip px-2.5 py-1.5 text-[13px] leading-relaxed font-bold text-pink">
+                  <p className="mt-1.5 rounded-xl bg-chip px-2.5 py-1.5 text-[13px] leading-relaxed font-bold text-accent">
                     📍 {selected.spotLabel.n}. <Bidi text={locale === "ar" ? selected.spotLabel.ar : selected.spotLabel.en} />
                   </p>
                 )}
                 <p className="mt-1 line-clamp-3 text-[13px] leading-relaxed text-muted"><Bidi text={locale === "ar" ? selected.summary_ar : selected.summary_en} /></p>
               </div>
-              <button type="button" onClick={() => setSelected(null)} className="grid size-8 shrink-0 place-items-center rounded-full bg-chip2" aria-label="close">
+              <button type="button" onClick={() => setSelected(null)} className="grid size-8 shrink-0 place-items-center rounded-full bg-chip2" aria-label={locale === "ar" ? "إغلاق التفاصيل" : "Close details"}>
                 <X className="size-4" />
               </button>
             </div>
-            <Link href={`/item/${selected.slug}`} className="bg-sunset mt-4 mb-3 flex h-12 items-center justify-center rounded-2xl font-extrabold text-white shadow-lg shadow-pink/30">
+            <Link href={`/item/${selected.slug}`} className="bg-sunset mt-4 mb-3 flex h-12 items-center justify-center rounded-2xl font-extrabold text-[#241338] shadow-lg shadow-pink/30">
               {labels.open}
             </Link>
           </div>

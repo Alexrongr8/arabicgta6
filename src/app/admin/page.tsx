@@ -252,7 +252,7 @@ async function Moderation({ ar }: { ar: boolean }) {
         {(subs ?? []).map((x) => (
           <form key={x.id} action={hideContentForm.bind(null, "submission", x.id)} className="flex items-center gap-2 border-t border-line py-2 text-[12.5px]">
             <span className="flex-1 truncate"><b>{x.author_name}</b>: {x.title}</span>
-            <button className="rounded-lg bg-[#ef4444] px-2 py-1 text-[11px] font-bold text-white">{ar ? "إخفاء" : "Hide"}</button>
+            <button className="rounded-lg bg-[#ef4444] px-2 py-1 text-[11px] font-bold text-black">{ar ? "إخفاء" : "Hide"}</button>
           </form>
         ))}
       </div>
@@ -261,7 +261,7 @@ async function Moderation({ ar }: { ar: boolean }) {
         {(comments ?? []).map((x) => (
           <form key={x.id} action={hideContentForm.bind(null, "comment", x.id)} className="flex items-center gap-2 border-t border-line py-2 text-[12.5px]">
             <span className="flex-1 truncate"><b>{x.author_name}</b>: {x.body}</span>
-            <button className="rounded-lg bg-[#ef4444] px-2 py-1 text-[11px] font-bold text-white">{ar ? "إخفاء" : "Hide"}</button>
+            <button className="rounded-lg bg-[#ef4444] px-2 py-1 text-[11px] font-bold text-black">{ar ? "إخفاء" : "Hide"}</button>
           </form>
         ))}
       </div>

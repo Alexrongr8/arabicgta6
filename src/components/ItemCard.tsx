@@ -35,7 +35,7 @@ export function ItemCard({ item, locale, showCategory = true, index = 0 }: { ite
           <StatusBadge status={item.status} locale={locale} />
           <span>{formatDate(item.published_at, locale)}</span>
         </span>
-        <span className="block text-[15px] leading-snug font-bold text-fg group-hover:text-pink"><Bidi text={pick(item, "title", locale)} /></span>
+        <span className="block text-[15px] leading-snug font-bold text-fg group-hover:text-accent"><Bidi text={pick(item, "title", locale)} /></span>
         <span className="mt-1 line-clamp-2 block text-[13px] leading-relaxed text-muted">
           {spoiler ? SPOILER_TEASER[locale] : <Bidi text={pick(item, "summary", locale)} />}
         </span>

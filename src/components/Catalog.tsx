@@ -49,7 +49,7 @@ export function Catalog({
             type="button"
             onClick={() => setCls(c.id)}
             aria-pressed={cls === c.id}
-            className={`h-9 shrink-0 rounded-full border px-3.5 text-[13px] font-bold ${cls === c.id ? "border-transparent bg-pink text-white" : "border-line bg-chip text-muted"}`}
+            className={`h-9 shrink-0 rounded-full border px-3.5 text-[13px] font-bold ${cls === c.id ? "border-transparent bg-pink text-black" : "border-line bg-chip text-muted"}`}
           >
             {c.emoji} {c.label} · {count(c.id)}
           </button>
@@ -62,10 +62,10 @@ export function Catalog({
           placeholder={ar ? "ابحث بالاسم…" : "Search by name…"}
           aria-label={ar ? "ابحث في الكتالوج بالاسم" : "Search the catalog by name"}
           type="search"
-          className="h-10 min-w-0 flex-1 rounded-xl border border-line bg-card px-3 text-[15px] outline-none focus:border-pink"
+          className="h-10 min-w-0 flex-1 rounded-xl border border-control bg-card px-3 text-[15px] outline-none focus:border-pink"
           dir="ltr"
         />
-        <select value={sort} onChange={(e) => setSort(Number(e.target.value))} aria-label={ar ? "ترتيب النتائج" : "Sort results"} className="h-10 rounded-xl border border-line bg-card px-2 text-[14px]">
+        <select value={sort} onChange={(e) => setSort(Number(e.target.value))} aria-label={ar ? "ترتيب النتائج" : "Sort results"} className="h-10 rounded-xl border border-control bg-card px-2 text-[14px]">
           <option value={-1}>{ar ? "ترتيب: افتراضي" : "Sort: default"}</option>
           {statLabels.map((l, i) => (
             <option key={l} value={i}>
@@ -80,7 +80,7 @@ export function Catalog({
       {shown.length === 0 && (
         <div className="card mb-4 p-5 text-center">
           <p className="mb-3 text-[14px] text-muted">{ar ? "ما لقينا شي بهالاسم في هذا القسم." : "Nothing matches that name here."}</p>
-          <button type="button" onClick={() => { setQ(""); setCls("all"); }} className="rounded-xl bg-pink px-4 py-2 text-sm font-extrabold text-white">
+          <button type="button" onClick={() => { setQ(""); setCls("all"); }} className="rounded-xl bg-pink px-4 py-2 text-sm font-extrabold text-black">
             {ar ? "اعرض الكل" : "Show everything"}
           </button>
         </div>

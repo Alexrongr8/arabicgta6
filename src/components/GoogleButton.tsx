@@ -1,23 +1,39 @@
 "use client";
-import { useState } from "react";
-import { createClient } from "@/lib/supabase/client";
+import { useRef, useState } from "react";
 
-export function GoogleButton({ label, next = "/", enabled, disabledLabel }: { label: string; next?: string; enabled: boolean; disabledLabel: string }) {
+export function GoogleButton({ label, next = "/", enabled, disabledLabel, errorLabel }: { label: string; next?: string; enabled: boolean; disabledLabel: string; errorLabel: string }) {
   const [busy, setBusy] = useState(false);
+  const [failed, setFailed] = useState(false);
+  const pending = useRef(false);
   if (!enabled) {
     return <p className="rounded-2xl border border-line px-4 py-3 text-center text-sm text-muted">{disabledLabel}</p>;
   }
   return (
+    <>
     <button
       type="button"
       disabled={busy}
+      aria-busy={busy}
       onClick={async () => {
+        if (pending.current) return;
+        pending.current = true;
         setBusy(true);
-        const supabase = createClient();
-        await supabase.auth.signInWithOAuth({
-          provider: "google",
-          options: { redirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(next)}` },
-        });
+        setFailed(false);
+        try {
+          // The auth SDK is only needed after a visitor chooses to sign in.
+          const { createClient } = await import("@/lib/supabase/client");
+          const supabase = createClient();
+          const { error } = await supabase.auth.signInWithOAuth({
+            provider: "google",
+            options: { redirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(next)}` },
+          });
+          if (error) throw error;
+        } catch {
+          setFailed(true);
+        } finally {
+          pending.current = false;
+          setBusy(false);
+        }
       }}
       className="flex h-13 w-full items-center justify-center gap-3 rounded-2xl bg-white px-5 text-[15px] font-bold text-[#1f1f1f] shadow-lg shadow-pink/20 transition active:scale-[0.98] disabled:opacity-60"
     >
@@ -29,5 +45,7 @@ export function GoogleButton({ label, next = "/", enabled, disabledLabel }: { la
       </svg>
       {busy ? "…" : label}
     </button>
+    {failed && <p role="alert" className="mt-3 text-sm text-fg">{errorLabel}</p>}
+    </>
   );
 }

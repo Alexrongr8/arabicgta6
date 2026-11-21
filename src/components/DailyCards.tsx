@@ -32,10 +32,10 @@ export function DailyCards({ secret, challenge, locale }: { secret: ItemCard | n
       <Link
         href={challenge.link ? `/item/${challenge.link}` : "/explore"}
         className="card-hover relative flex min-h-[170px] flex-col justify-end overflow-hidden rounded-3xl p-4 text-white shadow-lg"
-        style={{ background: "linear-gradient(150deg,#ff8a1f,#f0287a 70%)" }}
+        style={{ background: "linear-gradient(#0006,#0006), linear-gradient(150deg,#ff8a1f,#f0287a 70%)" }}
       >
         <Target className="absolute end-3 top-3 size-20 opacity-20" />
-        <span className="relative mb-2 inline-flex w-fit rotate-2 items-center gap-1.5 rounded-full bg-white px-3 py-1 text-[12px] font-extrabold text-[#f0287a]">
+        <span className="relative mb-2 inline-flex w-fit rotate-2 items-center gap-1.5 rounded-full bg-white px-3 py-1 text-[12px] font-extrabold text-[#b91358]">
           <Target className="size-3.5" /> {ar ? "تحدي الأسبوع" : "Challenge of the week"}
         </span>
         <span className="font-head relative text-[21px] leading-snug">

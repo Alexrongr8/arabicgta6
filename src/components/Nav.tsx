@@ -30,7 +30,7 @@ export function BottomNav({ labels }: { labels: Labels }) {
           return (
             <li key={href}>
               <Link href={href} className="flex flex-col items-center gap-1 pt-2.5 pb-1.5 text-[11px] font-bold" aria-current={active ? "page" : undefined}>
-                <span className={`grid h-7 w-12 place-items-center rounded-full transition ${active ? "bg-sunset text-white shadow-md shadow-pink/40" : "text-dim"}`}>
+                <span className={`grid h-7 w-12 place-items-center rounded-full transition ${active ? "bg-sunset text-[#241338] shadow-md shadow-pink/40" : "text-dim"}`}>
                   <Icon className="size-[19px]" />
                 </span>
                 <span className={active ? "text-fg" : "text-dim"}>{labels[key]}</span>

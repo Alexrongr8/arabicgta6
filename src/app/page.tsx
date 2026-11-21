@@ -42,7 +42,7 @@ export default async function Home() {
                 <Cover src={thumbFor(f, 640)} className="absolute inset-0 size-full object-cover" />
                 <span className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-transparent" />
                 <span className="relative mb-2 flex items-center gap-2">
-                  <span className="rounded-full px-2 py-0.5 text-[11px] font-extrabold text-white" style={{ background: c.color }}>
+                  <span className="rounded-full px-2 py-0.5 text-[11px] font-extrabold text-black" style={{ background: c.color }}>
                     {locale === "ar" ? c.ar : c.en}
                   </span>
                 </span>
@@ -60,7 +60,7 @@ export default async function Home() {
 
 
       <section className="mx-auto mt-3 max-w-6xl px-4">
-        <Link href="/community" className="card-hover flex items-center gap-4 overflow-hidden rounded-3xl p-4 text-white shadow-lg" style={{ background: "linear-gradient(135deg,#0f9f97,#7c3aed)" }}>
+        <Link href="/community" className="card-hover flex items-center gap-4 overflow-hidden rounded-3xl p-4 text-white shadow-lg" style={{ background: "linear-gradient(#0006,#0006), linear-gradient(135deg,#0f9f97,#7c3aed)" }}>
           <span className="grid size-14 shrink-0 place-items-center rounded-2xl bg-white/15 text-3xl">🕵️</span>
           <span className="flex-1">
             <span className="font-head block text-[20px] leading-tight">{locale === "ar" ? "اكتشافات اللاعبين" : "Player discoveries"}</span>

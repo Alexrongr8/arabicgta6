@@ -16,7 +16,7 @@ export function Header({ locale, viewer, labels, theme }: { locale: Locale; view
         </Link>
         <TopLinks labels={labels} />
         <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
-          <ThemeToggle initial={theme} label={locale === "ar" ? "الوضع الفاتح / الداكن" : "Light / dark mode"} />
+          <ThemeToggle initial={theme} label={locale === "ar" ? "الوضع الداكن" : "Dark mode"} />
           <LangToggle locale={locale} />
           {viewer.signedIn ? (
             <Link href="/account" className="grid size-9 place-items-center overflow-hidden rounded-full border border-line bg-chip" aria-label={t(locale, "account")}>
@@ -31,7 +31,7 @@ export function Header({ locale, viewer, labels, theme }: { locale: Locale; view
             <Link
               href="/login"
               aria-label={locale === "ar" ? "النشرة الأسبوعية" : "Weekly digest"}
-              className="bg-sunset inline-flex h-9 min-w-9 items-center justify-center gap-1 rounded-full px-2.5 text-[13px] font-extrabold text-white shadow-md shadow-pink/30 min-[480px]:px-3.5"
+              className="bg-sunset inline-flex h-9 min-w-9 items-center justify-center gap-1 rounded-full px-2.5 text-[13px] font-extrabold text-[#241338] shadow-md shadow-pink/30 min-[480px]:px-3.5"
             >
               ✉️<span className="hidden min-[480px]:inline">{locale === "ar" ? "النشرة" : "Digest"}</span>
             </Link>

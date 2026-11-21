@@ -6,10 +6,10 @@ export function StatusBadge({ status, locale, size = "sm" }: { status: Status; l
   return (
     <span
       title={locale === "ar" ? m.hintAr : m.hintEn}
-      className={`inline-flex items-center gap-1.5 rounded-full font-bold whitespace-nowrap ${
+      className={`inline-flex items-center gap-1.5 rounded-full bg-card font-bold whitespace-nowrap ${
         size === "sm" ? "px-2 py-0.5 text-[11px]" : "px-3 py-1 text-xs"
       }`}
-      style={{ color: m.color, background: `${m.color}1f`, border: `1px solid ${m.color}55` }}
+      style={{ color: "var(--fg)", background: `color-mix(in srgb, ${m.color} 12%, var(--card))`, border: `1px solid ${m.color}55` }}
     >
       <span className="size-1.5 rounded-full" style={{ background: m.color }} />
       {locale === "ar" ? m.ar : m.en}

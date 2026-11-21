@@ -22,7 +22,7 @@ export function SignInGate({ locale, next = "/", title }: { locale: Locale; next
             </li>
           ))}
         </ul>
-        <GoogleButton label={t(locale, "signInGoogle")} next={next} enabled={supabaseConfigured()} disabledLabel={t(locale, "authNotReady")} />
+        <GoogleButton label={t(locale, "signInGoogle")} next={next} enabled={supabaseConfigured()} disabledLabel={t(locale, "authNotReady")} errorLabel={t(locale, "loginError")} />
       </div>
     </div>
   );

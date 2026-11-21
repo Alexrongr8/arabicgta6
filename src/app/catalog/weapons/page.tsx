@@ -44,8 +44,8 @@ export default async function WeaponsCatalog({ searchParams }: PageProps<"/catal
   }));
   return (
     <main className="mx-auto max-w-5xl px-4 pt-5">
-      <header className="mb-5 rounded-3xl p-5 text-white shadow-lg" style={{ background: "linear-gradient(135deg,#ff8a1f,#f0287a)" }}>
-        <h1 className="text-[28px] leading-tight">{ar ? "كل أسلحة GTA 6 🔫" : "Every GTA 6 weapon 🔫"}</h1>
+      <header className="mb-5 rounded-3xl p-5 text-white shadow-lg" style={{ background: "linear-gradient(#0006,#0006), linear-gradient(135deg,#ff8a1f,#f0287a)" }}>
+        <h1 className="text-[28px] leading-tight">{ar ? "كتالوج أسلحة GTA 6 🔫" : "GTA 6 weapon catalog 🔫"}</h1>
         <p className="mt-2 text-[14px] text-white/90">
           {ar
             ? `${WEAPONS.length} سلاح. ${WITH_STATS} منها بأرقام شاشة الأسلحة داخل اللعبة (من 10): القوة، الدقة، التحكم والمدى، و${WITH_PRICE} بسعر ومحل شراء معروف. الباقي نكمّله أول ما يتأكد.`
@@ -55,7 +55,7 @@ export default async function WeaponsCatalog({ searchParams }: PageProps<"/catal
       <Catalog rows={rows} classes={classes} statLabels={ar ? ["القوة", "الدقة", "التحكم", "المدى"] : ["Damage", "Accuracy", "Handling", "Range"]} ar={ar} initialQuery={initialQuery} />
       <p className="mt-6 text-[12px] text-dim">
         {ar ? "مصدر الأرقام: شاشة الأسلحة داخل اللعبة، مجمّعة في " : "Stats from the in-game weapon screen, compiled by "}
-        <a href={WEAPON_SOURCE.url} target="_blank" rel="noopener noreferrer nofollow" className="text-teal underline">
+        <a href={WEAPON_SOURCE.url} target="_blank" rel="noopener noreferrer nofollow" className="text-success underline">
           MeowDB
         </a>
         {ar ? ". Rockstar ما تنشر أرقام رسمية خارج اللعبة." : ". Rockstar doesn't publish stats outside the game."}

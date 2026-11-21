@@ -12,7 +12,11 @@
   --line: rgba(46, 16, 72, 0.12);
   --fg: #241338;
   --muted: #5f4b78;
-  --dim: #8a77a1;
+  --dim: #6f5b85;
+  --accent: #b91358;
+  --success: #0b756f;
+  --error: #b91c1c;
+  --control: #8a77a1;
   --pink: #f0287a;
   --orange: #ff8a1f;
   --sun: #c27a00;
@@ -38,6 +42,10 @@
   --fg: #fbf6ff;
   --muted: #c3b4d8;
   --dim: #8f7fa8;
+  --accent: #ff3d8b;
+  --success: #19d3c5;
+  --error: #fca5a5;
+  --control: #8f7fa8;
   --pink: #ff3d8b;
   --orange: #ff9a3d;
   --sun: #ffd166;
@@ -60,6 +68,10 @@
   --color-fg: var(--fg);
   --color-muted: var(--muted);
   --color-dim: var(--dim);
+  --color-accent: var(--accent);
+  --color-success: var(--success);
+  --color-error: var(--error);
+  --color-control: var(--control);
   --color-pink: var(--pink);
   --color-orange: var(--orange);
   --color-sun: var(--sun);
@@ -69,6 +81,12 @@
   --font-sans: var(--font-body), system-ui, sans-serif;
   --font-head: var(--font-head-ar), var(--font-body), sans-serif;
   --font-display: var(--font-anton), var(--font-head-ar), sans-serif;
+}
+
+/* Keyboard focus remains visible without changing decorative borders. */
+:where(a, button, input, select, textarea, summary):focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
 }
 
 html {

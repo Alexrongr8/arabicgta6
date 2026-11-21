@@ -115,7 +115,7 @@ export default async function ItemPage({ params }: PageProps<"/item/[slug]">) {
             <p className="relative mt-3 text-[15px] leading-relaxed text-fg">{spoiler ? SPOILER_TEASER[locale] : <Bidi text={pick(item, "summary", locale)} />}</p>
             <div className="relative mt-4 flex flex-wrap gap-2">
               {(item.location || (item.spots?.length ?? 0) > 0) && (
-                <Link href={`/map?focus=${item.slug}`} className="bg-sunset inline-flex h-10 items-center gap-2 rounded-xl px-4 text-sm font-extrabold text-white shadow-md shadow-pink/30">
+                <Link href={`/map?focus=${item.slug}`} className="bg-sunset inline-flex h-10 items-center gap-2 rounded-xl px-4 text-sm font-extrabold text-[#241338] shadow-md shadow-pink/30">
                   <MapPin className="size-4" /> {t(locale, "showOnMap")}
                 </Link>
               )}
@@ -124,7 +124,7 @@ export default async function ItemPage({ params }: PageProps<"/item/[slug]">) {
                 href={`https://wa.me/?text=${encodeURIComponent(`${pick(item, "title", locale)} ${SITE}/item/${item.slug}`)}`}
                 target="_blank"
                 rel="noopener"
-                className="inline-flex h-10 items-center gap-2 rounded-xl bg-[#25D366] px-4 text-sm font-extrabold text-white"
+                className="inline-flex h-10 items-center gap-2 rounded-xl bg-[#25D366] px-4 text-sm font-extrabold text-[#241338]"
               >
                 {locale === "ar" ? "واتساب" : "WhatsApp"}
               </a>
@@ -138,7 +138,7 @@ export default async function ItemPage({ params }: PageProps<"/item/[slug]">) {
                 <h2 className="flex items-center gap-2 text-[19px]">
                   <MapPin className="size-5 text-pink" /> {locale === "ar" ? "وين بالضبط؟" : "Exactly where?"}
                 </h2>
-                <Link href={`/map?focus=${item.slug}`} className="rounded-full bg-pink px-3 py-1.5 text-[12px] font-extrabold text-white">
+                <Link href={`/map?focus=${item.slug}`} className="rounded-full bg-pink px-3 py-1.5 text-[12px] font-extrabold text-black">
                   {locale === "ar" ? "كلها على الخريطة" : "All on the map"}
                 </Link>
               </div>
@@ -146,7 +146,7 @@ export default async function ItemPage({ params }: PageProps<"/item/[slug]">) {
                 {item.spots!.map((sp, i) => (
                   <li key={i}>
                     <Link href={`/map?focus=${item.slug}&spot=${i}`} className="flex items-center gap-3 px-4 py-3 text-[14px] hover:bg-chip">
-                      <span className="grid size-7 shrink-0 place-items-center rounded-full text-[12px] font-extrabold text-white" style={{ background: c.color }}>
+                      <span className="grid size-7 shrink-0 place-items-center rounded-full text-[12px] font-extrabold text-black" style={{ background: c.color }}>
                         {i + 1}
                       </span>
                       <span className="flex-1 leading-relaxed">
@@ -180,7 +180,7 @@ export default async function ItemPage({ params }: PageProps<"/item/[slug]">) {
               <ul className="space-y-1.5">
                 {item.sources.map((s) => (
                   <li key={s.url}>
-                    <a href={s.url} target="_blank" rel="noopener noreferrer nofollow" className="inline-flex items-center gap-1.5 text-[13px] text-teal hover:underline" dir="ltr">
+                    <a href={s.url} target="_blank" rel="noopener noreferrer nofollow" className="inline-flex items-center gap-1.5 text-[13px] text-success hover:underline" dir="ltr">
                       <ExternalLink className="size-3.5 shrink-0" /> {s.title}
                     </a>
                   </li>
@@ -255,7 +255,7 @@ function SpoilerWrap({ on, ar, children }: { on: boolean; ar: boolean; children:
         <span className="flex-1">
           {ar ? "هذا الموضوع يحرق أحداث القصة. لا تفتحه إذا ما خلصت القصة." : "This article spoils the story. Don't open it if you haven't finished the story."}
         </span>
-        <span className="rounded-xl bg-pink px-3 py-1.5 text-[13px] font-extrabold text-white group-open:hidden">{ar ? "اعرض الحرق" : "Show spoilers"}</span>
+        <span className="rounded-xl bg-pink px-3 py-1.5 text-[13px] font-extrabold text-black group-open:hidden">{ar ? "اعرض الحرق" : "Show spoilers"}</span>
       </summary>
       <div className="mt-5">{children}</div>
     </details>

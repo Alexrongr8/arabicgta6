@@ -12,7 +12,7 @@ export function Section({ title, href, linkLabel, locale, children }: { title: s
           {title}
         </h2>
         {href && (
-          <Link href={href} className="inline-flex items-center gap-0.5 text-sm font-bold text-pink">
+          <Link href={href} className="inline-flex items-center gap-0.5 text-sm font-bold text-accent">
             {linkLabel} <Chevron className="size-4" />
           </Link>
         )}

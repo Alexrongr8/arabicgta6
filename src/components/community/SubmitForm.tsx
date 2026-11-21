@@ -17,7 +17,7 @@ export function SubmitForm({ ar }: { ar: boolean }) {
   const ref = useRef<HTMLFormElement>(null);
   const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
   const [pending, start] = useTransition();
-  const input = "w-full rounded-xl border border-line bg-card px-3 py-2.5 text-[15px] outline-none focus:border-pink";
+  const input = "w-full rounded-xl border border-control bg-card px-3 py-2.5 text-[16px] outline-none focus:border-pink";
   return (
     <form
       ref={ref}
@@ -42,21 +42,36 @@ export function SubmitForm({ ar }: { ar: boolean }) {
       className="card space-y-3 p-4"
     >
       <p className="font-head text-[19px]">{ar ? "🕵️ لقيت شي؟ شاركه باسمك" : "🕵️ Found something? Share it"}</p>
-      <select name="category" className={input} defaultValue="secrets">
-        {CATS.map(([v, a, e]) => (
-          <option key={v} value={v}>
-            {ar ? a : e}
-          </option>
-        ))}
-      </select>
-      <input name="title" required minLength={5} maxLength={140} placeholder={ar ? "العنوان — مثلاً: لقيت سيارة نادرة في Ocean Beach" : "Title — e.g. Found a rare car in Ocean Beach"} className={input} />
-      <textarea name="body" required minLength={20} maxLength={4000} rows={5} placeholder={ar ? "اشرح بالتفصيل: وش لقيت؟ كيف؟ وش الخطوات؟" : "Explain in detail: what, how, which steps?"} className={input} />
-      <input name="place" maxLength={120} placeholder={ar ? "المكان في اللعبة (اختياري) — مثلاً: Key Lento" : "Place in the game (optional)"} className={input} />
-      <input name="video" type="url" maxLength={300} placeholder={ar ? "رابط فيديو يوتيوب/تيك توك/إنستغرام (اختياري)" : "YouTube/TikTok/Instagram link (optional)"} className={input} dir="ltr" />
+      <label className="block space-y-1.5">
+        <span className="block text-[13px] font-bold">{ar ? "التصنيف" : "Category"}</span>
+        <select name="category" className={input} defaultValue="secrets">
+          {CATS.map(([v, a, e]) => (
+            <option key={v} value={v}>
+              {ar ? a : e}
+            </option>
+          ))}
+        </select>
+      </label>
+      <label className="block space-y-1.5">
+        <span className="block text-[13px] font-bold">{ar ? "العنوان" : "Title"}</span>
+        <input name="title" required minLength={5} maxLength={140} placeholder={ar ? "العنوان — مثلاً: لقيت سيارة نادرة في Ocean Beach" : "Title — e.g. Found a rare car in Ocean Beach"} className={input} />
+      </label>
+      <label className="block space-y-1.5">
+        <span className="block text-[13px] font-bold">{ar ? "وصف الاكتشاف" : "Discovery details"}</span>
+        <textarea name="body" required minLength={20} maxLength={4000} rows={5} placeholder={ar ? "اشرح بالتفصيل: وش لقيت؟ كيف؟ وش الخطوات؟" : "Explain in detail: what, how, which steps?"} className={input} />
+      </label>
+      <label className="block space-y-1.5">
+        <span className="block text-[13px] font-bold">{ar ? "المكان (اختياري)" : "Place (optional)"}</span>
+        <input name="place" maxLength={120} placeholder={ar ? "المكان في اللعبة (اختياري) — مثلاً: Key Lento" : "Place in the game (optional)"} className={input} />
+      </label>
+      <label className="block space-y-1.5">
+        <span className="block text-[13px] font-bold">{ar ? "رابط الفيديو (اختياري)" : "Video URL (optional)"}</span>
+        <input name="video" type="url" maxLength={300} placeholder={ar ? "رابط فيديو يوتيوب/تيك توك/إنستغرام (اختياري)" : "YouTube/TikTok/Instagram link (optional)"} className={input} dir="ltr" />
+      </label>
       <div className="flex items-center justify-between gap-2">
-        <span className={`text-[12.5px] ${msg?.ok ? "text-teal" : "text-[#dc2626]"}`}>{msg?.text}</span>
-        <button disabled={pending} className="h-11 rounded-xl bg-pink px-6 font-extrabold text-white disabled:opacity-50">
-          {pending ? "…" : ar ? "انشر" : "Publish"}
+        <span role="status" aria-live="polite" aria-atomic="true" className={`text-[12.5px] ${msg?.ok ? "text-success" : "text-error"}`}>{msg?.text}</span>
+        <button disabled={pending} className="h-11 rounded-xl bg-pink px-6 font-extrabold text-black disabled:opacity-50">
+          {pending ? (ar ? "جاري النشر…" : "Publishing…") : ar ? "انشر" : "Publish"}
         </button>
       </div>
       <p className="text-[11.5px] text-dim">{ar ? "يظهر اسمك الأول من حساب Google. ممنوع الإساءة والسبام." : "Your Google first name is shown. No abuse or spam."}</p>

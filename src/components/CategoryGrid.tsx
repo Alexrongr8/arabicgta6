@@ -19,7 +19,7 @@ export function CategoryGrid({ locale, counts }: { locale: Locale; counts: Recor
           </span>
           <span className="relative block text-[15px] font-extrabold">{locale === "ar" ? c.ar : c.en}</span>
           <span className="relative mt-0.5 line-clamp-2 block text-[12px] leading-relaxed text-muted">{locale === "ar" ? c.descAr : c.descEn}</span>
-          <span className="relative mt-2 block font-display text-lg" style={{ color: c.color }}>
+          <span className="relative mt-2 block font-display text-lg text-fg">
             {counts[c.slug] ?? 0}
           </span>
         </Link>
@@ -37,8 +37,9 @@ export function CategoryChips({ locale, active }: { locale: Locale; active?: str
           <Link
             key={c.slug}
             href={`/c/${c.slug}`}
+            aria-current={on ? "page" : undefined}
             className={`inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full border px-3.5 text-[13px] font-bold transition ${
-              on ? "border-transparent text-white" : "border-line bg-chip text-muted"
+              on ? "border-transparent text-black" : "border-line bg-chip text-muted"
             }`}
             style={on ? { background: c.color } : undefined}
           >

@@ -34,7 +34,7 @@ export default async function VehiclesCatalog({ searchParams }: PageProps<"/cata
   const withStats = VEHICLES.filter((v) => v[3]).length;
   return (
     <main className="mx-auto max-w-5xl px-4 pt-5">
-      <header className="mb-5 rounded-3xl p-5 text-white shadow-lg" style={{ background: "linear-gradient(135deg,#0f9f97,#2a1240)" }}>
+      <header className="mb-5 rounded-3xl p-5 text-white shadow-lg" style={{ background: "linear-gradient(#0006,#0006), linear-gradient(135deg,#0f9f97,#2a1240)" }}>
         <h1 className="text-[28px] leading-tight">{ar ? "كتالوج مركبات GTA 6 🏎️" : "GTA 6 vehicle catalog 🏎️"}</h1>
         <p className="mt-2 text-[14px] text-white/90">
           {ar
@@ -52,7 +52,7 @@ export default async function VehiclesCatalog({ searchParams }: PageProps<"/cata
       <p className="mt-6 text-[12px] text-dim">
         {ar ? "المصادر: قائمة التعديل داخل اللعبة، مجمّعة في " : "Sources: the in-game tuning menu, compiled by "}
         {VEHICLE_SOURCES.map((s, i) => (
-          <a key={s.url} href={s.url} target="_blank" rel="noopener noreferrer nofollow" className="text-teal underline">
+          <a key={s.url} href={s.url} target="_blank" rel="noopener noreferrer nofollow" className="text-success underline">
             {s.title.split(" — ")[0]}
             {i < VEHICLE_SOURCES.length - 1 ? "، " : ""}
           </a>

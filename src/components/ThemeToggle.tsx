@@ -9,6 +9,7 @@ export function ThemeToggle({ initial, label }: { initial: "light" | "dark"; lab
     <button
       type="button"
       aria-label={label}
+      aria-pressed={theme === "dark"}
       title={label}
       onClick={() => {
         document.documentElement.dataset.theme = next;

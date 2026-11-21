@@ -47,8 +47,8 @@ export default async function CategoryPage({ params, searchParams }: PageProps<"
 
       <>
           {(category === "weapons" || category === "vehicles") && (
-            <Link href={`/catalog/${category}`} className="mb-4 flex items-center justify-between rounded-2xl bg-pink px-4 py-3 font-extrabold text-white shadow-md">
-              <span>{category === "weapons" ? (locale === "ar" ? "🔫 شوف كل الأسلحة بالمواصفات" : "🔫 See every weapon with stats") : locale === "ar" ? "🏎️ شوف كل المركبات بالمواصفات" : "🏎️ See every vehicle with stats"}</span>
+            <Link href={`/catalog/${category}`} className="mb-4 flex items-center justify-between rounded-2xl bg-pink px-4 py-3 font-extrabold text-black shadow-md">
+              <span>{category === "weapons" ? (locale === "ar" ? "🔫 شوف كتالوج الأسلحة" : "🔫 Browse the weapon catalog") : locale === "ar" ? "🏎️ شوف كتالوج المركبات" : "🏎️ Browse the vehicle catalog"}</span>
               <span>←</span>
             </Link>
           )}

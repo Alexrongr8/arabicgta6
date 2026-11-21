@@ -9,7 +9,7 @@ export function Prose({ text }: { text: string }) {
         let heading: React.ReactNode = null;
         if (/^#{2,3} /.test(lines[0])) {
           heading = (
-            <h2 className="mt-6 mb-2 text-[20px] text-pink">
+            <h2 className="mt-6 mb-2 text-[20px] text-accent">
               <Bidi text={lines[0].replace(/^#{2,3} /, "")} />
             </h2>
           );

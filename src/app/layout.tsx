@@ -9,7 +9,6 @@ import { Footer } from "@/components/Footer";
 import { BottomNav } from "@/components/Nav";
 import { Tracker } from "@/components/Tracker";
 import { TipOfVisit } from "@/components/TipOfVisit";
-import { getTipCards } from "@/lib/data";
 import { Analytics } from "@vercel/analytics/next";
 
 const body = Tajawal({ variable: "--font-body", subsets: ["arabic", "latin"], weight: ["400", "500", "700", "800"] });
@@ -35,7 +34,7 @@ export const viewport: Viewport = {
 };
 
 export default async function RootLayout({ children }: LayoutProps<"/">) {
-  const [locale, viewer, tips, jar] = await Promise.all([getLocale(), getViewer(), getTipCards(), cookies()]);
+  const [locale, viewer, jar] = await Promise.all([getLocale(), getViewer(), cookies()]);
   const theme = jar.get("theme")?.value === "dark" ? "dark" : "light";
   const labels = { home: t(locale, "home"), explore: t(locale, "explore"), map: t(locale, "map"), search: t(locale, "search"), account: t(locale, "account") };
   return (
@@ -49,7 +48,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
         <Footer locale={locale} />
         <BottomNav labels={labels} />
         <Tracker />
-        <TipOfVisit tips={tips} locale={locale} />
+        <TipOfVisit locale={locale} />
         <Analytics />
       </body>
     </html>

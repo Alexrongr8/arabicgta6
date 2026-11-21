@@ -36,7 +36,7 @@ export function Hero({ locale, total, compact }: { locale: Locale; total: number
           </p>
           {!compact && (
             <div className="mt-5 flex flex-wrap gap-2.5">
-              <Link href="/map" className="inline-flex h-12 items-center gap-2 rounded-2xl bg-[#f0287a] px-5 font-extrabold text-white shadow-lg shadow-black/30 active:scale-95">
+              <Link href="/map" className="inline-flex h-12 items-center gap-2 rounded-2xl bg-[#f0287a] px-5 font-extrabold text-black shadow-lg shadow-black/30 active:scale-95">
                 <Map className="size-5" /> {ar ? "افتح الخريطة" : "Open the map"}
               </Link>
               <Link href="/search" className="inline-flex h-12 items-center gap-2 rounded-2xl bg-white px-5 font-extrabold text-[#2a1240] shadow-lg shadow-black/20 active:scale-95">

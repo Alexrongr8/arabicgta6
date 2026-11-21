@@ -54,7 +54,7 @@ export default async function Account() {
         </div>
         <p className="mb-4 text-sm text-muted">{t(locale, "digestDesc")}</p>
         <form action={setDigest.bind(null, !optIn)}>
-          <button className={`h-11 w-full rounded-xl font-extrabold ${optIn ? "border border-line" : "bg-sunset text-white"}`}>
+          <button className={`h-11 w-full rounded-xl font-extrabold ${optIn ? "border border-line" : "bg-sunset text-[#241338]"}`}>
             {optIn ? `${t(locale, "subscribed")} ✓ — ${t(locale, "unsubscribe")}` : t(locale, "subscribe")}
           </button>
         </form>

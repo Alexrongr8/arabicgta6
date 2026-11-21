@@ -19,7 +19,7 @@ export default async function Explore() {
       <div className="mb-4">
         <CatalogTiles locale={locale} />
       </div>
-      <Link href="/community" className="card-hover mb-4 flex items-center gap-3 rounded-3xl p-4 text-white shadow-lg" style={{ background: "linear-gradient(135deg,#0f9f97,#7c3aed)" }}>
+      <Link href="/community" className="card-hover mb-4 flex items-center gap-3 rounded-3xl p-4 text-white shadow-lg" style={{ background: "linear-gradient(#0006,#0006), linear-gradient(135deg,#0f9f97,#7c3aed)" }}>
         <span className="text-3xl">🕵️</span>
         <span className="font-head text-[19px]">{locale === "ar" ? "اكتشافات اللاعبين — شارك اكتشافك باسمك" : "Player discoveries — share yours"}</span>
       </Link>

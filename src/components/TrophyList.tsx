@@ -38,7 +38,8 @@ export function TrophyList({ trophies, locale }: { trophies: Trophy[]; locale: L
             key={c.id}
             type="button"
             onClick={() => setFilter(c.id)}
-            className={`h-9 shrink-0 rounded-full border px-3.5 text-[13px] font-bold ${filter === c.id ? "border-transparent bg-pink text-white" : "border-line bg-chip text-muted"}`}
+            aria-pressed={filter === c.id}
+            className={`h-9 shrink-0 rounded-full border px-3.5 text-[13px] font-bold ${filter === c.id ? "border-transparent bg-pink text-black" : "border-line bg-chip text-muted"}`}
           >
             {ar ? c.ar : c.en}
           </button>
@@ -58,11 +59,11 @@ export function TrophyList({ trophies, locale }: { trophies: Trophy[]; locale: L
                   <span className="font-display text-[15px] tracking-wide" dir="ltr">
                     {blur ? "• • • • • •" : t.name}
                   </span>
-                  <span className="rounded-full px-2 py-0.5 text-[10.5px] font-extrabold text-white" style={{ background: g.color }}>
+                  <span className="rounded-full px-2 py-0.5 text-[10.5px] font-extrabold text-black" style={{ background: g.color }}>
                     {ar ? g.ar : g.en}
                   </span>
                   {t.hidden && <span className="rounded-full bg-chip2 px-2 py-0.5 text-[10.5px] font-bold text-muted">{ar ? "مخفي" : "Hidden"}</span>}
-                  {t.missable && <span className="rounded-full bg-[#ef4444] px-2 py-0.5 text-[10.5px] font-extrabold text-white">{ar ? "يفوت!" : "Missable!"}</span>}
+                  {t.missable && <span className="rounded-full bg-[#ef4444] px-2 py-0.5 text-[10.5px] font-extrabold text-black">{ar ? "يفوت!" : "Missable!"}</span>}
                 </div>
                 {blur ? (
                   <button
@@ -78,12 +79,12 @@ export function TrophyList({ trophies, locale }: { trophies: Trophy[]; locale: L
                   </p>
                 )}
                 {t.note && (
-                  <p className="mt-1.5 rounded-xl bg-[#ef4444]/10 px-2.5 py-1.5 text-[12.5px] leading-relaxed text-[#dc2626]">
+                  <p className="mt-1.5 rounded-xl bg-[#ef4444]/10 px-2.5 py-1.5 text-[12.5px] leading-relaxed text-error">
                     <Bidi text={ar ? t.note.ar : t.note.en} />
                   </p>
                 )}
                 {t.link && !blur && (
-                  <Link href={`/item/${t.link}`} className="mt-1 inline-block text-[12.5px] font-bold text-pink">
+                  <Link href={`/item/${t.link}`} className="mt-1 inline-block text-[12.5px] font-bold text-accent">
                     {ar ? "الدليل المرتبط ←" : "Related guide →"}
                   </Link>
                 )}

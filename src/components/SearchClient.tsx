@@ -68,7 +68,7 @@ export function SearchClient({ locale, initialQuery, initialResults, initialCata
   return (
     <div>
       <div className="sticky top-[68px] z-30 -mx-4 bg-bg/95 px-4 pt-1 pb-3 backdrop-blur">
-        <label className="flex h-14 items-center gap-3 rounded-2xl border border-pink/40 bg-chip px-4 shadow-[0_0_0_4px_rgba(255,61,139,.08)] focus-within:border-pink">
+        <label className="flex h-14 items-center gap-3 rounded-2xl border border-control bg-chip px-4 shadow-[0_0_0_4px_rgba(255,61,139,.08)] focus-within:border-pink">
           {loading ? <Loader2 className="size-5 animate-spin text-pink" /> : <Search className="size-5 text-pink" />}
           <input
             ref={inputRef}
@@ -157,7 +157,8 @@ function Chip({ on, color, onClick, children }: { on: boolean; color?: string; o
     <button
       type="button"
       onClick={onClick}
-      className={`h-8 shrink-0 rounded-full border px-3 text-xs font-bold ${on ? "border-transparent text-white" : "border-line text-muted"}`}
+      aria-pressed={on}
+      className={`h-8 shrink-0 rounded-full border px-3 text-xs font-bold ${on ? "border-transparent text-black" : "border-line text-muted"}`}
       style={on ? { background: color ?? "var(--pink)" } : undefined}
     >
       {children}

@@ -27,10 +27,10 @@ export default async function SubmissionPage({ params }: PageProps<"/community/[
           {ar ? "بواسطة" : "by"} <b className="text-fg">{s.author_name}</b> · {formatDate(s.created_at, locale)}
         </p>
         <h1 className="text-[26px] leading-snug"><Bidi text={s.title} /></h1>
-        {s.place && <p className="mt-1 text-[13px] font-bold text-pink">📍 <Bidi text={s.place} /></p>}
+        {s.place && <p className="mt-1 text-[13px] font-bold text-accent">📍 <Bidi text={s.place} /></p>}
         <p className="mt-3 text-[15.5px] leading-loose whitespace-pre-line"><Bidi text={s.body} /></p>
         {s.video_url && (
-          <a href={s.video_url} target="_blank" rel="noopener noreferrer nofollow" className="mt-3 inline-flex items-center gap-2 rounded-xl bg-[#ff0033] px-4 py-2 text-sm font-extrabold text-white">
+          <a href={s.video_url} target="_blank" rel="noopener noreferrer nofollow" className="mt-3 inline-flex items-center gap-2 rounded-xl bg-[#ff0033] px-4 py-2 text-sm font-extrabold text-black">
             ▶ {ar ? "شوف الفيديو" : "Watch the video"}
           </a>
         )}
