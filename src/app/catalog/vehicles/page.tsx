@@ -7,12 +7,14 @@ import { catalogImage } from "@/lib/catalog-images";
 export async function generateMetadata(): Promise<Metadata> {
   const ar = (await getLocale()) === "ar";
   return {
-    title: ar ? "كل مركبات GTA 6 بالمواصفات" : "Every GTA 6 vehicle with stats",
-    description: ar ? "سيارات ودبابات وقوارب وطيارات GTA 6 مع السرعة والتسارع والتحكم." : "GTA 6 cars, bikes, boats, aircraft and military vehicles with speed, acceleration and handling.",
+    title: ar ? "كتالوج مركبات GTA 6" : "GTA 6 vehicles catalog",
+    description: ar ? `${VEHICLES.length} مركبة في GTA 6: سيارات ودبابات وقوارب وطيارات، و${VEHICLES.filter((v) => v[3]).length} منها بأرقام السرعة والتسارع من داخل اللعبة.` : `${VEHICLES.length} GTA 6 vehicles — cars, bikes, boats and aircraft; ${VEHICLES.filter((v) => v[3]).length} with in-game speed/acceleration stats so far.`,
   };
 }
 
-export default async function VehiclesCatalog() {
+export default async function VehiclesCatalog({ searchParams }: PageProps<"/catalog/vehicles">) {
+  const sp = await searchParams;
+  const initialQuery = typeof sp.q === "string" ? sp.q.slice(0, 80) : "";
   const ar = (await getLocale()) === "ar";
   const classes = [
     { id: "super", label: ar ? "سوبر كار" : "Super", emoji: "🏎️" },
@@ -44,6 +46,7 @@ export default async function VehiclesCatalog() {
         classes={classes}
         statLabels={ar ? ["السرعة", "التسارع", "تحكم الإسفلت", "تحكم الوعر", "المتانة"] : ["Speed", "Acceleration", "Road handling", "Off-road", "Strength"]}
         ar={ar}
+        initialQuery={initialQuery}
       />
       <p className="mt-6 text-[12px] text-dim">
         {ar ? "المصادر: قائمة التعديل داخل اللعبة، مجمّعة في " : "Sources: the in-game tuning menu, compiled by "}

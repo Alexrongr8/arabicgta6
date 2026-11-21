@@ -2,9 +2,11 @@ import "server-only";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import sharp, { type OverlayOptions } from "sharp";
+import { safeGet } from "./safe-fetch";
 import { createClient as createAnonClient } from "@supabase/supabase-js";
 import { CATEGORY_MAP } from "./categories";
 import { imageOf } from "./image";
+import { isSpoiler } from "./spoiler";
 import { SEED } from "./seed";
 import type { Item } from "./types";
 
@@ -26,10 +28,10 @@ const FONT_DIR = join(process.cwd(), "assets/fonts");
 const FONT_XB = join(FONT_DIR, "Tajawal-ExtraBold.ttf");
 const FONT_B = join(FONT_DIR, "Tajawal-Bold.ttf");
 
-type Card = Pick<Item, "slug" | "category" | "title_ar" | "title_en" | "image">;
+type Card = Pick<Item, "slug" | "category" | "title_ar" | "title_en" | "image" | "tags">;
 
 /** ok=false means the database could not be reached, so the result must not be cached long. */
-async function loadCard(slug: string): Promise<{ card: Card | null; ok: boolean }> {
+export async function loadCard(slug: string): Promise<{ card: Card | null; ok: boolean }> {
   const seed = SEED.find((i) => i.slug === slug) ?? null;
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
@@ -39,7 +41,7 @@ async function loadCard(slug: string): Promise<{ card: Card | null; ok: boolean 
   try {
     // Anonymous read (items are public); no cookies, so crawlers get the same result.
     const db = createAnonClient(url, key, { auth: { persistSession: false } });
-    const { data, error } = await db.from("items").select("slug,category,title_ar,title_en,image").eq("slug", slug).abortSignal(ctrl.signal).maybeSingle();
+    const { data, error } = await db.from("items").select("slug,category,title_ar,title_en,image,tags").eq("slug", slug).abortSignal(ctrl.signal).maybeSingle();
     if (error) return { card: seed, ok: false };
     return { card: (data as Card) ?? seed, ok: true };
   } catch {
@@ -49,37 +51,16 @@ async function loadCard(slug: string): Promise<{ card: Card | null; ok: boolean 
   }
 }
 
-/** Raw cover bytes (local file, or remote with one deadline for headers+body and an 8 MB cap). */
-async function coverBytes(src: string): Promise<Buffer | null> {
+/** Raw cover bytes: local file under /public, or a public HTTPS image through the SSRF-safe fetcher. */
+export async function coverBytes(src: string): Promise<Buffer | null> {
   try {
     if (src.startsWith("/")) {
-      if (src.includes("..")) return null;
+      if (src.includes("..") || src.startsWith("//")) return null;
       return await readFile(join(process.cwd(), "public", src));
     }
-    if (!/^https:\/\//.test(src)) return null;
-    const ctrl = new AbortController();
-    const timer = setTimeout(() => ctrl.abort(), 4000);
-    try {
-      const res = await fetch(src, { signal: ctrl.signal, headers: { "user-agent": "ArabicGTA6-OG/1.0" } });
-      if (!res.ok || !res.body) return null;
-      if (Number(res.headers.get("content-length") ?? 0) > MAX_BYTES) return null;
-      const reader = res.body.getReader();
-      const chunks: Uint8Array[] = [];
-      let total = 0;
-      for (;;) {
-        const { done, value } = await reader.read();
-        if (done) break;
-        total += value.byteLength;
-        if (total > MAX_BYTES) {
-          await reader.cancel();
-          return null;
-        }
-        chunks.push(value);
-      }
-      return Buffer.concat(chunks);
-    } finally {
-      clearTimeout(timer);
-    }
+    const res = await safeGet(src, { timeoutMs: 4000, maxBytes: MAX_BYTES, accept: "image/*", userAgent: "ArabicGTA6-OG/1.0" });
+    if (!res || res.status !== 200 || !/^image\//i.test(res.contentType)) return null;
+    return res.body;
   } catch {
     return null;
   }
@@ -89,7 +70,7 @@ async function coverLayer(src: string): Promise<Buffer | null> {
   const bytes = await coverBytes(src);
   if (!bytes) return null;
   try {
-    return await sharp(bytes).resize(W, H, { fit: "cover", position: "attention" }).png().toBuffer();
+    return await sharp(bytes, { limitInputPixels: 40_000_000 }).resize(W, H, { fit: "cover", position: "attention" }).png().toBuffer();
   } catch {
     return null;
   }
@@ -159,7 +140,8 @@ export async function renderItemOg(slug: string): Promise<Response> {
   const { card, ok } = await loadCard(slug);
   const cat = card ? CATEGORY_MAP[card.category] : null;
   const accent = cat?.color ?? "#ff3d8b";
-  const cover = card ? await coverLayer(imageOf(card)) : null;
+  // Spoiler articles share with the category's neutral official image, never their own cover.
+  const cover = card ? await coverLayer(isSpoiler(card) ? imageOf({ category: card.category }) : imageOf(card)) : null;
   const title = cleanTitle(card ? card.title_ar || card.title_en : "عربي GTA 6 — أسرار وأخبار وخريطة لعبة GTA VI");
 
   const base = cover ? sharp(cover) : sharp({ create: { width: W, height: H, channels: 4, background: "#1a0b2e" } });

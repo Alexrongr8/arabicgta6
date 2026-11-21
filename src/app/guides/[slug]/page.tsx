@@ -5,6 +5,7 @@ import { getBySlugs, getCategory } from "@/lib/data";
 import { getLocale } from "@/lib/session";
 import { ItemCard } from "@/components/ItemCard";
 import type { ItemCard as Card } from "@/lib/types";
+import { jsonLd } from "@/lib/jsonld";
 
 const SITE = process.env.NEXT_PUBLIC_SITE_URL ?? "https://arabicgta6.com";
 
@@ -18,7 +19,7 @@ export async function generateMetadata({ params }: PageProps<"/guides/[slug]">):
     description: ar ? p.introAr : p.introEn,
     keywords: p.keywordsAr,
     alternates: { canonical: `${SITE}/guides/${slug}` },
-    openGraph: { title: p.titleAr, description: p.introAr, type: "article" },
+    openGraph: { title: ar ? p.titleAr : p.titleEn, description: ar ? p.introAr : p.introEn, type: "article", locale: ar ? "ar_SA" : "en_US" },
   };
 }
 
@@ -35,12 +36,13 @@ export default async function GuidePage({ params }: PageProps<"/guides/[slug]">)
     ? {
         "@context": "https://schema.org",
         "@type": "FAQPage",
-        mainEntity: p.faq.map((f) => ({ "@type": "Question", name: f.qAr, acceptedAnswer: { "@type": "Answer", text: f.aAr } })),
+        inLanguage: locale,
+        mainEntity: p.faq.map((f) => ({ "@type": "Question", name: ar ? f.qAr : f.qEn, acceptedAnswer: { "@type": "Answer", text: ar ? f.aAr : f.aEn } })),
       }
     : null;
   return (
     <main className="mx-auto max-w-5xl px-4 pt-6">
-      {faqLd && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />}
+      {faqLd && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(faqLd) }} />}
       <h1 className="text-[28px] leading-snug md:text-4xl">{ar ? p.titleAr : p.titleEn}</h1>
       <p className="mt-3 mb-5 text-[15px] leading-relaxed text-muted">{ar ? p.introAr : p.introEn}</p>
       {p.faq && (

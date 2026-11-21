@@ -79,4 +79,5 @@ export type ItemCard = Pick<
   | "featured"
   | "image"
   | "spots"
+  | "tags"
 >;

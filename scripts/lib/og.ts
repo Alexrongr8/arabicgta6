@@ -1,22 +1,26 @@
-/** Fetches a page and returns its og:image / twitter:image URL (absolute), or null. */
+import { checkPublicHttpsUrl, safeGet } from "../../src/lib/safe-fetch";
+
+/**
+ * Fetches a page and returns its og:image / twitter:image URL (absolute, public HTTPS), or null.
+ * Uses the SSRF-safe fetcher: one 9 s deadline for the whole exchange, 1.5 MB body cap,
+ * manual redirect validation and no private/loopback destinations.
+ */
 export async function findImage(url: string): Promise<string | null> {
   try {
-    const ctrl = new AbortController();
-    const t = setTimeout(() => ctrl.abort(), 9000);
-    const res = await fetch(url, {
-      signal: ctrl.signal,
-      redirect: "follow",
-      headers: { "user-agent": "Mozilla/5.0 (compatible; ArabicGTA6Bot/1.0; +https://arabicgta6.com)", accept: "text/html" },
+    const res = await safeGet(url, {
+      timeoutMs: 9000,
+      maxBytes: 1_500_000,
+      accept: "text/html",
+      userAgent: "Mozilla/5.0 (compatible; ArabicGTA6Bot/1.0; +https://arabicgta6.com)",
     });
-    clearTimeout(t);
-    if (!res.ok || !(res.headers.get("content-type") ?? "").includes("html")) return null;
-    const html = (await res.text()).slice(0, 400_000);
+    if (!res || res.status !== 200 || !res.contentType.includes("html")) return null;
+    const html = res.body.toString("utf8").slice(0, 400_000);
     const m =
       html.match(/<meta[^>]+(?:property|name)=["'](?:og:image(?::secure_url)?|twitter:image(?::src)?)["'][^>]*content=["']([^"']+)["']/i) ??
       html.match(/<meta[^>]+content=["']([^"']+)["'][^>]*(?:property|name)=["'](?:og:image|twitter:image)["']/i);
     if (!m) return null;
-    const img = new URL(m[1].replace(/&amp;/g, "&"), res.url).toString();
-    if (!/^https:\/\//.test(img) || /logo|favicon|default|placeholder/i.test(img)) return null;
+    const img = new URL(m[1].replace(/&amp;/g, "&"), res.finalUrl).toString();
+    if (!checkPublicHttpsUrl(img) || /logo|favicon|default|placeholder/i.test(img)) return null;
     return img;
   } catch {
     return null;

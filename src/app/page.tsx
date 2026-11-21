@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { imageOf } from "@/lib/image";
+import { thumbFor } from "@/lib/image";
 import { Bidi } from "@/components/Bidi";
 import { CATEGORY_MAP } from "@/lib/categories";
 import { getCounts, getDailyPool, getFeatured, getLatest } from "@/lib/data";
@@ -39,7 +39,7 @@ export default async function Home() {
                 className="card-hover relative flex w-[80%] shrink-0 snap-start flex-col justify-end overflow-hidden rounded-3xl p-4 text-white shadow-lg sm:w-72"
                 style={{ minHeight: 210, background: `linear-gradient(160deg, ${c.color}, #2a1240)` }}
               >
-                <Cover src={imageOf(f)} className="absolute inset-0 size-full object-cover" />
+                <Cover src={thumbFor(f, 640)} className="absolute inset-0 size-full object-cover" />
                 <span className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-transparent" />
                 <span className="relative mb-2 flex items-center gap-2">
                   <span className="rounded-full px-2 py-0.5 text-[11px] font-extrabold text-white" style={{ background: c.color }}>

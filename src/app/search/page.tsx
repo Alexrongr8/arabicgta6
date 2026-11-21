@@ -3,9 +3,11 @@ import { search } from "@/lib/data";
 import { t } from "@/lib/i18n";
 import { getLocale } from "@/lib/session";
 import { SearchClient } from "@/components/SearchClient";
+import { searchCatalog } from "@/lib/catalog-search";
 
 export async function generateMetadata(): Promise<Metadata> {
-  return { title: t(await getLocale(), "search") };
+  // Internal search results: crawlable but not indexed (curated /guides pages are the landing pages).
+  return { title: t(await getLocale(), "search"), robots: { index: false, follow: true } };
 }
 
 const POPULAR = ["Vice City", "Lucia", "Jason", "UFO", "Infernus", "شوزن", "فلوس", "Port Gellhorn", "غش", "Skunk Ape"];
@@ -21,6 +23,7 @@ export default async function SearchPage({ searchParams }: PageProps<"/search">)
         locale={locale}
         initialQuery={q}
         initialResults={initial}
+        initialCatalog={q ? searchCatalog(q) : []}
         popular={POPULAR}
         labels={{
           placeholder: t(locale, "searchPlaceholder"),

@@ -2,9 +2,10 @@ import "server-only";
 import { cache } from "react";
 import type { CategorySlug, Item, ItemCard } from "./types";
 import { createClient, supabaseConfigured } from "./supabase/server";
-import { normalize, searchText } from "./normalize";
+import { normalize, searchTerms, searchText } from "./normalize";
 import { SEED } from "./seed";
 import { adminClient, adminConfigured } from "./admin";
+import { isSpoiler } from "./spoiler";
 
 /**
  * Data access layer. With Supabase configured, reads go through RLS:
@@ -14,7 +15,7 @@ import { adminClient, adminConfigured } from "./admin";
 
 export const GUEST_NEWS_LIMIT = 10;
 const CARD_COLS =
-  "slug,category,status,title_en,title_ar,summary_en,summary_ar,published_at,region,location,featured,image";
+  "slug,category,status,title_en,title_ar,summary_en,summary_ar,published_at,region,location,featured,image,tags";
 
 function toCard(i: Item): ItemCard {
   return {
@@ -31,6 +32,7 @@ function toCard(i: Item): ItemCard {
     featured: i.featured,
     image: i.image ?? null,
     spots: i.spots ?? [],
+    tags: i.tags ?? [],
   };
 }
 
@@ -74,31 +76,50 @@ export async function getCategory(category: CategorySlug): Promise<ItemCard[]> {
  * "Don't miss" row: the most-read articles of the last 3 days (from our own page-view log),
  * topped up with editor-flagged and the newest items. Changes on its own as people read.
  */
+/** Most-read article slugs in the last 3 days (distinct visitors), cached 10 min per server instance. */
+let popularCache: { at: number; slugs: string[] } | null = null;
+async function popularSlugs(): Promise<string[]> {
+  if (popularCache && popularCache.at > Date.now() - 10 * 60_000) return popularCache.slugs;
+  if (!adminConfigured()) return [];
+  const since = new Date(Date.now() - 3 * 864e5).toISOString();
+  const { data: views } = await adminClient()
+    .from("page_views")
+    .select("path,visitor_id")
+    .like("path", "/item/%")
+    .gte("created_at", since)
+    .order("created_at", { ascending: false })
+    .limit(1000);
+  const visitors = new Map<string, Set<string>>();
+  for (const v of views ?? []) {
+    const slug = String(v.path).slice(6).split(/[?#/]/)[0];
+    if (!slug) continue;
+    // one vote per visitor: repeated beacons from the same id can't inflate a slug
+    if (!visitors.has(slug)) visitors.set(slug, new Set());
+    visitors.get(slug)!.add(String(v.visitor_id ?? "anon"));
+  }
+  const slugs = [...visitors.entries()].sort((a, b) => b[1].size - a[1].size).slice(0, 8).map(([slug]) => slug);
+  popularCache = { at: Date.now(), slugs };
+  return slugs;
+}
+
+/**
+ * "Don't miss" row: most-read articles of the last 3 days, then the newest, then editor picks.
+ * Story-spoiler articles are never promoted here.
+ */
 export async function getFeatured(): Promise<ItemCard[]> {
   if (!supabaseConfigured()) {
-    const flagged = SEED.filter((i) => i.featured).sort(byDate);
-    return flagged.slice(0, 10).map(toCard);
+    return SEED.filter((i) => i.featured && !isSpoiler(i)).sort(byDate).slice(0, 10).map(toCard);
   }
   const supabase = await createClient();
-  let popular: string[] = [];
-  if (adminConfigured()) {
-    const since = new Date(Date.now() - 3 * 864e5).toISOString();
-    const { data: views } = await adminClient().from("page_views").select("path").like("path", "/item/%").gte("created_at", since).limit(20000);
-    const counts = new Map<string, number>();
-    for (const v of views ?? []) {
-      const slug = String(v.path).slice(6).split(/[?#]/)[0];
-      counts.set(slug, (counts.get(slug) ?? 0) + 1);
-    }
-    popular = [...counts.entries()].sort((a, b) => b[1] - a[1]).slice(0, 6).map(([slug]) => slug);
-  }
+  const popular = await popularSlugs();
   const [{ data: pop }, { data: flagged }, { data: fresh }] = await Promise.all([
     popular.length ? supabase.from("items").select(CARD_COLS).in("slug", popular) : Promise.resolve({ data: [] }),
-    supabase.from("items").select(CARD_COLS).eq("featured", true).order("published_at", { ascending: false }).limit(6),
-    supabase.from("items").select(CARD_COLS).order("published_at", { ascending: false }).limit(4),
+    supabase.from("items").select(CARD_COLS).eq("featured", true).order("published_at", { ascending: false }).limit(8),
+    supabase.from("items").select(CARD_COLS).order("published_at", { ascending: false }).limit(6),
   ]);
   const ordered = [...((pop ?? []) as ItemCard[]).sort((a, b) => popular.indexOf(a.slug) - popular.indexOf(b.slug)), ...((fresh ?? []) as ItemCard[]), ...((flagged ?? []) as ItemCard[])];
   const seen = new Set<string>();
-  return ordered.filter((i) => !seen.has(i.slug) && seen.add(i.slug)).slice(0, 10);
+  return ordered.filter((i) => !isSpoiler(i) && !seen.has(i.slug) && seen.add(i.slug)).slice(0, 10);
 }
 
 export async function getCounts(): Promise<Record<string, number>> {
@@ -141,10 +162,11 @@ export async function itemExists(slug: string): Promise<{ title_en: string; titl
 
 export async function getBySlugs(slugs: string[]): Promise<ItemCard[]> {
   if (!slugs.length) return [];
-  if (!supabaseConfigured()) return SEED.filter((i) => slugs.includes(i.slug)).map(toCard);
+  const order = (a: { slug: string }, b: { slug: string }) => slugs.indexOf(a.slug) - slugs.indexOf(b.slug);
+  if (!supabaseConfigured()) return SEED.filter((i) => slugs.includes(i.slug)).map(toCard).sort(order);
   const supabase = await createClient();
   const { data } = await supabase.from("items").select(CARD_COLS).in("slug", slugs);
-  return (data ?? []) as ItemCard[];
+  return ((data ?? []) as ItemCard[]).sort(order); // keep the curated order
 }
 
 export async function getMapItems(): Promise<ItemCard[]> {
@@ -154,30 +176,64 @@ export async function getMapItems(): Promise<ItemCard[]> {
   return (data ?? []) as ItemCard[];
 }
 
+/**
+ * Natural Arabic/English search. Game-name words, question words and Arabic digits are normalised
+ * away; every remaining term must match first (exact behaviour), and if that finds nothing the
+ * results that match the most terms are returned instead.
+ */
 export async function search(q: string, limit = 40): Promise<ItemCard[]> {
-  const nq = normalize(q);
-  if (!nq) return [];
-  if (!supabaseConfigured()) return localSearch(SEED, nq, limit).map(toCard);
+  if (!normalize(q)) return [];
+  const terms = searchTerms(q);
+  if (!terms.length) return getLatest(Math.min(limit, 12)); // e.g. just "قراند" → newest articles
+  if (!supabaseConfigured()) return localSearch(SEED, terms, limit).map(toCard);
   const supabase = await createClient();
-  const { data, error } = await supabase.rpc("search_items", { q: nq, max_results: limit });
+  const { data, error } = await supabase.rpc("search_items", { q: terms.join(" "), max_results: limit });
   if (error) throw error;
-  return (data ?? []) as ItemCard[];
+  // search_items returns whole rows (with bodies); send only card fields to the browser
+  if ((data ?? []).length || terms.length === 1) return ((data ?? []) as Item[]).map(toCard);
+  // Partial match, only on substantive words (3+ letters, so "s" or a lone model number can't
+  // match half the site), and an article must contain at least half of them.
+  const strong = partialTerms(terms);
+  if (!strong.length) return [];
+  const need = Math.ceil(strong.length / 2);
+  const per = await Promise.all(strong.map((t) => supabase.rpc("search_items", { q: t, max_results: limit })));
+  const score = new Map<string, { card: ItemCard; n: number; best: number }>();
+  per.forEach(({ data: rows }, ti) =>
+    ((rows ?? []) as Item[]).map(toCard).forEach((r, pos) => {
+      const cur = score.get(r.slug) ?? { card: r, n: 0, best: 1e9 };
+      cur.n += 1;
+      cur.best = Math.min(cur.best, ti * 1000 + pos);
+      score.set(r.slug, cur);
+    }),
+  );
+  return [...score.values()].filter((x) => x.n >= need).sort((a, b) => b.n - a.n || a.best - b.best).slice(0, limit).map((x) => x.card);
 }
 
-function localSearch(items: Item[], nq: string, limit: number): Item[] {
-  const terms = nq.split(" ").filter(Boolean);
-  const scored: { i: Item; s: number }[] = [];
+const partialTerms = (terms: string[]) => terms.filter((t) => t.length >= 3).slice(0, 5);
+
+function localSearch(items: Item[], terms: string[], limit: number): Item[] {
+  const nq = terms.join(" ");
+  const scored: { i: Item; s: number; n: number }[] = [];
   for (const i of items) {
     const hay = searchText(i);
-    if (!terms.every((t) => hay.includes(t))) continue;
+    const n = terms.filter((t) => hay.includes(t)).length;
+    if (!n) continue;
     const titles = normalize(`${i.title_en} ${i.title_ar} ${i.aliases.join(" ")}`);
-    let s = 1;
+    let s = n === terms.length ? 100 : 0;
     if (titles.includes(nq)) s += 10;
     if (normalize(i.title_en) === nq || normalize(i.title_ar) === nq) s += 20;
     if (titles.startsWith(nq)) s += 5;
-    scored.push({ i, s });
+    scored.push({ i, s, n });
   }
-  return scored.sort((a, b) => b.s - a.s || byDate(a.i, b.i)).slice(0, limit).map((x) => x.i);
+  const full = scored.filter((x) => x.n === terms.length);
+  const strong = partialTerms(terms);
+  const pool = full.length
+    ? full
+    : scored.filter((x) => {
+        const hay = searchText(x.i);
+        return strong.length > 0 && strong.filter((t) => hay.includes(t)).length >= Math.ceil(strong.length / 2);
+      });
+  return pool.sort((a, b) => b.n - a.n || b.s - a.s || byDate(a.i, b.i)).slice(0, limit).map((x) => x.i);
 }
 
 export type TipCard = Pick<Item, "slug" | "title_en" | "title_ar" | "summary_en" | "summary_ar">;
@@ -194,8 +250,8 @@ export const getTipCards = cache(async (): Promise<TipCard[]> => {
 /** Pool for "Secret of the day": secrets, strange things, tips and funny moments. */
 export async function getDailyPool(): Promise<ItemCard[]> {
   const cats: CategorySlug[] = ["secrets", "strange", "tips", "funny"];
-  if (!supabaseConfigured()) return SEED.filter((i) => cats.includes(i.category)).sort((a, b) => a.slug.localeCompare(b.slug)).map(toCard);
+  if (!supabaseConfigured()) return SEED.filter((i) => cats.includes(i.category) && !isSpoiler(i)).sort((a, b) => a.slug.localeCompare(b.slug)).map(toCard);
   const supabase = await createClient();
   const { data } = await supabase.from("items").select(CARD_COLS).in("category", cats).order("slug").limit(1000);
-  return (data ?? []) as ItemCard[];
+  return ((data ?? []) as ItemCard[]).filter((i) => !isSpoiler(i));
 }

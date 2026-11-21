@@ -20,6 +20,8 @@ import { VoteBar } from "@/components/community/VoteBar";
 import { Comments } from "@/components/community/Comments";
 import { getVotes } from "@/lib/community/data";
 import { imageCredit } from "@/lib/image";
+import { isSpoiler, SPOILER_TEASER } from "@/lib/spoiler";
+import { jsonLd } from "@/lib/jsonld";
 
 const SITE = process.env.NEXT_PUBLIC_SITE_URL ?? "https://arabicgta6.com";
 
@@ -29,14 +31,14 @@ export async function generateMetadata({ params }: PageProps<"/item/[slug]">): P
   const item = await getItem(slug, true);
   if (!item) return {};
   const title = locale === "ar" ? item.title_ar : item.title_en;
-  const description = locale === "ar" ? item.summary_ar : item.summary_en;
+  const description = isSpoiler(item) ? SPOILER_TEASER[locale] : locale === "ar" ? item.summary_ar : item.summary_en;
   // og:image / twitter:image come from ./opengraph-image.tsx and ./twitter-image.tsx (file-based metadata wins).
   return {
     title,
     description,
     keywords: [...item.aliases, "GTA 6", "قراند 6"],
     alternates: { canonical: `${SITE}/item/${slug}` },
-    openGraph: { title, description, type: "article", url: `${SITE}/item/${slug}`, siteName: "Arabic GTA 6", locale: "ar_SA" },
+    openGraph: { title, description, type: "article", url: `${SITE}/item/${slug}`, siteName: "Arabic GTA 6", locale: locale === "ar" ? "ar_SA" : "en_US" },
     twitter: { card: "summary_large_image", title, description },
   };
 }
@@ -65,14 +67,15 @@ export default async function ItemPage({ params }: PageProps<"/item/[slug]">) {
   const related = await getBySlugs(item.related);
   const votes = (await getVotes([`item:${item.slug}`], viewer.id))[`item:${item.slug}`];
   const body = pick(item, "body", locale);
+  const spoiler = isSpoiler(item);
 
   const ld = {
     "@context": "https://schema.org",
     "@type": "Article",
-    headline: item.title_ar,
-    alternativeHeadline: item.title_en,
-    description: item.summary_ar,
-    inLanguage: "ar",
+    headline: pick(item, "title", locale),
+    alternativeHeadline: locale === "ar" ? item.title_en : item.title_ar,
+    description: spoiler ? SPOILER_TEASER[locale] : pick(item, "summary", locale),
+    inLanguage: locale,
     datePublished: item.published_at,
     image: item.image ? (item.image.startsWith("/") ? `${SITE}${item.image}` : item.image) : undefined,
     mainEntityOfPage: `${SITE}/item/${item.slug}`,
@@ -81,7 +84,7 @@ export default async function ItemPage({ params }: PageProps<"/item/[slug]">) {
 
   return (
     <main className="mx-auto max-w-5xl px-4 pt-5">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(ld) }} />
       <nav className="mb-4 flex items-center gap-2 text-xs text-dim">
         <Link href="/explore" className="hover:text-fg">{t(locale, "explore")}</Link>
         <span>/</span>
@@ -92,7 +95,11 @@ export default async function ItemPage({ params }: PageProps<"/item/[slug]">) {
 
       <article className="grid gap-6 lg:grid-cols-[1fr_300px]">
         <div className="min-w-0">
-          <CoverFigure src={imageOf(item)} alt={pick(item, "title", locale)} credit={imageCredit(imageOf(item))} />
+          {spoiler ? (
+            <CoverFigure src={imageOf({ category: item.category })} alt="" credit={imageCredit(imageOf({ category: item.category }))} />
+          ) : (
+            <CoverFigure src={imageOf(item)} alt={pick(item, "title", locale)} credit={imageCredit(imageOf(item))} />
+          )}
           <header className="relative mb-5 overflow-hidden rounded-3xl border border-line p-5 shadow-sm md:p-7" style={{ background: `linear-gradient(150deg, ${c.color}30, var(--card) 70%)` }}>
             <CategoryIcon category={item.category} className="absolute -end-4 -top-4 size-32 opacity-15" style={{ color: c.color }} />
             <div className="relative mb-3 flex flex-wrap items-center gap-2">
@@ -105,7 +112,7 @@ export default async function ItemPage({ params }: PageProps<"/item/[slug]">) {
             {locale === "ar" && item.title_en && !item.title_ar.includes(item.title_en) && (
               <p className="relative mt-1 font-display text-sm tracking-wide text-dim" dir="ltr">{item.title_en}</p>
             )}
-            <p className="relative mt-3 text-[15px] leading-relaxed text-fg"><Bidi text={pick(item, "summary", locale)} /></p>
+            <p className="relative mt-3 text-[15px] leading-relaxed text-fg">{spoiler ? SPOILER_TEASER[locale] : <Bidi text={pick(item, "summary", locale)} />}</p>
             <div className="relative mt-4 flex flex-wrap gap-2">
               {(item.location || (item.spots?.length ?? 0) > 0) && (
                 <Link href={`/map?focus=${item.slug}`} className="bg-sunset inline-flex h-10 items-center gap-2 rounded-xl px-4 text-sm font-extrabold text-white shadow-md shadow-pink/30">
@@ -124,6 +131,7 @@ export default async function ItemPage({ params }: PageProps<"/item/[slug]">) {
             </div>
           </header>
 
+          <SpoilerWrap on={spoiler} ar={locale === "ar"}>
           {(item.spots?.length ?? 0) > 0 && (
             <section className="card mb-5 overflow-hidden">
               <div className="flex items-center justify-between gap-2 border-b border-line px-4 py-3">
@@ -154,8 +162,8 @@ export default async function ItemPage({ params }: PageProps<"/item/[slug]">) {
 
           <Videos ids={item.videos ?? []} title={locale === "ar" ? "شوفها بالفيديو" : "Watch it"} />
 
-          {/* Infobox on mobile comes before the body, like a wiki */}
-          <Infobox item={item} locale={locale} className="mb-5 lg:hidden" />
+          {/* Infobox on mobile comes before the body, like a wiki (inside the gate for spoilers, on all widths) */}
+          <Infobox item={item} locale={locale} className={`mb-5 ${spoiler ? "" : "lg:hidden"}`} />
 
           <div className="card p-5 md:p-7">
             <Prose text={body} />
@@ -163,6 +171,8 @@ export default async function ItemPage({ params }: PageProps<"/item/[slug]">) {
               <VoteBar target={`item:${item.slug}`} votes={votes} path={`/item/${item.slug}`} ar={locale === "ar"} />
             </div>
           </div>
+
+          </SpoilerWrap>
 
           {item.sources.length > 0 && (
             <section className="mt-5">
@@ -181,7 +191,7 @@ export default async function ItemPage({ params }: PageProps<"/item/[slug]">) {
         </div>
 
         <aside className="hidden lg:block">
-          <Infobox item={item} locale={locale} className="sticky top-20" />
+          {!spoiler && <Infobox item={item} locale={locale} className="sticky top-20" />}
         </aside>
       </article>
 
@@ -232,5 +242,22 @@ function Infobox({ item, locale, className = "" }: { item: Awaited<ReturnType<ty
         </div>
       )}
     </div>
+  );
+}
+
+/** Story spoilers: summary, pins, videos, facts and body stay folded until the reader opens them. */
+function SpoilerWrap({ on, ar, children }: { on: boolean; ar: boolean; children: React.ReactNode }) {
+  if (!on) return <>{children}</>;
+  return (
+    <details className="group mb-5">
+      <summary className="card flex cursor-pointer list-none items-center gap-3 border-2 border-dashed border-pink/50 p-5 text-[15px] font-bold [&::-webkit-details-marker]:hidden">
+        <span className="text-2xl">⚠️</span>
+        <span className="flex-1">
+          {ar ? "هذا الموضوع يحرق أحداث القصة. لا تفتحه إذا ما خلصت القصة." : "This article spoils the story. Don't open it if you haven't finished the story."}
+        </span>
+        <span className="rounded-xl bg-pink px-3 py-1.5 text-[13px] font-extrabold text-white group-open:hidden">{ar ? "اعرض الحرق" : "Show spoilers"}</span>
+      </summary>
+      <div className="mt-5">{children}</div>
+    </details>
   );
 }

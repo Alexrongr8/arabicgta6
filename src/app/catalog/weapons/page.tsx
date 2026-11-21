@@ -2,17 +2,24 @@ import type { Metadata } from "next";
 import { WEAPONS, WEAPON_SOURCE } from "../../../../data/catalog-weapons";
 import { getLocale } from "@/lib/session";
 import { Catalog } from "@/components/Catalog";
+
+const WITH_STATS = WEAPONS.filter((w) => w[3]).length;
+const WITH_PRICE = WEAPONS.filter((w) => w[2] && /\$/.test(w[2])).length;
 import { catalogImage } from "@/lib/catalog-images";
 
 export async function generateMetadata(): Promise<Metadata> {
   const ar = (await getLocale()) === "ar";
   return {
-    title: ar ? "كل أسلحة GTA 6 بالمواصفات" : "Every GTA 6 weapon with stats",
-    description: ar ? `${WEAPONS.length} سلاح في GTA 6 مع القوة والدقة والتحكم والمدى، والسعر ومكان الشراء.` : `${WEAPONS.length} GTA 6 weapons with damage, accuracy, handling, range, price and where to buy.`,
+    title: ar ? "كتالوج أسلحة GTA 6" : "GTA 6 weapons catalog",
+    description: ar
+      ? `${WEAPONS.length} سلاح في GTA 6، منها ${WITH_STATS} بأرقام القوة والدقة والتحكم والمدى من داخل اللعبة و${WITH_PRICE} بسعر ومكان شراء معروف.`
+      : `${WEAPONS.length} GTA 6 weapons; ${WITH_STATS} with in-game damage/accuracy/handling/range and ${WITH_PRICE} with a known price and shop.`,
   };
 }
 
-export default async function WeaponsCatalog() {
+export default async function WeaponsCatalog({ searchParams }: PageProps<"/catalog/weapons">) {
+  const sp = await searchParams;
+  const initialQuery = typeof sp.q === "string" ? sp.q.slice(0, 80) : "";
   const ar = (await getLocale()) === "ar";
   const classes = [
     { id: "pistol", label: ar ? "مسدسات" : "Pistols", emoji: "🔫" },
@@ -41,11 +48,11 @@ export default async function WeaponsCatalog() {
         <h1 className="text-[28px] leading-tight">{ar ? "كل أسلحة GTA 6 🔫" : "Every GTA 6 weapon 🔫"}</h1>
         <p className="mt-2 text-[14px] text-white/90">
           {ar
-            ? `${WEAPONS.length} سلاح بالمواصفات من شاشة الأسلحة داخل اللعبة نفسها (من 10): القوة، الدقة، التحكم، والمدى — مع السعر ومحل الشراء.`
-            : `${WEAPONS.length} weapons with the game's own stat bars (out of 10): damage, accuracy, handling and range — plus price and shop.`}
+            ? `${WEAPONS.length} سلاح. ${WITH_STATS} منها بأرقام شاشة الأسلحة داخل اللعبة (من 10): القوة، الدقة، التحكم والمدى، و${WITH_PRICE} بسعر ومحل شراء معروف. الباقي نكمّله أول ما يتأكد.`
+            : `${WEAPONS.length} weapons. ${WITH_STATS} have the in-game stat bars (out of 10) and ${WITH_PRICE} a known price and shop; the rest are filled in once verified.`}
         </p>
       </header>
-      <Catalog rows={rows} classes={classes} statLabels={ar ? ["القوة", "الدقة", "التحكم", "المدى"] : ["Damage", "Accuracy", "Handling", "Range"]} ar={ar} />
+      <Catalog rows={rows} classes={classes} statLabels={ar ? ["القوة", "الدقة", "التحكم", "المدى"] : ["Damage", "Accuracy", "Handling", "Range"]} ar={ar} initialQuery={initialQuery} />
       <p className="mt-6 text-[12px] text-dim">
         {ar ? "مصدر الأرقام: شاشة الأسلحة داخل اللعبة، مجمّعة في " : "Stats from the in-game weapon screen, compiled by "}
         <a href={WEAPON_SOURCE.url} target="_blank" rel="noopener noreferrer nofollow" className="text-teal underline">

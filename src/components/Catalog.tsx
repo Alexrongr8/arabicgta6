@@ -1,5 +1,6 @@
 "use client";
 import { useMemo, useState } from "react";
+import { normalize } from "@/lib/normalize";
 
 export interface CatalogRow {
   name: string;
@@ -18,21 +19,27 @@ export function Catalog({
   classes,
   statLabels,
   ar,
+  initialQuery = "",
 }: {
   rows: CatalogRow[];
   classes: { id: string; label: string; emoji: string }[];
   statLabels: string[];
   ar: boolean;
+  initialQuery?: string;
 }) {
   const [cls, setCls] = useState<string>("all");
   const [sort, setSort] = useState<number>(-1);
-  const [q, setQ] = useState("");
+  const [q, setQ] = useState(initialQuery);
+  const nq = normalize(q);
+  const matches = (x: CatalogRow) => !nq || normalize(x.name).includes(nq);
   const shown = useMemo(() => {
-    let r = rows.filter((x) => (cls === "all" || x.cls === cls) && (!q || x.name.toLowerCase().includes(q.toLowerCase())));
+    let r = rows.filter((x) => (cls === "all" || x.cls === cls) && matches(x));
     if (sort >= 0) r = [...r].sort((a, b) => (b.stats?.[sort] ?? -1) - (a.stats?.[sort] ?? -1));
     return r;
-  }, [rows, cls, sort, q]);
-  const count = (id: string) => rows.filter((x) => id === "all" || x.cls === id).length;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [rows, cls, sort, nq]);
+  // counts follow the current search, so the chips never promise rows that aren't shown
+  const count = (id: string) => rows.filter((x) => (id === "all" || x.cls === id) && matches(x)).length;
   return (
     <div>
       <div className="no-scrollbar -mx-4 mb-3 flex gap-2 overflow-x-auto px-4">
@@ -41,6 +48,7 @@ export function Catalog({
             key={c.id}
             type="button"
             onClick={() => setCls(c.id)}
+            aria-pressed={cls === c.id}
             className={`h-9 shrink-0 rounded-full border px-3.5 text-[13px] font-bold ${cls === c.id ? "border-transparent bg-pink text-white" : "border-line bg-chip text-muted"}`}
           >
             {c.emoji} {c.label} · {count(c.id)}
@@ -52,10 +60,12 @@ export function Catalog({
           value={q}
           onChange={(e) => setQ(e.target.value)}
           placeholder={ar ? "ابحث بالاسم…" : "Search by name…"}
+          aria-label={ar ? "ابحث في الكتالوج بالاسم" : "Search the catalog by name"}
+          type="search"
           className="h-10 min-w-0 flex-1 rounded-xl border border-line bg-card px-3 text-[15px] outline-none focus:border-pink"
           dir="ltr"
         />
-        <select value={sort} onChange={(e) => setSort(Number(e.target.value))} className="h-10 rounded-xl border border-line bg-card px-2 text-[14px]">
+        <select value={sort} onChange={(e) => setSort(Number(e.target.value))} aria-label={ar ? "ترتيب النتائج" : "Sort results"} className="h-10 rounded-xl border border-line bg-card px-2 text-[14px]">
           <option value={-1}>{ar ? "ترتيب: افتراضي" : "Sort: default"}</option>
           {statLabels.map((l, i) => (
             <option key={l} value={i}>
@@ -64,6 +74,17 @@ export function Catalog({
           ))}
         </select>
       </div>
+      <p className="mb-3 text-[13px] text-muted" role="status" aria-live="polite">
+        {ar ? `${shown.length} نتيجة` : `${shown.length} results`}
+      </p>
+      {shown.length === 0 && (
+        <div className="card mb-4 p-5 text-center">
+          <p className="mb-3 text-[14px] text-muted">{ar ? "ما لقينا شي بهالاسم في هذا القسم." : "Nothing matches that name here."}</p>
+          <button type="button" onClick={() => { setQ(""); setCls("all"); }} className="rounded-xl bg-pink px-4 py-2 text-sm font-extrabold text-white">
+            {ar ? "اعرض الكل" : "Show everything"}
+          </button>
+        </div>
+      )}
       <ol className="grid gap-2.5 md:grid-cols-2">
         {shown.map((r) => (
           <li key={r.name} className="card overflow-hidden p-0">

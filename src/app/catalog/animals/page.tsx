@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ANIMALS, ANIMAL_SOURCES, type AGroup } from "../../../../data/catalog-animals";
 import { getLocale } from "@/lib/session";
 import { catalogImage } from "@/lib/catalog-images";
+import { normalize } from "@/lib/normalize";
 
 export async function generateMetadata(): Promise<Metadata> {
   const ar = (await getLocale()) === "ar";
@@ -20,8 +21,13 @@ const GROUPS: { id: AGroup; ar: string; en: string; emoji: string }[] = [
   { id: "cryptid", ar: "مخلوقات غامضة", en: "Cryptids", emoji: "👣" },
 ];
 
-export default async function AnimalsCatalog() {
+export default async function AnimalsCatalog({ searchParams }: PageProps<"/catalog/animals">) {
   const ar = (await getLocale()) === "ar";
+  const sp = await searchParams;
+  const q = typeof sp.q === "string" ? sp.q.slice(0, 80).trim() : "";
+  const nq = normalize(q);
+  const matches = (a: (typeof ANIMALS)[number]) => !nq || normalize(`${a.en} ${a.ar}`).includes(nq);
+  const total = ANIMALS.filter(matches).length;
   return (
     <main className="mx-auto max-w-5xl px-4 pt-5">
       <header className="mb-5 rounded-3xl p-5 text-white shadow-lg" style={{ background: "linear-gradient(135deg,#16a34a,#0f766e)" }}>
@@ -37,8 +43,18 @@ export default async function AnimalsCatalog() {
           <span className="rounded-full bg-white/20 px-3 py-1">⚠️ {ar ? "خطير" : "Dangerous"}</span>
         </div>
       </header>
+      {q && (
+        <div className="card mb-5 flex flex-wrap items-center gap-3 p-4 text-[14px]" role="status">
+          <span className="flex-1">
+            {ar ? `نتائج "${q}": ${total}` : `Results for "${q}": ${total}`}
+          </span>
+          <Link href="/catalog/animals" className="rounded-xl bg-pink px-3 py-1.5 text-[13px] font-extrabold text-white">
+            {ar ? "اعرض كل الحيوانات" : "Show all animals"}
+          </Link>
+        </div>
+      )}
       {GROUPS.map((g) => {
-        const list = ANIMALS.filter((a) => a.group === g.id);
+        const list = ANIMALS.filter((a) => a.group === g.id && matches(a));
         if (!list.length) return null;
         return (
           <section key={g.id} className="mb-6">
