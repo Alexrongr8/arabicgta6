@@ -4,6 +4,7 @@ import { CATEGORY_MAP } from "@/lib/categories";
 import { getCounts, getDailyPool, getFeatured, getLatest } from "@/lib/data";
 import { pickDaily, weeklyChallenge } from "@/lib/daily";
 import { DailyCards } from "@/components/DailyCards";
+import { CatalogTiles } from "@/components/CatalogTiles";
 import { pick, t } from "@/lib/i18n";
 import { getLocale, getViewer } from "@/lib/session";
 import { Hero } from "@/components/Hero";
@@ -26,6 +27,10 @@ export default async function Home() {
     <main>
       <Hero locale={locale} total={total} />
       <DailyCards secret={secret} challenge={challenge} locale={locale} />
+
+      <Section title={locale === "ar" ? "الكتالوج 📚" : "Catalogs 📚"} locale={locale}>
+        <CatalogTiles locale={locale} />
+      </Section>
 
       <Section title={t(locale, "featured")} locale={locale}>
         <div className="no-scrollbar -mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-2">
@@ -61,15 +66,6 @@ export default async function Home() {
         <CategoryGrid locale={locale} counts={counts} />
       </Section>
 
-      <section className="mx-auto mt-6 max-w-6xl px-4">
-        <Link href="/trophies" className="card-hover flex items-center gap-4 overflow-hidden rounded-3xl p-4 text-white shadow-lg" style={{ background: "linear-gradient(135deg,#2a1240,#7c3aed 60%,#f0287a)" }}>
-          <span className="grid size-14 shrink-0 place-items-center rounded-2xl bg-white/15 text-3xl">🏆</span>
-          <span className="flex-1">
-            <span className="font-head block text-[20px] leading-tight">{locale === "ar" ? "كل كؤوس GTA 6 — بلايستيشن وإكس بوكس" : "Every GTA 6 trophy — PS5 & Xbox"}</span>
-            <span className="mt-0.5 block text-[12.5px] text-white/85">{locale === "ar" ? "55 كأس بالتفصيل، والكأس الوحيد اللي يفوت" : "All 55 in detail, plus the one you can miss"}</span>
-          </span>
-        </Link>
-      </section>
 
       <section className="mx-auto mt-3 max-w-6xl px-4">
         <Link href="/community" className="card-hover flex items-center gap-4 overflow-hidden rounded-3xl p-4 text-white shadow-lg" style={{ background: "linear-gradient(135deg,#0f9f97,#7c3aed)" }}>

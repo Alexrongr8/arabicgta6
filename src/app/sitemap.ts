@@ -14,6 +14,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${SITE}/trophies`, changeFrequency: "weekly", priority: 0.8 },
     { url: `${SITE}/catalog/weapons`, changeFrequency: "weekly", priority: 0.8 },
     { url: `${SITE}/catalog/vehicles`, changeFrequency: "weekly", priority: 0.8 },
+    { url: `${SITE}/catalog/animals`, changeFrequency: "weekly", priority: 0.7 },
     { url: `${SITE}/community`, changeFrequency: "hourly", priority: 0.7 },
     ...SEO_PAGES.map((p) => ({ url: `${SITE}/guides/${p.slug}`, changeFrequency: "daily" as const, priority: 0.9 })),
     ...CATEGORIES.map((c) => ({ url: `${SITE}/c/${c.slug}`, changeFrequency: "hourly" as const, priority: 0.8 })),
