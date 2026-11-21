@@ -11,10 +11,8 @@ export function Header({ locale, viewer, labels, theme }: { locale: Locale; view
   return (
     <header className="glass sticky top-0 z-40 border-b border-line">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-2 px-3 md:px-4">
-        <Link href="/" aria-label={t(locale, "siteName")} className="flex flex-col items-start gap-0.5" dir="ltr">
+        <Link href="/" aria-label={t(locale, "siteName")} dir="ltr">
           <Logo />
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/img/flag-sa.svg" alt="" title={locale === "ar" ? "من السعودية" : "Made in Saudi Arabia"} className="h-3 w-auto rounded-[2px] shadow-sm" />
         </Link>
         <TopLinks labels={labels} />
         <div className="flex items-center gap-2">

@@ -16,8 +16,12 @@ export function Logo({ className = "" }: { className?: string }) {
         <rect x="6" y="31.5" width="28" height="3" fill="#1a0d2e" />
         <path d="M27 9c-3 1-5 4-5.5 8M27 9c-1 3 0 6 2 8M27 9c3 0 5 2 6 4M27 9c-3-1-6 0-8 2" stroke="#19d3c5" strokeWidth="1.6" fill="none" strokeLinecap="round" />
       </svg>
-      <span className="font-display text-[18px] leading-none tracking-wide">
-        <span className="text-fg">ARABIC</span> <span className="text-sunset">GTA6</span>
+      <span className="flex flex-col items-end gap-[3px]">
+        <span className="font-display text-[18px] leading-none tracking-wide">
+          <span className="text-fg">ARABIC</span> <span className="text-sunset">GTA6</span>
+        </span>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/img/flag-sa.svg" alt="" title="Made in Saudi Arabia" className="h-[11px] w-auto rounded-[2px] shadow-sm" />
       </span>
     </span>
   );

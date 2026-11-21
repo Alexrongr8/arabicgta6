@@ -1,0 +1,102 @@
+"use client";
+import { useMemo, useState } from "react";
+
+export interface CatalogRow {
+  name: string;
+  cls: string;
+  note: string | null;
+  stats: number[] | null;
+  badge?: string | null;
+  sub?: string | null;
+}
+
+/** Filterable, sortable catalog with stat bars (all stats out of 10). */
+export function Catalog({
+  rows,
+  classes,
+  statLabels,
+  ar,
+}: {
+  rows: CatalogRow[];
+  classes: { id: string; label: string; emoji: string }[];
+  statLabels: string[];
+  ar: boolean;
+}) {
+  const [cls, setCls] = useState<string>("all");
+  const [sort, setSort] = useState<number>(-1);
+  const [q, setQ] = useState("");
+  const shown = useMemo(() => {
+    let r = rows.filter((x) => (cls === "all" || x.cls === cls) && (!q || x.name.toLowerCase().includes(q.toLowerCase())));
+    if (sort >= 0) r = [...r].sort((a, b) => (b.stats?.[sort] ?? -1) - (a.stats?.[sort] ?? -1));
+    return r;
+  }, [rows, cls, sort, q]);
+  const count = (id: string) => rows.filter((x) => id === "all" || x.cls === id).length;
+  return (
+    <div>
+      <div className="no-scrollbar -mx-4 mb-3 flex gap-2 overflow-x-auto px-4">
+        {[{ id: "all", label: ar ? "الكل" : "All", emoji: "✨" }, ...classes].filter((c) => count(c.id) > 0).map((c) => (
+          <button
+            key={c.id}
+            type="button"
+            onClick={() => setCls(c.id)}
+            className={`h-9 shrink-0 rounded-full border px-3.5 text-[13px] font-bold ${cls === c.id ? "border-transparent bg-pink text-white" : "border-line bg-chip text-muted"}`}
+          >
+            {c.emoji} {c.label} · {count(c.id)}
+          </button>
+        ))}
+      </div>
+      <div className="mb-4 flex flex-wrap gap-2">
+        <input
+          value={q}
+          onChange={(e) => setQ(e.target.value)}
+          placeholder={ar ? "ابحث بالاسم…" : "Search by name…"}
+          className="h-10 min-w-0 flex-1 rounded-xl border border-line bg-card px-3 text-[15px] outline-none focus:border-pink"
+          dir="ltr"
+        />
+        <select value={sort} onChange={(e) => setSort(Number(e.target.value))} className="h-10 rounded-xl border border-line bg-card px-2 text-[14px]">
+          <option value={-1}>{ar ? "ترتيب: افتراضي" : "Sort: default"}</option>
+          {statLabels.map((l, i) => (
+            <option key={l} value={i}>
+              {ar ? `الأعلى في: ${l}` : `Highest ${l}`}
+            </option>
+          ))}
+        </select>
+      </div>
+      <ol className="grid gap-2.5 md:grid-cols-2">
+        {shown.map((r) => (
+          <li key={r.name} className="card p-3.5">
+            <div className="mb-1 flex flex-wrap items-center gap-1.5">
+              <span className="font-display text-[16px] tracking-wide" dir="ltr">
+                {r.name}
+              </span>
+              {r.badge && <span className="rounded-full bg-[#ffd166] px-2 py-0.5 text-[10.5px] font-extrabold text-[#2a1240]">{r.badge}</span>}
+            </div>
+            {r.note && (
+              <p className="mb-2 text-[12.5px] text-muted" dir="auto">
+                📍 {r.note}
+              </p>
+            )}
+            {r.stats ? (
+              <div className="space-y-1.5">
+                {r.stats.map((v, i) => (
+                  <div key={i} className="grid grid-cols-[86px_1fr_32px] items-center gap-2 text-[12px]">
+                    <span className="text-dim">{statLabels[i]}</span>
+                    <span className="h-2 overflow-hidden rounded-full bg-chip2">
+                      <span className="block h-full rounded-full" style={{ width: `${v * 10}%`, background: "linear-gradient(90deg,#ff8a1f,#f0287a)" }} />
+                    </span>
+                    <span className="text-end font-bold" dir="ltr">
+                      {v.toFixed(1)}
+                    </span>
+                  </div>
+                ))}
+                {r.sub && <p className="text-[11px] text-dim">{r.sub}</p>}
+              </div>
+            ) : (
+              <p className="text-[12px] text-dim">{ar ? "الإحصائيات لسه ما انشرت — بنضيفها أول ما تتوفر." : "Stats not published yet — added as soon as they are."}</p>
+            )}
+          </li>
+        ))}
+      </ol>
+    </div>
+  );
+}

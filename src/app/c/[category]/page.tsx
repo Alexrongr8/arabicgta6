@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { CATEGORY_MAP, isCategory } from "@/lib/categories";
@@ -45,6 +46,12 @@ export default async function CategoryPage({ params, searchParams }: PageProps<"
       </header>
 
       <>
+          {(category === "weapons" || category === "vehicles") && (
+            <Link href={`/catalog/${category}`} className="mb-4 flex items-center justify-between rounded-2xl bg-pink px-4 py-3 font-extrabold text-white shadow-md">
+              <span>{category === "weapons" ? (locale === "ar" ? "🔫 شوف كل الأسلحة بالمواصفات" : "🔫 See every weapon with stats") : locale === "ar" ? "🏎️ شوف كل المركبات بالمواصفات" : "🏎️ See every vehicle with stats"}</span>
+              <span>←</span>
+            </Link>
+          )}
           <StatusFilter locale={locale} active={status} />
           <div className="grid gap-3 md:grid-cols-2">
             {shown.map((i, n) => (
