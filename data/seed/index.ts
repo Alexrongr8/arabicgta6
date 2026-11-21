@@ -16,6 +16,9 @@ import batch2 from "./batch2";
 import streamers from "./streamers";
 import npcExpansion from "./npc-expansion";
 import contentExpansion from "./content-expansion";
+import gameplayImprovements from "./gameplay-improvements";
+import tvExperience from "./tv-experience";
+import strangeDiscoveries from "./strange-discoveries";
 
 export const SEED_ITEMS: Item[] = [
   ...news,
@@ -37,4 +40,7 @@ export const SEED_ITEMS: Item[] = [
   ...streamers,
   ...npcExpansion,
   ...contentExpansion,
+  ...gameplayImprovements,
+  ...tvExperience,
+  ...strangeDiscoveries,
 ];

@@ -15,6 +15,24 @@ export interface SeoPage {
 
 export const SEO_PAGES: SeoPage[] = [
   {
+    slug: "gta-6-settings",
+    titleAr: "إعدادات GTA 6 لتحسين القيادة والتصويب والصورة",
+    titleEn: "GTA 6 settings for driving, aiming and your display",
+    introAr: "ابدأ بالمشكلة التي تريد تحسينها: استجابة اليد، دخول المنعطفات، حركة الكاميرا، وضوح الحوار أو نعومة الشاشة. أدلة مترابطة بخطوات للمقارنة ومصادر وصور للإعدادات، مع فصل خيارات اللعبة عن إعدادات التلفزيون.",
+    introEn: "Start with what you want to improve: controller response, cornering, camera movement, clear dialogue or smoother display motion. Linked guides provide comparison steps and sources, separating game controls from television settings.",
+    keywordsAr: ["إعدادات GTA 6", "تحسين قيادة قراند 6", "حساسية التصويب GTA 6", "تنعيم GTA 6", "60 فريم قراند 6"],
+    slugs: [
+      "driving-braking-corner-practice", "controller-deadzone-drift-check", "dualsense-adaptive-driving-feedback",
+      "driving-camera-follow-height", "aim-look-sensitivity-practice", "targeting-lock-on-partial-free-aim",
+      "camera-shake-bob-sway-comfort", "in-game-motion-blur-comparison", "movement-speed-walk-jog-run",
+      "auto-drive-cinematic-route-controls", "subtitles-speakers-background-readability", "reticle-visibility-center-dot",
+      "minimap-compass-gps-visibility", "metric-units-clock-format", "game-audio-dialogue-media-balance",
+      "input-assists-taps-holds-minigames", "display-flashes-contrast-effects",
+      "tv-motion-smoothing-not-native-60fps", "samsung-game-motion-plus-comparison", "lg-trumotion-gaming-comparison",
+      "sony-motionflow-game-mode", "ps5-vrr-allm-tv-smoothing", "ps5-hdr-setup-for-gta-vi",
+    ],
+  },
+  {
     slug: "gta-6-money",
     titleAr: "كيف أجيب فلوس في GTA 6؟ أفضل طرق جمع الفلوس",
     titleEn: "How to make money in GTA 6: the best methods",
