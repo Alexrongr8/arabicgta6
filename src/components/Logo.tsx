@@ -22,7 +22,7 @@ export function Logo({ className = "" }: { className?: string }) {
           GTA6
           {/* Saudi flag tucked under "A6" — doesn't shift the wordmark */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/img/flag-sa.svg" alt="" title="Made in Saudi Arabia" className="absolute top-full right-0 mt-[3px] h-[11px] w-auto rounded-[2px] shadow-sm" />
+          <img src="/img/flag-sa.svg" alt="" title="Made in Saudi Arabia" className="absolute top-full right-0 -mt-[1px] h-[11px] w-auto rounded-[2px] shadow-sm" />
         </span>
       </span>
     </span>
