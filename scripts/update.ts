@@ -48,6 +48,11 @@ const BEAMS: Beam[] = [
     focus: "viral GTA 6 clips and posts, and what famous streamers and celebrities (e.g. IShowSpeed / Speed, Kai Cenat, xQc, MrBeast, famous Arab streamers) did or found while playing GTA 6.",
   },
   {
+    id: "arab-streamers",
+    label: "Arab streamers (Kick, YouTube, Twitch) and Arabic gaming news",
+    focus: "what Arab streamers and YouTubers (Saudi, Gulf, Egyptian, etc. — e.g. Xzit, 3mr, sxb, drb7h, BanderitaX, AboFlah) did, found or reacted to in GTA 6, their viral clips and records, plus Arabic-language gaming news about GTA 6. Use category 'streamers' for creator highlights.",
+  },
+  {
     id: "creators-news",
     label: "News about streamers & celebrities",
     focus: "news articles about famous streamers, YouTubers, athletes or celebrities playing GTA 6 (e.g. IShowSpeed, Kai Cenat, xQc), viral moments, records and reactions.",

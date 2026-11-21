@@ -13,6 +13,7 @@ import controllerTips from "./tips";
 import funny from "./funny";
 import choices from "./choices";
 import batch2 from "./batch2";
+import streamers from "./streamers";
 
 export const SEED_ITEMS: Item[] = [
   ...news,
@@ -31,4 +32,5 @@ export const SEED_ITEMS: Item[] = [
   ...funny,
   ...choices,
   ...batch2,
+  ...streamers,
 ];

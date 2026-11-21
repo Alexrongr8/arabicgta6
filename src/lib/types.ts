@@ -12,6 +12,7 @@ export type CategorySlug =
   | "strange"
   | "funny"
   | "choices"
+  | "streamers"
   | "characters"
   | "vehicles"
   | "tips";

@@ -24,6 +24,7 @@ export const CATEGORIES: CategoryMeta[] = [
   { slug: "glitches", ar: "القلتشات", en: "Glitches", descAr: "قلتشات ومشاكل مكتشفة وحلولها", descEn: "Known glitches, bugs and fixes", icon: "bug", color: "#ef4444", entity: false },
   { slug: "strange", ar: "أشياء غريبة", en: "Strange things", descAr: "ظواهر غريبة وألغاز في عالم اللعبة", descEn: "Weird sightings and mysteries", icon: "ghost", color: "#8b5cf6", entity: false },
   { slug: "choices", ar: "عواقب الأفعال", en: "Choices & consequences", descAr: "وش يصير لو كذبت أو قتلت أو اخترت غلط؟", descEn: "What happens if you lie, kill or choose wrong?", icon: "git-branch", color: "#e879f9", entity: false },
+  { slug: "streamers", ar: "الستريمرز العرب", en: "Arab streamers", descAr: "أبرز الستريمرز العرب في GTA 6 ولقطاتهم", descEn: "The top Arab GTA 6 streamers and their highlights", icon: "tv", color: "#53fc18", entity: true },
   { slug: "funny", ar: "مواقف طريفة", en: "Funny moments", descAr: "أطرف المواقف العشوائية اللي صارت للاعبين", descEn: "The funniest random moments players ran into", icon: "laugh", color: "#fb923c", entity: false },
   { slug: "tips", ar: "نصائح وأدلة", en: "Tips & guides", descAr: "نصائح للمبتدئين والمحترفين", descEn: "Tips for beginners and pros", icon: "lightbulb", color: "#14b8a6", entity: false },
 ];

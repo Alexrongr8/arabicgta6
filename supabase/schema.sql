@@ -7,7 +7,7 @@ create extension if not exists pg_trgm;
 create table if not exists public.items (
   id uuid primary key default gen_random_uuid(),
   slug text not null unique,
-  category text not null check (category in ('news','secrets','glitches','money','weapons','places','strange','funny','choices','characters','vehicles','tips')),
+  category text not null check (category in ('news','secrets','glitches','money','weapons','places','strange','funny','choices','streamers','characters','vehicles','tips')),
   status text not null default 'rumor' check (status in ('official','confirmed','leak','rumor')),
   title_en text not null,
   title_ar text not null,
@@ -155,6 +155,10 @@ alter table public.update_runs enable row level security;
 alter table public.items add column if not exists image text;
 alter table public.items add column if not exists spots jsonb not null default '[]';
 alter table public.items add column if not exists videos text[] not null default '{}';
+
+-- category list grew over time: refresh the check constraint
+alter table public.items drop constraint if exists items_category_check;
+alter table public.items add constraint items_category_check check (category in ('news','secrets','glitches','money','weapons','places','strange','funny','choices','streamers','characters','vehicles','tips'));
 
 -- ───────────────────────── owner analytics ─────────────────────────
 -- Sign-in details on profiles (written by the server with the service role on each sign-in).
