@@ -11,6 +11,7 @@
  */
 import "./lib/env";
 import { db } from "./lib/db";
+import { urlKey } from "./lib/url-key";
 import { askJson, isFatal, preflight, itemSchema, MAP_HINT, MODEL, RADAR_MODEL, STYLE_GUIDE, CATEGORY_GUIDE, youtubeThumb, type AiItem } from "./lib/ai";
 import { findImage } from "./lib/og";
 import { enrichBatch } from "./enrich";
@@ -100,7 +101,8 @@ function similar(a: string, b: string) {
   return inter / Math.min(ta.size, tb.size);
 }
 
-const cleanUrl = (u: string) => u.replace(/[?#].*$/, "").replace(/\/$/, "");
+// identity-preserving key: different YouTube videos stay different (docs/RADAR-POLICY.md §5.1)
+const cleanUrl = urlKey;
 
 async function sweep(beam: Beam, since: string, knownTitles: string[]): Promise<{ ok: boolean; leads: Lead[] }> {
   const prompt = `You are a radar scanning for NEW Grand Theft Auto VI (GTA 6) information published since ${since}. GTA VI launched on 19 November 2026 on PS5 and Xbox Series X|S.
@@ -247,7 +249,9 @@ ${STYLE_GUIDE}`;
 
   if (!DRY) {
     const { error: logErr } = await supabase.from("update_runs").insert({
-      kind: "update",
+      // Only a run where every beam succeeded advances the search window (kind "update");
+      // partial runs are logged separately so the failed beam's window is searched again next time.
+      kind: results.every((r) => r.ok) ? "update" : "update_partial",
       added: accepted.length,
       note: `beams=${active.map((b) => b.id).join("+")} leads=${leads.length} new=${accepted.map((a) => a.slug).join(", ").slice(0, 700)} enriched=${enriched}`,
     });

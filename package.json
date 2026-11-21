@@ -11,6 +11,7 @@
     "update": "tsx scripts/update.ts",
     "digest": "tsx scripts/digest.ts",
     "check:seed": "tsx scripts/check-seed.ts",
+    "test:scripts": "tsx scripts/tests/url-key.test.ts",
     "typecheck": "tsc --noEmit",
     "enrich": "tsx scripts/enrich.ts",
     "catalog-images": "tsx scripts/catalog-images-ai.ts"

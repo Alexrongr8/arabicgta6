@@ -1,0 +1,15 @@
+import assert from "node:assert/strict";
+import { urlKey } from "../lib/url-key";
+const A = "https://www.youtube.com/watch?v=AAAAAAAAAAA", B = "https://www.youtube.com/watch?v=BBBBBBBBBBB";
+assert.notEqual(urlKey(A), urlKey(B));
+for (const v of ["https://youtu.be/AAAAAAAAAAA?si=xyz", "https://m.youtube.com/watch?v=AAAAAAAAAAA&feature=share&t=30", "https://www.youtube.com/shorts/AAAAAAAAAAA", "https://www.youtube-nocookie.com/embed/AAAAAAAAAAA", A + "#comments"]) assert.equal(urlKey(v), urlKey(A), v);
+assert.equal(urlKey("https://x.com/rockstar/status/123?s=20"), urlKey("https://twitter.com/RockstarGames/status/123"));
+assert.equal(urlKey("https://www.reddit.com/r/GTA6/comments/abc123/title/?utm_source=share"), "reddit:abc123");
+assert.equal(urlKey("https://www.ign.com/articles/x/?utm_source=tw&fbclid=1"), urlKey("https://ign.com/articles/x"));
+assert.notEqual(urlKey("https://site.com/page?id=1"), urlKey("https://site.com/page?id=2"));
+assert.ok(!urlKey("https://notreddit.com/comments/abc123/x").startsWith("reddit:"), "look-alike host must not become a Reddit id");
+assert.equal(urlKey("https://old.reddit.com/r/x/comments/AbC123/"), "reddit:abc123");
+assert.notEqual(urlKey("https://site.com/?s=one"), urlKey("https://site.com/?s=two"));
+assert.notEqual(urlKey("https://forum.com/view?t=1"), urlKey("https://forum.com/view?t=2"));
+assert.equal(urlKey("https://site.com/a?b=2&a=1&utm_medium=x"), urlKey("https://site.com/a?a=1&b=2"));
+console.log("urlKey: all assertions passed");
