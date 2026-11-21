@@ -1,6 +1,6 @@
 import { Fragment } from "react";
 
-const LATIN = /[A-Za-z][A-Za-z0-9 .,'’&\-:+#|]*[A-Za-z0-9.']|[A-Za-z]/g;
+const LATIN = /[A-Za-z\u00C0-\u024F][A-Za-z\u00C0-\u024F0-9 .,'’&\-:+#|$]*[A-Za-z\u00C0-\u024F0-9.'$]|[A-Za-z\u00C0-\u024F]/g;
 
 /** Isolates Latin runs inside Arabic text so names like "(Lucia Caminos)" render correctly in RTL. */
 export function Bidi({ text }: { text: string }) {

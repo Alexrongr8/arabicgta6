@@ -245,7 +245,7 @@ export default function LeonidaMap({ items: cards, locale, focus, spot, labels }
                 </div>
                 <h3 className="text-[17px] leading-snug font-extrabold"><Bidi text={locale === "ar" ? selected.title_ar : selected.title_en} /></h3>
                 {selected.spotLabel && (
-                  <p className="mt-1 inline-flex items-start gap-1.5 rounded-xl bg-chip px-2 py-1 text-[13px] font-bold text-pink">
+                  <p className="mt-1.5 rounded-xl bg-chip px-2.5 py-1.5 text-[13px] leading-relaxed font-bold text-pink">
                     📍 {selected.spotLabel.n}. <Bidi text={locale === "ar" ? selected.spotLabel.ar : selected.spotLabel.en} />
                   </p>
                 )}

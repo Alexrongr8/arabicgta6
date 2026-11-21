@@ -1,5 +1,6 @@
 import type { Item } from "../../src/lib/types";
 import news from "./news";
+import newsLatest from "./news-latest";
 import places from "./places";
 import placesMap from "./places-map";
 import characters from "./characters";
@@ -14,6 +15,7 @@ import choices from "./choices";
 
 export const SEED_ITEMS: Item[] = [
   ...news,
+  ...newsLatest,
   ...places,
   ...placesMap,
   ...characters,

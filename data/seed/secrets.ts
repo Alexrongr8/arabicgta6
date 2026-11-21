@@ -49,6 +49,7 @@ Pick up an egg and throw it off the edge to trigger a short cutscene. It's Rocks
     tags: ["cryptid", "side quest"],
     region: "Grassrivers",
     related: ["cottonmouth-lake", "kirk-cryptid-hunter"],
+    videos: ["4SOON1kBdL8", "kig9yAxX_9A"],
     src: ["gsEggs", "kotakuDetails"],
   },
   {
@@ -65,6 +66,7 @@ Pick up an egg and throw it off the edge to trigger a short cutscene. It's Rocks
     tags: ["UFO", "trophy"],
     region: "Port Gellhorn",
     related: ["port-gellhorn"],
+    videos: ["UeabnpI88qQ"],
     src: ["gsEggs", "kotakuDetails"],
   },
   {
