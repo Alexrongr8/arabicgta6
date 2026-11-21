@@ -20,9 +20,9 @@ export function Logo({ className = "" }: { className?: string }) {
         <span className="text-fg">ARABIC</span>{" "}
         <span className="relative text-sunset">
           GTA6
-          {/* small Saudi flag tucked under "GTA6" — doesn't shift the wordmark */}
+          {/* Saudi flag tucked under "A6" — doesn't shift the wordmark */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/img/flag-sa.svg" alt="" title="Made in Saudi Arabia" className="absolute top-full left-1/2 mt-[3px] h-[9px] w-auto -translate-x-1/2 rounded-[1.5px] shadow-sm" />
+          <img src="/img/flag-sa.svg" alt="" title="Made in Saudi Arabia" className="absolute top-full right-0 mt-[3px] h-[11px] w-auto rounded-[2px] shadow-sm" />
         </span>
       </span>
     </span>
