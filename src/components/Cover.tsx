@@ -19,11 +19,17 @@ export function Cover({ src, className = "", alt = "", eager = false }: { src: s
   );
 }
 
-export function imageCredit(src: string): string {
-  if (src.startsWith("/img/")) return "Rockstar Games";
-  try {
-    return new URL(src).hostname.replace(/^www\./, "");
-  } catch {
-    return "";
-  }
+/** Article banner: the whole figure disappears if the remote image can't be loaded. */
+export function CoverFigure({ src, alt, credit }: { src: string; alt: string; credit: string }) {
+  const [ok, setOk] = useState(true);
+  if (!ok) return null;
+  return (
+    <figure className="relative mb-4 overflow-hidden rounded-3xl border border-line bg-chip">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src={src} alt={alt} referrerPolicy="no-referrer" onError={() => setOk(false)} className="aspect-[16/9] w-full object-cover" />
+      <figcaption className="absolute bottom-2 end-2 rounded-full bg-black/55 px-2 py-0.5 text-[10px] text-white/85" dir="ltr">
+        📷 {credit}
+      </figcaption>
+    </figure>
+  );
 }

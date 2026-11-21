@@ -43,7 +43,7 @@ export function SearchClient({ locale, initialQuery, initialResults, popular, la
 
   return (
     <div>
-      <div className="sticky top-[64px] z-30 -mx-4 bg-bg/95 px-4 pt-1 pb-3 backdrop-blur">
+      <div className="sticky top-[68px] z-30 -mx-4 bg-bg/95 px-4 pt-1 pb-3 backdrop-blur">
         <label className="flex h-14 items-center gap-3 rounded-2xl border border-pink/40 bg-chip px-4 shadow-[0_0_0_4px_rgba(255,61,139,.08)] focus-within:border-pink">
           {loading ? <Loader2 className="size-5 animate-spin text-pink" /> : <Search className="size-5 text-pink" />}
           <input

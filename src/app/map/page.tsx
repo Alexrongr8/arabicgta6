@@ -13,7 +13,7 @@ export default async function MapPage({ searchParams }: PageProps<"/map">) {
   const [locale, viewer] = await Promise.all([getLocale(), getViewer()]);
   if (!viewer.member) {
     return (
-      <main className="relative min-h-[calc(100dvh-60px)] overflow-hidden px-4 pt-10">
+      <main className="relative min-h-[calc(100dvh-64px)] overflow-hidden px-4 pt-10">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="/map/leonida-official-small.webp" alt="" className="pointer-events-none absolute inset-0 size-full object-cover opacity-40 blur-[2px]" />
         <div className="relative">

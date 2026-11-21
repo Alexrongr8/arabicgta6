@@ -1,9 +1,9 @@
-name: Auto-update content
+name: Radar (hourly content update)
 
 on:
   schedule:
-    # Every 6 hours. For hourly updates change to: "0 * * * *"
-    - cron: "0 */6 * * *"
+    # Every hour at minute 7. For every 6 hours use: "7 */6 * * *"
+    - cron: "7 * * * *"
   workflow_dispatch: {}
 
 concurrency:
@@ -13,7 +13,7 @@ concurrency:
 jobs:
   update:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 40
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -26,4 +26,9 @@ jobs:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          # Optional repo variables (Settings → Secrets and variables → Actions → Variables)
           OPENAI_MODEL: ${{ vars.OPENAI_MODEL }}
+          OPENAI_RADAR_MODEL: ${{ vars.OPENAI_RADAR_MODEL }}
+          RADAR_BEAMS: ${{ vars.RADAR_BEAMS }}
+          UPDATE_MAX_ITEMS: ${{ vars.UPDATE_MAX_ITEMS }}
+          ENRICH_PER_RUN: ${{ vars.ENRICH_PER_RUN }}

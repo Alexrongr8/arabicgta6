@@ -10,11 +10,11 @@ import { ThemeToggle } from "./ThemeToggle";
 export function Header({ locale, viewer, labels, theme }: { locale: Locale; viewer: Viewer; labels: Parameters<typeof TopLinks>[0]["labels"]; theme: "light" | "dark" }) {
   return (
     <header className="glass sticky top-0 z-40 border-b border-line">
-      <div className="mx-auto flex h-15 max-w-6xl items-center justify-between gap-2 px-3 md:px-4">
-        <Link href="/" aria-label={t(locale, "siteName")} className="flex items-center gap-1.5">
+      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-2 px-3 md:px-4">
+        <Link href="/" aria-label={t(locale, "siteName")} className="flex flex-col items-start gap-0.5" dir="ltr">
           <Logo />
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/img/flag-sa.svg" alt="" title={locale === "ar" ? "من السعودية" : "Made in Saudi Arabia"} className="h-3.5 w-auto rounded-[2px] shadow-sm" />
+          <img src="/img/flag-sa.svg" alt="" title={locale === "ar" ? "من السعودية" : "Made in Saudi Arabia"} className="h-3 w-auto rounded-[2px] shadow-sm" />
         </Link>
         <TopLinks labels={labels} />
         <div className="flex items-center gap-2">

@@ -13,7 +13,8 @@ import { Prose } from "@/components/Prose";
 import { SignInGate } from "@/components/SignInGate";
 import { StatusBadge } from "@/components/StatusBadge";
 import { ShareButton } from "@/components/ShareButton";
-import { Cover, imageCredit } from "@/components/Cover";
+import { CoverFigure } from "@/components/Cover";
+import { imageCredit } from "@/lib/image";
 
 export async function generateMetadata({ params }: PageProps<"/item/[slug]">): Promise<Metadata> {
   const { slug } = await params;
@@ -59,14 +60,7 @@ export default async function ItemPage({ params }: PageProps<"/item/[slug]">) {
 
       <article className="grid gap-6 lg:grid-cols-[1fr_300px]">
         <div className="min-w-0">
-          {item.image && (
-            <figure className="relative mb-4 overflow-hidden rounded-3xl border border-line bg-chip">
-              <Cover src={item.image} eager className="aspect-[16/9] w-full object-cover" alt={pick(item, "title", locale)} />
-              <figcaption className="absolute bottom-2 end-2 rounded-full bg-black/55 px-2 py-0.5 text-[10px] text-white/85" dir="ltr">
-                📷 {imageCredit(item.image)}
-              </figcaption>
-            </figure>
-          )}
+          {item.image && <CoverFigure src={item.image} alt={pick(item, "title", locale)} credit={imageCredit(item.image)} />}
           <header className="relative mb-5 overflow-hidden rounded-3xl border border-line p-5 shadow-sm md:p-7" style={{ background: `linear-gradient(150deg, ${c.color}30, var(--card) 70%)` }}>
             <CategoryIcon category={item.category} className="absolute -end-4 -top-4 size-32 opacity-15" style={{ color: c.color }} />
             <div className="relative mb-3 flex flex-wrap items-center gap-2">

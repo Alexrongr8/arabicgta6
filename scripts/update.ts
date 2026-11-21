@@ -1,119 +1,83 @@
 /**
- * Auto-update: searches the web for new GTA 6 information with OpenAI (web search tool),
- * then summarises, classifies, translates (Arabic + English) and publishes new entries.
- * Run by GitHub Actions every 6 hours (see .github/workflows/update.yml), or locally:
+ * The radar: every hour it sweeps several "beams" for new GTA 6 information —
+ * news sites (Google-style web search), Reddit, YouTube, Instagram/X/TikTok and
+ * streamers & celebrities (e.g. IShowSpeed) — then an editor pass writes deep
+ * bilingual (Arabic + English) articles for the new leads, with a cover image,
+ * and publishes them. Afterwards it deepens a few older short articles.
+ *
+ * Run by GitHub Actions (see .github/workflows/update.yml), or locally:
  *   npm run update            (publishes)
  *   npm run update -- --dry   (prints, publishes nothing)
  */
 import "./lib/env";
-import OpenAI from "openai";
-import { need } from "./lib/env";
 import { db } from "./lib/db";
+import { askJson, itemSchema, MAP_HINT, MODEL, RADAR_MODEL, STYLE_GUIDE, CATEGORY_GUIDE, youtubeThumb, type AiItem } from "./lib/ai";
+import { findImage } from "./lib/og";
+import { enrichBatch } from "./enrich";
 import { normalize, searchText, slugify } from "../src/lib/normalize";
-import { CATEGORIES } from "../src/lib/categories";
 
 const DRY = process.argv.includes("--dry");
-const MODEL = process.env.OPENAI_MODEL || "gpt-5.5";
-const MAX_NEW = Number(process.env.UPDATE_MAX_ITEMS || 12);
+const MAX_NEW = Number(process.env.UPDATE_MAX_ITEMS || 8);
+const ENRICH_PER_RUN = Number(process.env.ENRICH_PER_RUN || 4);
 
-const CATEGORY_SLUGS = CATEGORIES.map((c) => c.slug);
+type Beam = { id: string; label: string; domains?: string[]; focus: string };
 
-const itemSchema = {
+const BEAMS: Beam[] = [
+  {
+    id: "web",
+    label: "News & web (Google-style search)",
+    focus:
+      "official Rockstar Newswire / Take-Two announcements, patches and updates, sales, PC and GTA Online news, plus big guides on gaming sites (IGN, GameSpot, Kotaku, Eurogamer, VGC, Push Square, PC Gamer, GamesRadar, Polygon, Dexerto, Sportskeeda).",
+  },
+  {
+    id: "reddit",
+    label: "Reddit",
+    domains: ["reddit.com"],
+    focus: "posts in r/GTA6, r/GTA, r/GrandTheftAutoV_PC and similar: new secrets, easter eggs, glitches, money methods, weird or funny moments, choices and consequences that many players confirm in the comments.",
+  },
+  {
+    id: "youtube",
+    label: "YouTube",
+    domains: ["youtube.com"],
+    focus: "new videos (guides, secrets, glitches, money methods, rare weapons and cars, funny moments) from GTA creators — prefer videos with many views or from known GTA channels.",
+  },
+  {
+    id: "social",
+    label: "Instagram, X, TikTok & streamers",
+    domains: ["instagram.com", "x.com", "twitter.com", "tiktok.com", "twitch.tv", "kick.com"],
+    focus: "viral GTA 6 clips and posts, and what famous streamers and celebrities (e.g. IShowSpeed / Speed, Kai Cenat, xQc, MrBeast, famous Arab streamers) did or found while playing GTA 6.",
+  },
+  {
+    id: "creators-news",
+    label: "News about streamers & celebrities",
+    focus: "news articles about famous streamers, YouTubers, athletes or celebrities playing GTA 6 (e.g. IShowSpeed, Kai Cenat, xQc), viral moments, records and reactions.",
+  },
+];
+
+const leadSchema = {
   type: "object",
   additionalProperties: false,
-  required: [
-    "category", "status", "title_en", "title_ar", "summary_en", "summary_ar", "body_en", "body_ar",
-    "aliases", "tags", "facts", "region", "location", "related", "sources", "event_date",
-  ],
+  required: ["leads"],
   properties: {
-    category: { type: "string", enum: CATEGORY_SLUGS },
-    status: { type: "string", enum: ["official", "confirmed", "leak", "rumor"] },
-    title_en: { type: "string" },
-    title_ar: { type: "string" },
-    summary_en: { type: "string" },
-    summary_ar: { type: "string" },
-    body_en: { type: "string" },
-    body_ar: { type: "string" },
-    aliases: { type: "array", items: { type: "string" } },
-    tags: { type: "array", items: { type: "string" } },
-    facts: {
+    leads: {
       type: "array",
       items: {
         type: "object",
         additionalProperties: false,
-        required: ["k_en", "k_ar", "v_en", "v_ar"],
-        properties: { k_en: { type: "string" }, k_ar: { type: "string" }, v_en: { type: "string" }, v_ar: { type: "string" } },
+        required: ["headline", "gist", "url", "category", "confidence"],
+        properties: {
+          headline: { type: "string" },
+          gist: { type: "string" },
+          url: { type: "string" },
+          category: { type: "string" },
+          confidence: { type: "string", enum: ["high", "medium", "low"] },
+        },
       },
     },
-    region: { type: ["string", "null"], enum: ["Vice City", "Leonida Keys", "Grassrivers", "Port Gellhorn", "Ambrosia", "Mount Kalaga", "Leonida", null] },
-    location: {
-      type: ["object", "null"],
-      additionalProperties: false,
-      required: ["x", "y"],
-      properties: { x: { type: "number" }, y: { type: "number" } },
-    },
-    related: { type: "array", items: { type: "string" } },
-    sources: {
-      type: "array",
-      items: {
-        type: "object",
-        additionalProperties: false,
-        required: ["title", "url"],
-        properties: { title: { type: "string" }, url: { type: "string" } },
-      },
-    },
-    event_date: { type: ["string", "null"], description: "ISO date of the news/event if known" },
   },
 } as const;
 
-const responseSchema = {
-  type: "object",
-  additionalProperties: false,
-  required: ["items"],
-  properties: { items: { type: "array", items: itemSchema } },
-} as const;
-
-type NewItem = {
-  category: string;
-  status: "official" | "confirmed" | "leak" | "rumor";
-  title_en: string;
-  title_ar: string;
-  summary_en: string;
-  summary_ar: string;
-  body_en: string;
-  body_ar: string;
-  aliases: string[];
-  tags: string[];
-  facts: { k_en: string; k_ar: string; v_en: string; v_ar: string }[];
-  region: string | null;
-  location: { x: number; y: number } | null;
-  related: string[];
-  sources: { title: string; url: string }[];
-  event_date: string | null;
-};
-
-const REGION_HINT = `Map coordinates are pixels on Rockstar's official Leonida map poster (2805 wide x 3840 tall, y grows downward). Reference points: Vice City (1880,1995), Downtown (1968,2053), Little Cuba (1853,2047), Vice Beach (2390,1880), Ocean Beach (2418,2006), Belville (1845,1520), Tequesta (1890,2285), VCIA airport (1590,2190), Hamlet (1575,2632), Grassrivers (1265,2545), Pelican Valley (1462,2812), Port Gellhorn (855,1370), Capri (805,2025), Ambrosia (1560,1368), Lake Leonida (1697,1205), Mount Kalaga National Park (1395,870), Millport (1848,883), Key Lento (1595,3197), Southwind (918,3282), Riquezas Keys (612,3187). Only give a location when the place is clearly known; otherwise null.`;
-
-function buildPrompt(existing: { slug: string; title_en: string }[], since: string) {
-  return `You are the editor of an Arabic-first GTA 6 (Grand Theft Auto VI) fan encyclopedia. GTA VI launched on 19 November 2026 on PS5 and Xbox Series X|S.
-
-Search the web for NEW information about GTA 6 published since ${since}: news (patches, sales, announcements, PC/Online), secrets & easter eggs, glitches, money methods, rare/unique weapon locations, places & landmarks, strange things, characters, vehicles, and gameplay tips (always give PlayStation AND Xbox buttons for controller tips).
-
-Rules:
-- Return at most ${MAX_NEW} items, only things NOT already covered by the existing entries listed below (skip duplicates or near-duplicates, even if worded differently).
-- Prefer reputable sources (Rockstar Newswire, Take-Two, IGN, GameSpot, Kotaku, Eurogamer, VGC, Push Square, PC Gamer, GamesRadar, Polygon) and well-sourced community finds. Every item needs at least one real source URL you actually found.
-- status: "official" = from Rockstar/Take-Two; "confirmed" = verified in the released game by multiple players/outlets; "leak" = from leaks/dataminers; "rumor" = unverified/single source. Be strict and honest.
-- Write Arabic in clear Modern Standard Arabic with a friendly Gulf-gamer tone. Keep in-game proper names (places, weapons, vehicles, characters, missions) in English Latin script inside the Arabic text.
-- summary: 1-2 sentences. body: 2-5 short paragraphs; use lines starting with "- " for lists. No markdown headings, no links in the body.
-- aliases: alternative names/spellings in English AND Arabic that people might search for.
-- facts: short key/value pairs for an infobox (e.g. price, location, how to unlock, buttons).
-- related: slugs from the existing list that are closely related (or []).
-- ${REGION_HINT}
-- If nothing new and credible exists, return {"items": []}.
-
-Existing entries (slug — title):
-${existing.map((e) => `${e.slug} — ${e.title_en}`).join("\n")}`;
-}
+type Lead = { headline: string; gist: string; url: string; category: string; confidence: string; beam: string };
 
 function similar(a: string, b: string) {
   const ta = new Set(normalize(a).split(" ").filter((w) => w.length > 2));
@@ -124,78 +88,148 @@ function similar(a: string, b: string) {
   return inter / Math.min(ta.size, tb.size);
 }
 
-async function main() {
-  const openai = new OpenAI({ apiKey: need("OPENAI_API_KEY") });
-  const supabase = db();
+const cleanUrl = (u: string) => u.replace(/[?#].*$/, "").replace(/\/$/, "");
 
+async function sweep(beam: Beam, since: string, knownTitles: string[]): Promise<Lead[]> {
+  const prompt = `You are a radar scanning for NEW Grand Theft Auto VI (GTA 6) information published since ${since}. GTA VI launched on 19 November 2026 on PS5 and Xbox Series X|S.
+Source to scan: ${beam.label}. Focus: ${beam.focus}
+
+Return up to 8 leads that are genuinely new and interesting for players (skip anything already in the list below, even if worded differently). Each lead: a short headline, a 1-2 sentence gist with the key facts, the best URL you actually found, a category from this list, and your confidence that it's real.
+Categories:
+${CATEGORY_GUIDE}
+
+Already published (titles):
+${knownTitles.slice(0, 400).join("\n")}`;
+  try {
+    const r = await askJson<{ leads: Omit<Lead, "beam">[] }>({ model: RADAR_MODEL, prompt, schema: leadSchema as unknown as Record<string, unknown>, name: "radar_leads", domains: beam.domains });
+    return (r.leads ?? []).map((l) => ({ ...l, beam: beam.id }));
+  } catch (e) {
+    console.warn(`beam ${beam.id} failed:`, (e as Error).message);
+    return [];
+  }
+}
+
+async function main() {
+  const supabase = db();
   const { data: existing, error } = await supabase
     .from("items")
     .select("slug,title_en,sources,published_at")
     .order("published_at", { ascending: false })
-    .limit(1500);
+    .limit(3000);
   if (error) throw error;
   const known = existing ?? [];
-  const knownUrls = new Set(known.flatMap((k) => ((k.sources as { url: string }[]) ?? []).map((s) => s.url.replace(/\/$/, ""))));
+  const knownUrls = new Set(known.flatMap((k) => ((k.sources as { url: string }[]) ?? []).map((s) => cleanUrl(s.url))));
   const knownSlugs = new Set(known.map((k) => k.slug));
 
   const { data: lastRun } = await supabase.from("update_runs").select("ran_at").eq("kind", "update").order("ran_at", { ascending: false }).limit(1).maybeSingle();
-  const since = new Date(new Date(lastRun?.ran_at ?? Date.now() - 2 * 864e5).getTime() - 12 * 3600e3).toISOString().slice(0, 16) + "Z";
+  const since = new Date(new Date(lastRun?.ran_at ?? Date.now() - 2 * 864e5).getTime() - 6 * 3600e3).toISOString().slice(0, 16) + "Z";
 
-  console.log(`Model ${MODEL}; ${known.length} existing items; searching since ${since}`);
-  const res = await openai.responses.create({
-    model: MODEL,
-    tools: [{ type: "web_search" }],
-    input: buildPrompt(known.map((k) => ({ slug: k.slug, title_en: k.title_en })), since),
-    text: { format: { type: "json_schema", name: "gta6_items", schema: responseSchema as unknown as Record<string, unknown>, strict: true } },
-  });
+  const beams = (process.env.RADAR_BEAMS ?? "").split(",").map((s) => s.trim()).filter(Boolean);
+  const active = beams.length ? BEAMS.filter((b) => beams.includes(b.id)) : BEAMS;
+  console.log(`Radar: ${active.map((b) => b.id).join(", ")} | model ${RADAR_MODEL}/${MODEL} | since ${since}`);
 
-  const parsed = JSON.parse(res.output_text || '{"items":[]}') as { items: NewItem[] };
+  // 1) Sweep all beams in parallel.
+  const knownTitles = known.map((k) => k.title_en);
+  const leads = (await Promise.all(active.map((b) => sweep(b, since, knownTitles)))).flat();
+
+  // 2) Keep fresh, distinct, credible leads.
+  const fresh: Lead[] = [];
+  for (const l of leads) {
+    if (!/^https?:\/\//.test(l.url) || l.confidence === "low") continue;
+    if (knownUrls.has(cleanUrl(l.url))) continue;
+    if (known.some((k) => similar(k.title_en, l.headline) >= 0.75)) continue;
+    if (fresh.some((f) => similar(f.headline, l.headline) >= 0.7)) continue;
+    fresh.push(l);
+  }
+  fresh.sort((a, b) => (a.confidence === "high" ? 0 : 1) - (b.confidence === "high" ? 0 : 1));
+  const picked = fresh.slice(0, MAX_NEW);
+  console.log(`Leads: ${leads.length} found, ${fresh.length} fresh, writing ${picked.length}`);
+  for (const l of picked) console.log(`  [${l.beam}/${l.category}] ${l.headline} — ${l.url}`);
+
+  // 3) Editor pass: one deep article per lead.
   const accepted: Record<string, unknown>[] = [];
-  for (const it of parsed.items ?? []) {
-    const urls = it.sources.map((s) => s.url.replace(/\/$/, "")).filter((u) => /^https?:\/\//.test(u));
-    if (!urls.length) continue;
-    if (urls.every((u) => knownUrls.has(u)) && it.category !== "news") continue;
-    if (known.some((k) => similar(k.title_en, it.title_en) >= 0.8)) continue;
-    if (accepted.some((a) => similar(String(a.title_en), it.title_en) >= 0.8)) continue;
+  for (const lead of picked) {
+    const prompt = `You are the editor of an Arabic-first GTA 6 fan encyclopedia. Research this lead on the web and write ONE complete article about it.
 
-    let slug = slugify(it.title_en) || `item-${Date.now()}`;
-    while (knownSlugs.has(slug)) slug = `${slug}-${Math.random().toString(36).slice(2, 6)}`;
-    knownSlugs.add(slug);
+Lead: ${lead.headline}
+Gist: ${lead.gist}
+Found at: ${lead.url} (via ${lead.beam})
 
-    const loc = it.location && it.location.x >= 0 && it.location.x <= 2805 && it.location.y >= 0 && it.location.y <= 3840 ? it.location : null;
-    const published = it.category === "news" && it.event_date && !Number.isNaN(Date.parse(it.event_date)) && Date.parse(it.event_date) <= Date.now() ? new Date(it.event_date).toISOString() : new Date().toISOString();
-    const row = {
-      slug,
-      category: it.category,
-      status: it.status,
-      title_en: it.title_en.trim(),
-      title_ar: it.title_ar.trim(),
-      summary_en: it.summary_en.trim(),
-      summary_ar: it.summary_ar.trim(),
-      body_en: it.body_en.trim(),
-      body_ar: it.body_ar.trim(),
-      aliases: it.aliases.slice(0, 15),
-      tags: it.tags.slice(0, 10),
-      facts: it.facts.slice(0, 10),
-      location: loc,
-      region: it.region,
-      related: it.related.filter((r) => knownSlugs.has(r)).slice(0, 8),
-      sources: it.sources.filter((s) => /^https?:\/\//.test(s.url)).slice(0, 6),
-      published_at: published,
-      origin: "auto",
-    };
-    accepted.push({ ...row, search_text: searchText(row) });
+Rules:
+- Verify with at least one more source when possible; include every source URL you used (the lead URL first).
+- category from: ${CATEGORY_GUIDE.replace(/\n/g, " | ")}
+- status: "official" = Rockstar/Take-Two; "confirmed" = verified in the released game by several players/outlets; "leak" = leaks/dataminers; "rumor" = unverified or single source. Be strict.
+- summary: 1-2 sentences.
+- aliases: other names/spellings people might search, in English AND Arabic.
+- facts: 3-8 short key/value pairs for an infobox (location, price, how to unlock, buttons, date...).
+- related: slugs from this list only when clearly related, else []: ${[...knownSlugs].slice(0, 600).join(", ")}
+- ${MAP_HINT}
+${STYLE_GUIDE}`;
+    try {
+      const it = await askJson<AiItem>({ prompt, schema: itemSchema as unknown as Record<string, unknown>, name: "gta6_item" });
+      if (!it.title_en || !it.body_ar || it.body_ar.length < 400) continue;
+      if (accepted.some((a) => similar(String(a.title_en), it.title_en) >= 0.75)) continue;
+
+      let slug = slugify(it.title_en) || `item-${Date.now()}`;
+      while (knownSlugs.has(slug)) slug = `${slug}-${Math.random().toString(36).slice(2, 6)}`;
+      knownSlugs.add(slug);
+
+      const sources = [{ title: lead.headline, url: lead.url }, ...it.sources]
+        .filter((s, i, arr) => /^https?:\/\//.test(s.url) && arr.findIndex((x) => cleanUrl(x.url) === cleanUrl(s.url)) === i)
+        .slice(0, 6);
+      let image: string | null = null;
+      for (const s of sources) {
+        image = youtubeThumb(s.url) ?? (await findImage(s.url));
+        if (image) break;
+      }
+      const loc = it.location && it.location.x >= 0 && it.location.x <= 2805 && it.location.y >= 0 && it.location.y <= 3840 ? it.location : null;
+      const published =
+        it.category === "news" && it.event_date && !Number.isNaN(Date.parse(it.event_date)) && Date.parse(it.event_date) <= Date.now()
+          ? new Date(it.event_date).toISOString()
+          : new Date().toISOString();
+      const row = {
+        slug,
+        category: it.category,
+        status: it.status,
+        title_en: it.title_en.trim(),
+        title_ar: it.title_ar.trim(),
+        summary_en: it.summary_en.trim(),
+        summary_ar: it.summary_ar.trim(),
+        body_en: it.body_en.trim(),
+        body_ar: it.body_ar.trim(),
+        aliases: it.aliases.slice(0, 15),
+        tags: [...it.tags.slice(0, 9), `via:${lead.beam}`],
+        facts: it.facts.slice(0, 10),
+        location: loc,
+        region: it.region,
+        related: it.related.filter((r) => knownSlugs.has(r)).slice(0, 8),
+        sources,
+        image,
+        published_at: published,
+        origin: "auto",
+      };
+      accepted.push({ ...row, search_text: searchText(row) });
+      console.log(` + [${row.category}/${row.status}] ${row.title_en}${image ? " 🖼" : ""}`);
+    } catch (e) {
+      console.warn("editor failed for", lead.headline, (e as Error).message);
+    }
   }
 
-  console.log(`Model returned ${parsed.items?.length ?? 0}, accepted ${accepted.length}`);
-  for (const a of accepted) console.log(` + [${a.category}/${a.status}] ${a.title_en}`);
-  if (DRY) return;
-
-  if (accepted.length) {
+  if (!DRY && accepted.length) {
     const { error: insErr } = await supabase.from("items").insert(accepted);
     if (insErr) throw insErr;
   }
-  await supabase.from("update_runs").insert({ kind: "update", added: accepted.length, note: `${MODEL}: ${accepted.map((a) => a.slug).join(", ").slice(0, 900)}` });
+
+  // 4) Deepen a few older short articles each run, until every page is detailed.
+  const enriched = await enrichBatch(ENRICH_PER_RUN, DRY);
+
+  if (!DRY) {
+    await supabase.from("update_runs").insert({
+      kind: "update",
+      added: accepted.length,
+      note: `beams=${active.map((b) => b.id).join("+")} leads=${leads.length} new=${accepted.map((a) => a.slug).join(", ").slice(0, 700)} enriched=${enriched}`,
+    });
+  }
 }
 
 main().catch((e) => {

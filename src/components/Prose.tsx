@@ -6,6 +6,13 @@ export function Prose({ text }: { text: string }) {
     <div className="prose-item text-[15.5px]">
       {blocks.map((b, i) => {
         const lines = b.split("\n").map((l) => l.trim());
+        if (lines.length === 1 && /^#{2,3} /.test(lines[0])) {
+          return (
+            <h2 key={i} className="mt-6 mb-2 text-[20px] text-pink">
+              <Bidi text={lines[0].replace(/^#{2,3} /, "")} />
+            </h2>
+          );
+        }
         if (lines.every((l) => l.startsWith("- "))) {
           return (
             <ul key={i}>

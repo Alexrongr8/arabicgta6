@@ -114,7 +114,7 @@ export default function LeonidaMap({ items, locale, focus, labels }: { items: It
     });
 
   return (
-    <div className="relative h-[calc(100dvh-60px)] w-full overflow-hidden">
+    <div className="relative h-[calc(100dvh-64px)] w-full overflow-hidden">
       {/* Leaflet must run in an LTR box, otherwise overlays are mispositioned in RTL pages */}
       <div dir="ltr" className="absolute inset-0">
       <MapContainer
