@@ -21,3 +21,4 @@
 | 2026-11-22 | Claude | Owner: publish even without a verifiable source, labelled. Unsourced drafts now publish as rumor with tag source-unknown, shown as a "مصدر غير معروف" badge on cards and article pages. Only off-topic/incomplete or duplicate drafts are held. |
 | 2026-11-22 | Claude | Owner: Shorts rail moved below the welcome hero. |
 | 2026-11-22 | Claude | Owner: share thumbnails redesigned light/Arabic: photo in a rounded frame + Arabic title column, category pill, Saudi flag + ARABIC GTA6, domain pill. Site card (/opengraph-image) now uses the same sharp/Pango renderer. |
+| 2026-11-22 | Claude | Owner: use real in-game images. Replaced Rockstar artwork (out-now, rooftop) with official in-game screenshots in category fallbacks, seed + DB covers; site share card uses the Cheetah screenshot. |

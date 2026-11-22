@@ -6,10 +6,10 @@ import IMAGES from "./images.json";
 const OFFICIAL_IMAGES: Record<string, string> = {
   "lucia-caminos": "/img/lucia.webp",
   "jason-duval": "/img/jason-lucia.webp",
-  "gta-6-release-november-19-2026": "/img/out-now.webp",
-  "day-one-sales-record-3-79-billion": "/img/rooftop.webp",
+  "gta-6-release-november-19-2026": "/img/vice-city.webp",
+  "day-one-sales-record-3-79-billion": "/img/cheetah.webp",
   "metacritic-99-score": "/img/jason-lucia.webp",
-  "trailer-2-may-2025": "/img/rooftop.webp",
+  "trailer-2-may-2025": "/img/vintage.webp",
   "price-and-editions": "/img/ultimate.webp",
   "which-edition-to-buy": "/img/ultimate.webp",
   "grotti-cheetah-95": "/img/cheetah.webp",

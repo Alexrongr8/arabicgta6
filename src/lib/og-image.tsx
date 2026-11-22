@@ -236,7 +236,7 @@ export async function renderItemOg(slug: string): Promise<Response> {
 /** Site-wide share card (homepage and pages without their own image). */
 export async function renderSiteOg(): Promise<Response> {
   const { png, full } = await renderCard({
-    cover: "/img/thumb/vice-city-1280.webp",
+    cover: "/img/thumb/cheetah-1280.webp",
     title: "كل أسرار GTA 6 بالعربي",
     subtitle: "أخبار وأسرار وفلوس وخريطة وشورتس، تتحدّث كل ساعة",
     badge: { text: "موسوعة GTA 6 الأولى بالعربي", color: "#ff3d8b" },

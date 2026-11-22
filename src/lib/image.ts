@@ -10,8 +10,8 @@ export function imageCredit(src: string): string {
 
 /** Official Rockstar Games media used when an article has no picture of its own, so every card has an image. */
 const FALLBACK: Record<string, string> = {
-  news: "/img/out-now.webp",
-  secrets: "/img/rooftop.webp",
+  news: "/img/vice-city.webp",
+  secrets: "/img/lucia.webp",
   money: "/img/jason-lucia.webp",
   weapons: "/img/revolvers.webp",
   places: "/img/vice-city.webp",
@@ -19,9 +19,9 @@ const FALLBACK: Record<string, string> = {
   vehicles: "/img/cheetah.webp",
   glitches: "/img/lucia.webp",
   strange: "/img/vintage.webp",
-  funny: "/img/rooftop.webp",
+  funny: "/img/jason-lucia.webp",
   choices: "/img/lucia.webp",
-  streamers: "/img/out-now.webp",
+  streamers: "/img/cheetah.webp",
   tips: "/img/ultimate.webp",
 };
 
