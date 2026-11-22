@@ -35,8 +35,8 @@ export default async function Home() {
   const challenge = weeklyChallenge();
   return (
     <main>
-      <ShortsRail shorts={shorts} locale={locale} />
       <Hero locale={locale} total={total} />
+      <ShortsRail shorts={shorts} locale={locale} />
       <DailyCards secret={secret} challenge={challenge} locale={locale} />
 
       <Section title={t(locale, "featured")} locale={locale}>
