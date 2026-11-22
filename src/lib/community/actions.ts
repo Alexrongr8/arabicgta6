@@ -4,7 +4,6 @@ import { createClient, supabaseConfigured } from "@/lib/supabase/server";
 import { adminClient, adminConfigured, isOwner } from "@/lib/admin";
 import { CATEGORIES } from "@/lib/categories";
 import { profilePresentation } from "@/lib/profile-presentation";
-import { publicRead } from "@/lib/public-read";
 import { COMMUNITY_ID, communityTarget, communityVideo } from "./validation";
 
 type Failure = "auth" | "invalid" | "limit" | "offline" | "unavailable";
@@ -27,7 +26,8 @@ function checked(error: { code?: string; message?: string } | null) {
   if (!error) return;
   if (error.code === "P0001" && error.message === "community_limit") throw new ActionFailure("limit");
   if (error.code === "28000") throw new ActionFailure("auth");
-  if (["22023", "22P02", "23503", "23514"].includes(error.code ?? "")) throw new ActionFailure("invalid");
+  if (error.code === "22023" || error.code === "22P02" || error.code?.startsWith("23")) throw new ActionFailure("invalid");
+  console.error("community write failed", String(error.code ?? "").slice(0, 10), String(error.message ?? "").slice(0, 120));
   throw new ActionFailure("unavailable");
 }
 
@@ -50,20 +50,6 @@ function targetFor(target: unknown, path: unknown) {
   return parsed;
 }
 
-async function requireTarget(supabase: Awaited<ReturnType<typeof createClient>>, target: NonNullable<ReturnType<typeof communityTarget>>) {
-  const row = await publicRead("community target", (signal) => supabase.from(target.table).select(target.column)
-    .eq(target.column, target.id).abortSignal(signal).maybeSingle());
-  if (!row) throw new ActionFailure("invalid");
-}
-
-async function checkAllowance(m: Awaited<ReturnType<typeof me>>, table: "comments" | "submissions", limit: number) {
-  const since = new Date(Date.now() - 864e5).toISOString();
-  const { count, error } = await m.supabase.from(table).select("id", { count: "exact", head: true }).eq("user_id", m.user.id).gte("created_at", since);
-  checked(error);
-  if (count === null || !Number.isInteger(count) || count < 0) throw new ActionFailure("unavailable");
-  if (count >= limit) throw new ActionFailure("limit");
-}
-
 function refreshTarget(target: NonNullable<ReturnType<typeof communityTarget>>) {
   revalidatePath(target.path);
   if (target.table === "submissions") revalidatePath("/community");
@@ -78,10 +64,10 @@ export async function addComment(target: string, body: string, path: string): Pr
     const text = body.trim();
     if (text.length < 2 || text.length > 1500 || LINK.test(text)) throw new ActionFailure("invalid");
     const m = await me();
-    await requireTarget(m.supabase, parsed);
-    await checkAllowance(m, "comments", 40);
-    const { error } = await m.supabase.from("comments").insert({ target, user_id: m.user.id, author_name: m.name, author_avatar: m.avatar, body: text });
+    // Database (add_comment RPC + trigger) stamps author, verifies the target and enforces the quota atomically.
+    const { data, error } = await m.supabase.rpc("add_comment", { p_target: target, p_body: text });
     checked(error);
+    if (typeof data !== "string" || !data) throw new ActionFailure("unavailable");
     refreshTarget(parsed);
   });
 }
@@ -91,10 +77,7 @@ export async function vote(target: string, value: 1 | -1 | 0, path: string): Pro
     const parsed = targetFor(target, path);
     if (value !== -1 && value !== 0 && value !== 1) throw new ActionFailure("invalid");
     const m = await me();
-    await requireTarget(m.supabase, parsed);
-    const { error } = value === 0
-      ? await m.supabase.from("votes").delete().eq("target", target).eq("user_id", m.user.id)
-      : await m.supabase.from("votes").upsert({ target, user_id: m.user.id, value });
+    const { error } = await m.supabase.rpc("set_vote", { p_target: target, p_value: value });
     checked(error);
     refreshTarget(parsed);
   });
@@ -116,10 +99,9 @@ export async function submitDiscovery(form: FormData): Promise<Result> {
     const video_url = communityVideo(video);
     if (video && !video_url) throw new ActionFailure("invalid");
     const m = await me();
-    await checkAllowance(m, "submissions", 5);
-    const { error } = await m.supabase.from("submissions")
-      .insert({ user_id: m.user.id, author_name: m.name, author_avatar: m.avatar, title, body, place, video_url, category });
+    const { data, error } = await m.supabase.rpc("submit_discovery", { p_title: title, p_body: body, p_category: category, p_place: place, p_video_url: video_url ?? null });
     checked(error);
+    if (typeof data !== "string" || !data) throw new ActionFailure("unavailable");
     revalidatePath("/community");
   });
 }

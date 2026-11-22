@@ -29,6 +29,7 @@ function harness({ configured = true, owner = false, admin = true, auth, handler
     return q;
   }
   function defaultResult(call) {
+    if (call.rpc) return { data: call.table === 'set_vote' ? null : SUB, error: null };
     if (call.ops.some(o => o[0] === 'update')) return { data: { id: ID, target }, error: null };
     if (call.ops.some(o => o[0] === 'select' && o[2]?.head)) return { count: 0, data: null, error: null };
     if (call.ops.some(o => o[0] === 'maybeSingle')) return { data: { id: SUB, slug: 'guide' }, error: null };
@@ -62,7 +63,8 @@ function form(values = {}) {
   for (const [key, value] of Object.entries({ title: 'Useful discovery', body: 'Useful player discovery with enough detail.', category: 'tips', place: '', video: '', ...values })) f.set(key, value);
   return f;
 }
-const wrote = h => h.calls.filter(c => c.ops.some(o => ['insert', 'update', 'delete', 'upsert'].includes(o[0])));
+const wrote = h => h.calls.filter(c => c.rpc || c.ops.some(o => ['insert', 'update', 'delete', 'upsert'].includes(o[0])));
+const rpcArgs = (h, name) => h.calls.find(c => c.rpc && c.table === name)?.ops.find(o => o[0] === 'select')[1];
 const rejected = async (p, error) => { const result = await p; assert.equal(result.ok, false); assert.equal(result.error, error); };
 const flush = async () => { for (let n = 0; n < 20; n++) await Promise.resolve(); };
 let passed = 0;
@@ -85,39 +87,40 @@ await check('fresh authentication is required and outages are distinct from sign
   }
   const offline = harness({ configured: false }); await rejected(offline.load('src/lib/community/actions.ts').vote(target, 1, route), 'offline'); assert.equal(offline.authReads(), 0);
 });
-await check('missing targets cannot receive writes, and lookup failure is not missing content', async () => {
-  for (const error of [null, { message: 'database down' }]) {
-    const h = harness({ handler: () => ({ data: null, error }) }); await rejected(h.load('src/lib/community/actions.ts').vote(target, 1, route), error ? 'unavailable' : 'invalid'); assert.equal(wrote(h).length, 0);
+await check('database target and validation guards map to invalid, transport failures stay unavailable', async () => {
+  for (const [error, expected] of [[{ code: '22023', message: 'community_invalid' }, 'invalid'], [{ code: '23503' }, 'invalid'], [{ message: 'database down' }, 'unavailable']]) {
+    const h = harness({ handler: () => ({ data: null, error }) }); await rejected(h.load('src/lib/community/actions.ts').vote(target, 1, route), expected); assert.equal(h.refreshed.length, 0);
   }
 });
-await check('vote insert and removal check errors without reporting success or revalidating', async () => {
-  for (const value of [-1, 0, 1]) {
-    let h; h = harness({ handler: c => c.table === 'votes' ? { data: null, error: { code: '42501', message: 'private failure' } } : h.defaultResult(c) });
-    await rejected(h.load('src/lib/community/actions.ts').vote(target, value, route), 'unavailable'); assert.equal(h.refreshed.length, 0);
+await check('vote RPC errors are reported without success or revalidation', async () => {
+  for (const value of [-1, 0, 1]) for (const [code, expected] of [['42501', 'unavailable'], ['42883', 'unavailable'], ['08006', 'unavailable']]) {
+    const h = harness({ handler: c => c.rpc ? { data: null, error: { code, message: 'private failure' } } : h.defaultResult(c) });
+    await rejected(h.load('src/lib/community/actions.ts').vote(target, value, route), expected); assert.equal(h.refreshed.length, 0);
   }
 });
-await check('successful votes derive only target and community refresh paths', async () => {
+await check('successful votes use the set_vote RPC and derive only target and community refresh paths', async () => {
   const h = harness(), a = h.load('src/lib/community/actions.ts'); assert.equal((await a.vote('sub:' + SUB, 1, '/community')).ok, true);
   assert.deepEqual(h.refreshed, ['/community/' + SUB, '/community']);
-  const payload = wrote(h)[0].ops.find(o => o[0] === 'upsert')[1]; assert.equal(payload.user_id, ID); assert.equal(payload.value, 1);
+  assert.deepEqual({ ...rpcArgs(h, 'set_vote') }, { p_target: 'sub:' + SUB, p_value: 1 });
+  assert.equal(h.calls.filter(c => !c.rpc).length, 0);
 });
-await check('editable auth metadata cannot crash string methods or store unsafe avatars', async () => {
+await check('comments go through add_comment without client-supplied identity fields', async () => {
   const h = harness(); h.user.user_metadata = { full_name: { x: 'unsafe' }, name: ['unsafe'], avatar_url: 'javascript:alert(1)' };
-  assert.equal((await h.load('src/lib/community/actions.ts').addComment(target, 'Valid comment', route)).ok, true);
-  const row = wrote(h)[0].ops.find(o => o[0] === 'insert')[1]; assert.equal(row.author_name, 'Player'); assert.equal(row.author_avatar, null); assert.equal(row.user_id, ID);
+  assert.equal((await h.load('src/lib/community/actions.ts').addComment(target, '  Valid comment ', route)).ok, true);
+  assert.deepEqual({ ...rpcArgs(h, 'add_comment') }, { p_target: target, p_body: 'Valid comment' });
 });
 await check('comment runtime types, lengths and links fail without mutation', async () => {
   const h = harness(), a = h.load('src/lib/community/actions.ts');
   for (const text of [null, {}, 'x', 'a'.repeat(1501), 'Visit https://spam.test', 'Visit www.spam.test']) await rejected(a.addComment(target, text, route), 'invalid');
   assert.equal(h.authReads(), 0); assert.equal(wrote(h).length, 0);
 });
-await check('failed or missing quota counts fail closed and daily limits remain enforced', async () => {
-  for (const count of [null, NaN, -1, 40]) {
-    let h; h = harness({ handler: c => c.ops.some(o => o[0] === 'select' && o[2]?.head) ? { count, data: null, error: null } : h.defaultResult(c) });
-    await rejected(h.load('src/lib/community/actions.ts').addComment(target, 'Valid comment', route), count === 40 ? 'limit' : 'unavailable'); assert.equal(wrote(h).length, 0);
+await check('database quota limits map to limit and a missing returned id is not success', async () => {
+  const limited = harness({ handler: c => c.rpc ? { data: null, error: { code: 'P0001', message: 'community_limit' } } : limited.defaultResult(c) });
+  await rejected(limited.load('src/lib/community/actions.ts').addComment(target, 'Valid comment', route), 'limit');
+  for (const data of [null, '', 7]) {
+    const h = harness({ handler: c => c.rpc ? { data, error: null } : h.defaultResult(c) });
+    await rejected(h.load('src/lib/community/actions.ts').submitDiscovery(form()), 'unavailable'); assert.equal(h.refreshed.length, 0);
   }
-  let h; h = harness({ handler: c => c.ops.some(o => o[0] === 'select' && o[2]?.head) ? { count: 0, error: { message: 'down' } } : h.defaultResult(c) });
-  await rejected(h.load('src/lib/community/actions.ts').submitDiscovery(form()), 'unavailable'); assert.equal(wrote(h).length, 0);
 });
 await check('submission form types, media hosts, credentials and oversized input are rejected', async () => {
   const h = harness(), a = h.load('src/lib/community/actions.ts');
@@ -133,9 +136,10 @@ await check('submission form types, media hosts, credentials and oversized input
 });
 await check('valid discovery preserves bounded fields and maps known DB guards without leaking errors', async () => {
   const h = harness(); assert.equal((await h.load('src/lib/community/actions.ts').submitDiscovery(form({ video: 'https://youtu.be/dQw4w9WgXcQ' }))).ok, true);
-  assert.equal(wrote(h)[0].ops.find(o => o[0] === 'insert')[1].video_url, 'https://youtu.be/dQw4w9WgXcQ');
+  assert.equal(rpcArgs(h, 'submit_discovery').p_video_url, 'https://youtu.be/dQw4w9WgXcQ');
+  assert.equal(rpcArgs(h, 'submit_discovery').p_place, null);
   for (const [error, expected] of [[{ code: 'P0001', message: 'community_limit' }, 'limit'], [{ code: '22023', message: 'private detail' }, 'invalid'], [{ code: '28000' }, 'auth'], [{ code: '08006', message: 'private detail' }, 'unavailable']]) {
-    let x; x = harness({ handler: c => c.ops.some(o => o[0] === 'insert') ? { error } : x.defaultResult(c) });
+    const x = harness({ handler: c => c.rpc ? { data: null, error } : x.defaultResult(c) });
     await rejected(x.load('src/lib/community/actions.ts').submitDiscovery(form()), expected); assert.equal(x.refreshed.length, 0);
   }
 });
