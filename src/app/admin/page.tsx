@@ -83,6 +83,9 @@ export default async function Admin() {
   return (
     <main className="mx-auto max-w-6xl px-4 pt-6">
       <h1 className="mb-1 text-2xl">{ar ? "لوحة المالك — جمهورك" : "Owner dashboard — your audience"}</h1>
+      <a href="/admin/review" className="mb-3 inline-flex h-11 items-center rounded-xl bg-chip px-4 text-[13px] font-extrabold text-pink">
+        {ar ? "📡 مسودات الرادار تنتظر مراجعتك" : "📡 Radar drafts awaiting review"}
+      </a>
       <p className="mb-5 text-xs text-dim">{ar ? "مرئية لك فقط. الموقع الجغرافي تقريبي من عنوان IP. الزائر = متصفح/جهاز مميز." : "Visible only to you. Location is approximate (IP). A visitor = a distinct browser/device."}</p>
 
       {sampled && <p role="status" className="mb-5 rounded-xl border border-amber-400/40 bg-amber-400/10 p-3 text-sm">
