@@ -3,10 +3,7 @@ import { useState, useTransition } from "react";
 import Link from "next/link";
 import { addComment } from "@/lib/community/actions";
 
-const ERR = {
-  ar: { auth: "سجّل دخولك عشان تعلّق.", invalid: "التعليق قصير أو فيه روابط.", limit: "وصلت الحد اليومي للتعليقات.", offline: "التعليقات تشتغل بعد ربط قاعدة البيانات." },
-  en: { auth: "Sign in to comment.", invalid: "Comment too short or contains links.", limit: "Daily comment limit reached.", offline: "Comments work once the database is connected." },
-};
+import { communityFeedback } from "@/lib/community/feedback";
 
 export function CommentForm({ target, path, ar, signedIn }: { target: string; path: string; ar: boolean; signedIn: boolean }) {
   const [text, setText] = useState("");
@@ -22,19 +19,27 @@ export function CommentForm({ target, path, ar, signedIn }: { target: string; pa
     <form
       onSubmit={(e) => {
         e.preventDefault();
+        if (pending) return;
         start(async () => {
-          const r = await addComment(target, text, path);
-          if (r.ok) {
-            setText("");
-            setMsg({ ok: true, text: ar ? "تم نشر تعليقك." : "Your comment was posted." });
-          } else setMsg({ ok: false, text: ERR[ar ? "ar" : "en"][r.error] });
+          setMsg(null);
+          try {
+            const r = await addComment(target, text, path);
+            if (r.ok) {
+              setText("");
+              setMsg({ ok: true, text: ar ? "تم نشر تعليقك." : "Your comment was posted." });
+            } else setMsg({ ok: false, text: communityFeedback(r.error, ar, "comment") });
+          } catch {
+            setMsg({ ok: false, text: communityFeedback("unavailable", ar, "comment") });
+          }
         });
       }}
       className="space-y-2"
+      aria-busy={pending}
     >
       <label className="block space-y-1.5">
         <span className="block text-[13px] font-bold">{ar ? "تعليقك" : "Your comment"}</span>
         <textarea
+          disabled={pending}
           value={text}
           onChange={(e) => setText(e.target.value)}
           maxLength={1500}

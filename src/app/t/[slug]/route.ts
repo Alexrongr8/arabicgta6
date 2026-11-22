@@ -10,8 +10,9 @@ const LONG = "public, max-age=86400, s-maxage=604800, stale-while-revalidate=604
 
 /**
  * /t/<slug>?w=228 — resized WebP of an article's cover. Only serves images that belong to a real
- * article (looked up by slug), so it is not an open image proxy. Any failure redirects to the
- * category's official fallback image with a short cache, so it recovers on its own.
+ * article (looked up by slug), so it is not an open image proxy. Card failures redirect to a
+ * local fallback. The1280px article variant returns an error so CoverFigure can select and
+ * accurately credit its own illustrative fallback, without inheriting the failed source's credit.
  */
 export async function GET(req: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -23,6 +24,9 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ slug
   const { card, ok } = await loadCard(slug);
   const fallback = card ? categoryThumb(card.category, width as ThumbWidth) : `/img/thumb/vice-city-${width}.webp`;
   const redirectFallback = () => {
+    if (width === 1280) {
+      return new NextResponse(null, { status: !card && ok ? 404 : 503, headers: { "Cache-Control": SHORT } });
+    }
     const r = NextResponse.redirect(new URL(fallback, req.nextUrl.origin), 302);
     r.headers.set("Cache-Control", SHORT);
     return r;
@@ -38,7 +42,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ slug
       .webp({ quality: 72 })
       .toBuffer();
     return new NextResponse(new Uint8Array(out), {
-      // If the database lookup degraded to seed data, cache briefly so a later DB-only change shows up.
+      // A successful configured lookup is authoritative; failed reads never reuse a retired seed image.
       headers: { "Content-Type": "image/webp", "Cache-Control": ok ? LONG : SHORT },
     });
   } catch {

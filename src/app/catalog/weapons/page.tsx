@@ -1,3 +1,4 @@
+import { publicMetadata } from "@/lib/public-metadata";
 import type { Metadata } from "next";
 import { WEAPONS, WEAPON_SOURCE } from "../../../../data/catalog-weapons";
 import { getLocale } from "@/lib/session";
@@ -9,12 +10,12 @@ import { catalogImage } from "@/lib/catalog-images";
 
 export async function generateMetadata(): Promise<Metadata> {
   const ar = (await getLocale()) === "ar";
-  return {
+  return publicMetadata("/catalog/weapons", ar ? "ar" : "en", {
     title: ar ? "كتالوج أسلحة GTA 6" : "GTA 6 weapons catalog",
     description: ar
       ? `${WEAPONS.length} سلاح في GTA 6، منها ${WITH_STATS} بأرقام القوة والدقة والتحكم والمدى من داخل اللعبة و${WITH_PRICE} بسعر ومكان شراء معروف.`
       : `${WEAPONS.length} GTA 6 weapons; ${WITH_STATS} with in-game damage/accuracy/handling/range and ${WITH_PRICE} with a known price and shop.`,
-  };
+  });
 }
 
 export default async function WeaponsCatalog({ searchParams }: PageProps<"/catalog/weapons">) {

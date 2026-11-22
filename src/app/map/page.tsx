@@ -1,3 +1,4 @@
+import { publicMetadata } from "@/lib/public-metadata";
 import type { Metadata } from "next";
 import { getMapItems } from "@/lib/data";
 import { t } from "@/lib/i18n";
@@ -5,7 +6,8 @@ import { getLocale } from "@/lib/session";
 import { MapShell } from "@/components/MapShell";
 
 export async function generateMetadata(): Promise<Metadata> {
-  return { title: t(await getLocale(), "map") };
+  const locale = await getLocale();
+  return publicMetadata("/map", locale, { title: t(locale, "map") });
 }
 
 export default async function MapPage({ searchParams }: PageProps<"/map">) {

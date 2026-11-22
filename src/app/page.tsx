@@ -1,5 +1,6 @@
+import { publicMetadata } from "@/lib/public-metadata";
 import Link from "next/link";
-import { thumbFor } from "@/lib/image";
+import { categoryThumb, thumbFor } from "@/lib/image";
 import { Bidi } from "@/components/Bidi";
 import { CATEGORY_MAP } from "@/lib/categories";
 import { getCounts, getDailyPool, getFeatured, getLatest } from "@/lib/data";
@@ -14,6 +15,13 @@ import { Section } from "@/components/Section";
 import { CategoryGrid } from "@/components/CategoryGrid";
 import { SignInGate } from "@/components/SignInGate";
 import { Cover } from "@/components/Cover";
+import { StatusBadge } from "@/components/StatusBadge";
+
+export async function generateMetadata() {
+  const locale = await getLocale();
+  const title = `${t(locale, "siteName")} — ${locale === "ar" ? "أسرار وأخبار وخريطة" : "secrets, news & map"}`;
+  return { ...publicMetadata("/", locale, { title }), title: { absolute: title } };
+}
 
 export default async function Home() {
   const [locale, viewer] = await Promise.all([getLocale(), getViewer()]);
@@ -39,12 +47,13 @@ export default async function Home() {
                 className="card-hover relative flex w-[80%] shrink-0 snap-start flex-col justify-end overflow-hidden rounded-3xl p-4 text-white shadow-lg sm:w-72"
                 style={{ minHeight: 210, background: `linear-gradient(160deg, ${c.color}, #2a1240)` }}
               >
-                <Cover src={thumbFor(f, 640)} className="absolute inset-0 size-full object-cover" />
+                <Cover src={thumbFor(f, 640)} fallback={categoryThumb(f.category, 640)} className="absolute inset-0 size-full object-cover" />
                 <span className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-transparent" />
-                <span className="relative mb-2 flex items-center gap-2">
+                <span className="relative mb-2 flex flex-wrap items-center gap-2">
                   <span className="rounded-full px-2 py-0.5 text-[11px] font-extrabold text-black" style={{ background: c.color }}>
                     {locale === "ar" ? c.ar : c.en}
                   </span>
+                  <StatusBadge status={f.status} locale={locale} />
                 </span>
                 <span className="font-head relative text-[19px] leading-snug"><Bidi text={pick(f, "title", locale)} /></span>
                 <span className="relative mt-1 line-clamp-2 text-[12.5px] text-white/85"><Bidi text={pick(f, "summary", locale)} /></span>

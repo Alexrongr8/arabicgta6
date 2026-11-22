@@ -1,3 +1,4 @@
+import { publicMetadata } from "@/lib/public-metadata";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ANIMALS, ANIMAL_SOURCES, type AGroup } from "../../../../data/catalog-animals";
@@ -7,7 +8,7 @@ import { normalize } from "@/lib/normalize";
 
 export async function generateMetadata(): Promise<Metadata> {
   const ar = (await getLocale()) === "ar";
-  return { title: ar ? "حيوانات GTA 6 — الكتالوج" : "GTA 6 animals catalog", description: ar ? "حيوانات Leonida: وين تلقاها، وش تصطاد، ووش الخطير منها." : "Leonida's wildlife: where to find it, what you can hunt and what's dangerous." };
+  return publicMetadata("/catalog/animals", ar ? "ar" : "en", { title: ar ? "حيوانات GTA 6 — الكتالوج" : "GTA 6 animals catalog", description: ar ? "حيوانات Leonida: وين تلقاها، وش تصطاد، ووش الخطير منها." : "Leonida's wildlife: where to find it, what you can hunt and what's dangerous." });
 }
 
 const GROUPS: { id: AGroup; ar: string; en: string; emoji: string }[] = [

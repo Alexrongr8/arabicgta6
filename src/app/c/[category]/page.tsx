@@ -1,3 +1,4 @@
+import { publicMetadata } from "@/lib/public-metadata";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
@@ -17,7 +18,7 @@ export async function generateMetadata({ params }: PageProps<"/c/[category]">): 
   if (!isCategory(category)) return {};
   const locale = await getLocale();
   const c = CATEGORY_MAP[category];
-  return { title: locale === "ar" ? c.ar : c.en, description: locale === "ar" ? c.descAr : c.descEn };
+  return publicMetadata(`/c/${category}`, locale, { title: locale === "ar" ? c.ar : c.en, description: locale === "ar" ? c.descAr : c.descEn });
 }
 
 export default async function CategoryPage({ params, searchParams }: PageProps<"/c/[category]">) {

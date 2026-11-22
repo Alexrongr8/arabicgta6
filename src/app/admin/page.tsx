@@ -1,26 +1,13 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { adminClient, adminConfigured, isOwner } from "@/lib/admin";
-import { hideContentForm } from "@/lib/community/actions";
+import { ModerationButton } from "@/components/community/ModerationButton";
+import { publicRead, publicReadSignal } from "@/lib/public-read";
 import { formatDate } from "@/lib/i18n";
 import { getLocale, getViewer } from "@/lib/session";
+import { loadAdminOverview } from "@/lib/admin-overview";
 
 export const metadata: Metadata = { title: "Owner dashboard", robots: { index: false } };
-
-type Profile = {
-  id: string;
-  email: string | null;
-  full_name: string | null;
-  avatar_url: string | null;
-  country: string | null;
-  region: string | null;
-  city: string | null;
-  device: string | null;
-  sign_in_count: number;
-  last_sign_in_at: string | null;
-  created_at: string;
-  digest_opt_in: boolean;
-};
 
 const flag = (cc?: string | null) =>
   cc && cc.length === 2 ? String.fromCodePoint(...[...cc.toUpperCase()].map((c) => 0x1f1a5 + c.charCodeAt(0))) : "🌐";
@@ -46,26 +33,27 @@ export default async function Admin() {
   const since7 = daysAgo(7);
   const since1 = daysAgo(1);
 
-  const since30 = daysAgo(30);
-  const [{ data: profiles }, { data: views }, { data: runs }] = await Promise.all([
-    db.from("profiles").select("*").order("last_sign_in_at", { ascending: false, nullsFirst: false }).limit(1000),
-    db
-      .from("page_views")
-      .select("path,country,region,city,device,device_type,os,browser,source,utm_campaign,referrer,user_id,visitor_id,lang,created_at")
-      .gte("created_at", since30)
-      .order("created_at", { ascending: false })
-      .limit(50000),
-    db.from("update_runs").select("*").order("ran_at", { ascending: false }).limit(8),
-  ]);
-  const users = (profiles ?? []) as Profile[];
-  const pv = views ?? [];
+  let overview: Awaited<ReturnType<typeof loadAdminOverview>>;
+  try {
+    overview = await loadAdminOverview(db);
+  } catch {
+    return <main className="mx-auto max-w-6xl px-4 pt-6"><div role="alert" className="card p-5">
+      <h1 className="text-xl">{ar ? "تعذر تحميل إحصاءات الإدارة" : "Dashboard statistics unavailable"}</h1>
+      <p className="mt-2 text-muted">{ar ? "لم نستبدل البيانات الناقصة بأصفار. حاول تحديث الصفحة بعد قليل." : "Missing data has not been shown as zero. Please refresh shortly."}</p>
+      <a className="mt-3 inline-block text-pink" href="/admin">{ar ? "حاول مرة أخرى" : "Try again"}</a>
+    </div><Moderation ar={ar} /></main>;
+  }
+  const users = overview.profiles.rows;
+  const pv = overview.views.rows;
+  const runs = overview.runs;
+  const sampled = overview.profiles.truncated || overview.views.truncated;
   const pv7 = pv.filter((r) => r.created_at >= since7);
   const pv1 = pv.filter((r) => r.created_at >= since1);
   const uniq = (rows: typeof pv) => new Set(rows.map((r) => r.visitor_id ?? `${r.city}-${r.device}`)).size;
   const newUsers7 = users.filter((u) => u.created_at >= since7).length;
 
   const stats = [
-    { k: ar ? "زوار اليوم" : "Visitors today", v: uniq(pv1) },
+    { k: ar ? "زوار آخر 24 ساعة" : "Visitors (last 24 hours)", v: uniq(pv1) },
     { k: ar ? "زوار 7 أيام" : "Visitors (7d)", v: uniq(pv7) },
     { k: ar ? "زوار 30 يوم" : "Visitors (30d)", v: uniq(pv) },
     { k: ar ? "مشاهدات 7 أيام" : "Page views (7d)", v: pv7.length },
@@ -97,6 +85,12 @@ export default async function Admin() {
       <h1 className="mb-1 text-2xl">{ar ? "لوحة المالك — جمهورك" : "Owner dashboard — your audience"}</h1>
       <p className="mb-5 text-xs text-dim">{ar ? "مرئية لك فقط. الموقع الجغرافي تقريبي من عنوان IP. الزائر = متصفح/جهاز مميز." : "Visible only to you. Location is approximate (IP). A visitor = a distinct browser/device."}</p>
 
+      {sampled && <p role="status" className="mb-5 rounded-xl border border-amber-400/40 bg-amber-400/10 p-3 text-sm">
+        {ar
+          ? `عرض جزئي: حُمّلت ${pv.length} من ${overview.views.total} مشاهدة، و${users.length} من ${overview.profiles.total} عضو. الإحصاءات والمخططات التالية تخص هذه العينة فقط؛ لا تعتمدها كإجمالي للحملات.`
+          : `Partial sample: loaded ${pv.length} of ${overview.views.total} page views and ${users.length} of ${overview.profiles.total} members. The statistics and charts below describe this sample only, not campaign totals.`}
+      </p>}
+
       <div className="mb-6 grid grid-cols-2 gap-3 md:grid-cols-4">
         {stats.map((s) => (
           <div key={s.k} className="card p-4">
@@ -107,7 +101,7 @@ export default async function Admin() {
       </div>
 
       <div className="card mb-6 p-4">
-        <p className="mb-3 text-sm font-extrabold">{ar ? "الزوار يومياً (آخر 14 يوم)" : "Daily visitors (last 14 days)"}</p>
+        <p className="mb-3 text-sm font-extrabold">{ar ? "الزوار يومياً (آخر 14 يوم، بتوقيت UTC)" : "Daily visitors (last 14 days, UTC)"}</p>
         <div className="flex h-36 items-end gap-1.5" dir="ltr">
           {days.map((d) => (
             <div key={d.d} className="flex flex-1 flex-col items-center gap-1" title={`${d.d}: ${d.visitors} visitors, ${d.views} views`}>
@@ -241,28 +235,29 @@ function TopList({ title, rows }: { title: string; rows: [string, number][] }) {
 
 async function Moderation({ ar }: { ar: boolean }) {
   const db = adminClient();
-  const [{ data: subs }, { data: comments }] = await Promise.all([
-    db.from("submissions").select("id,author_name,title,created_at").eq("hidden", false).order("created_at", { ascending: false }).limit(30),
-    db.from("comments").select("id,author_name,body,target,created_at").eq("hidden", false).order("created_at", { ascending: false }).limit(40),
+  const signal = publicReadSignal();
+  const [subs, comments] = await Promise.all([
+    publicRead<{ id: string; author_name: string; title: string }[]>("moderation submissions", db.from("submissions").select("id,author_name,title,created_at").eq("hidden", false).order("created_at", { ascending: false }).limit(30), signal),
+    publicRead<{ id: string; author_name: string; body: string }[]>("moderation comments", db.from("comments").select("id,author_name,body,target,created_at").eq("hidden", false).order("created_at", { ascending: false }).limit(40), signal),
   ]);
   return (
     <section className="mt-8 grid gap-3 md:grid-cols-2">
       <div className="card p-4">
         <p className="mb-2 text-sm font-extrabold">{ar ? "آخر مشاركات اللاعبين" : "Latest submissions"}</p>
         {(subs ?? []).map((x) => (
-          <form key={x.id} action={hideContentForm.bind(null, "submission", x.id)} className="flex items-center gap-2 border-t border-line py-2 text-[12.5px]">
+          <div key={x.id} className="flex items-center gap-2 border-t border-line py-2 text-[12.5px]">
             <span className="flex-1 truncate"><b>{x.author_name}</b>: {x.title}</span>
-            <button className="rounded-lg bg-[#ef4444] px-2 py-1 text-[11px] font-bold text-black">{ar ? "إخفاء" : "Hide"}</button>
-          </form>
+            <ModerationButton kind="submission" id={x.id} ar={ar} />
+          </div>
         ))}
       </div>
       <div className="card p-4">
         <p className="mb-2 text-sm font-extrabold">{ar ? "آخر التعليقات" : "Latest comments"}</p>
         {(comments ?? []).map((x) => (
-          <form key={x.id} action={hideContentForm.bind(null, "comment", x.id)} className="flex items-center gap-2 border-t border-line py-2 text-[12.5px]">
+          <div key={x.id} className="flex items-center gap-2 border-t border-line py-2 text-[12.5px]">
             <span className="flex-1 truncate"><b>{x.author_name}</b>: {x.body}</span>
-            <button className="rounded-lg bg-[#ef4444] px-2 py-1 text-[11px] font-bold text-black">{ar ? "إخفاء" : "Hide"}</button>
-          </form>
+            <ModerationButton kind="comment" id={x.id} ar={ar} />
+          </div>
         ))}
       </div>
     </section>

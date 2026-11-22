@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { imageOf } from "@/lib/image";
+import { categoryThumb, imageOf, thumbFor } from "@/lib/image";
 import { Bidi } from "@/components/Bidi";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -36,7 +36,7 @@ export async function generateMetadata({ params }: PageProps<"/item/[slug]">): P
   return {
     title,
     description,
-    keywords: [...item.aliases, "GTA 6", "قراند 6"],
+    keywords: [...(isSpoiler(item) ? [] : item.aliases), "GTA 6", "قراند 6"],
     alternates: { canonical: `${SITE}/item/${slug}` },
     openGraph: { title, description, type: "article", url: `${SITE}/item/${slug}`, siteName: "Arabic GTA 6", locale: locale === "ar" ? "ar_SA" : "en_US" },
     twitter: { card: "summary_large_image", title, description },
@@ -77,7 +77,7 @@ export default async function ItemPage({ params }: PageProps<"/item/[slug]">) {
     description: spoiler ? SPOILER_TEASER[locale] : pick(item, "summary", locale),
     inLanguage: locale,
     datePublished: item.published_at,
-    image: item.image ? (item.image.startsWith("/") ? `${SITE}${item.image}` : item.image) : undefined,
+    image: spoiler ? `${SITE}${imageOf({ category: item.category })}` : item.image ? (item.image.startsWith("/") ? `${SITE}${item.image}` : item.image) : undefined,
     mainEntityOfPage: `${SITE}/item/${item.slug}`,
     publisher: { "@type": "Organization", name: "Arabic GTA 6" },
   };
@@ -96,9 +96,9 @@ export default async function ItemPage({ params }: PageProps<"/item/[slug]">) {
       <article className="grid gap-6 lg:grid-cols-[1fr_300px]">
         <div className="min-w-0">
           {spoiler ? (
-            <CoverFigure src={imageOf({ category: item.category })} alt="" credit={imageCredit(imageOf({ category: item.category }))} />
+            <CoverFigure src={categoryThumb(item.category, 1280)} fallback={categoryThumb(item.category, 1280)} alt="" credit="Rockstar Games" locale={locale} />
           ) : (
-            <CoverFigure src={imageOf(item)} alt={pick(item, "title", locale)} credit={imageCredit(imageOf(item))} />
+            <CoverFigure src={thumbFor(item, 1280)} fallback={categoryThumb(item.category, 1280)} alt={pick(item, "title", locale)} credit={imageCredit(imageOf(item))} locale={locale} />
           )}
           <header className="relative mb-5 overflow-hidden rounded-3xl border border-line p-5 shadow-sm md:p-7" style={{ background: `linear-gradient(150deg, ${c.color}30, var(--card) 70%)` }}>
             <CategoryIcon category={item.category} className="absolute -end-4 -top-4 size-32 opacity-15" style={{ color: c.color }} />
@@ -119,7 +119,7 @@ export default async function ItemPage({ params }: PageProps<"/item/[slug]">) {
                   <MapPin className="size-4" /> {t(locale, "showOnMap")}
                 </Link>
               )}
-              <ShareButton title={pick(item, "title", locale)} label={locale === "ar" ? "مشاركة" : "Share"} />
+              <ShareButton title={pick(item, "title", locale)} label={locale === "ar" ? "مشاركة" : "Share"} locale={locale} />
               <a
                 href={`https://wa.me/?text=${encodeURIComponent(`${pick(item, "title", locale)} ${SITE}/item/${item.slug}`)}`}
                 target="_blank"
@@ -257,7 +257,7 @@ function SpoilerWrap({ on, ar, children }: { on: boolean; ar: boolean; children:
         </span>
         <span className="rounded-xl bg-pink px-3 py-1.5 text-[13px] font-extrabold text-black group-open:hidden">{ar ? "اعرض الحرق" : "Show spoilers"}</span>
       </summary>
-      <div className="mt-5">{children}</div>
+      <div data-nosnippet className="mt-5">{children}</div>
     </details>
   );
 }

@@ -1,3 +1,4 @@
+import { publicMetadata } from "@/lib/public-metadata";
 import Link from "next/link";
 import { CatalogTiles } from "@/components/CatalogTiles";
 import type { Metadata } from "next";
@@ -7,7 +8,8 @@ import { getLocale } from "@/lib/session";
 import { CategoryGrid } from "@/components/CategoryGrid";
 
 export async function generateMetadata(): Promise<Metadata> {
-  return { title: t(await getLocale(), "categories") };
+  const locale = await getLocale();
+  return publicMetadata("/explore", locale, { title: t(locale, "categories") });
 }
 
 export default async function Explore() {

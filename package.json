@@ -17,6 +17,10 @@
     "test:reads": "node scripts/tests/read-resilience.test.mjs",
     "test:digest": "tsx scripts/tests/digest.test.ts",
     "test:radar": "tsx --test scripts/tests/radar-policy.test.ts",
+    "test:community": "node scripts/tests/community-reliability.test.mjs",
+    "test:media": "node scripts/tests/media-share.test.mjs",
+    "test:seo": "node scripts/tests/seo.test.mjs",
+    "test:admin": "node scripts/tests/admin-reads.test.mjs",
     "typecheck": "next typegen && tsc --noEmit",
     "enrich": "tsx scripts/enrich.ts",
     "catalog-images": "tsx scripts/catalog-images-ai.ts"

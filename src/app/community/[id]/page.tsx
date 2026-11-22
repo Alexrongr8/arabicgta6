@@ -7,16 +7,19 @@ import { formatDate } from "@/lib/i18n";
 import { VoteBar } from "@/components/community/VoteBar";
 import { Comments } from "@/components/community/Comments";
 import { Bidi } from "@/components/Bidi";
+import { publicRead } from "@/lib/public-read";
+import { COMMUNITY_ID, communityVideo } from "@/lib/community/validation";
 
 export default async function SubmissionPage({ params }: PageProps<"/community/[id]">) {
   const { id } = await params;
-  if (!supabaseConfigured() || !/^[0-9a-f-]{36}$/.test(id)) notFound();
+  if (!supabaseConfigured() || !COMMUNITY_ID.test(id)) notFound();
   const [locale, viewer] = await Promise.all([getLocale(), getViewer()]);
   const ar = locale === "ar";
   const supabase = await createClient();
-  const { data } = await supabase.from("submissions").select("*").eq("id", id).maybeSingle();
+  const data = await publicRead<Submission>("submission", (signal) => supabase.from("submissions").select("*").eq("id", id).abortSignal(signal).maybeSingle());
   const s = data as Submission | null;
   if (!s) notFound();
+  const video = communityVideo(s.video_url);
   const votes = (await getVotes([`sub:${s.id}`], viewer.id))[`sub:${s.id}`];
   return (
     <main className="mx-auto max-w-3xl px-4 pt-5">
@@ -29,8 +32,8 @@ export default async function SubmissionPage({ params }: PageProps<"/community/[
         <h1 className="text-[26px] leading-snug"><Bidi text={s.title} /></h1>
         {s.place && <p className="mt-1 text-[13px] font-bold text-accent">📍 <Bidi text={s.place} /></p>}
         <p className="mt-3 text-[15.5px] leading-loose whitespace-pre-line"><Bidi text={s.body} /></p>
-        {s.video_url && (
-          <a href={s.video_url} target="_blank" rel="noopener noreferrer nofollow" className="mt-3 inline-flex items-center gap-2 rounded-xl bg-[#ff0033] px-4 py-2 text-sm font-extrabold text-black">
+        {video && (
+          <a href={video} target="_blank" rel="noopener noreferrer nofollow" className="mt-3 inline-flex items-center gap-2 rounded-xl bg-[#ff0033] px-4 py-2 text-sm font-extrabold text-black">
             ▶ {ar ? "شوف الفيديو" : "Watch the video"}
           </a>
         )}

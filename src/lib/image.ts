@@ -29,10 +29,10 @@ export function imageOf(i: { image?: string | null; category: string }): string 
   return i.image || FALLBACK[i.category] || "/img/vice-city.webp";
 }
 
-export const THUMB_WIDTHS = [228, 640] as const;
+export const THUMB_WIDTHS = [228, 640, 1280] as const;
 export type ThumbWidth = (typeof THUMB_WIDTHS)[number];
 
-/** Prebuilt small versions of the shared official images (public/img/thumb/<name>-228|640.webp). */
+/** Prebuilt variants of shared official images (public/img/thumb/<name>-<width>.webp). */
 function localThumb(src: string, width: ThumbWidth): string {
   const m = src.match(/^\/img\/([a-z0-9-]+)\.webp$/);
   return m ? `/img/thumb/${m[1]}-${width}.webp` : src;
@@ -40,7 +40,7 @@ function localThumb(src: string, width: ThumbWidth): string {
 
 /**
  * Small, cached version of an article's cover for cards: 228 = square card thumbnail,
- * 640 = 16:9 featured card. Local official images use prebuilt variants; remote covers go
+ * 640 = 16:9 featured card;1280 = article hero. Local official images use prebuilt variants; remote covers go
  * through /t/<slug> (resized once, then CDN-cached).
  */
 export function thumbFor(i: { slug: string; image?: string | null; category: string }, width: ThumbWidth): string {

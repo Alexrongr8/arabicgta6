@@ -12,6 +12,7 @@ export async function Comments({ target, path, locale, signedIn }: { target: str
       <h2 className="mb-3 text-[20px]">
         💬 {ar ? "تعليقات اللاعبين" : "Player comments"} <span className="text-[15px] text-dim">({comments.length})</span>
       </h2>
+      {comments.length === 300 && <p className="mb-2 text-[12px] text-muted">{ar ? "تظهر أحدث 300 تعليق." : "Showing the latest 300 comments."}</p>}
       <div className="mb-3 space-y-2">
         {comments.map((c) => (
           <div key={c.id} className="card flex gap-3 p-3">

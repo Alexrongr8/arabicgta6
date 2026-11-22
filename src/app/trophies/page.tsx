@@ -1,3 +1,4 @@
+import { publicMetadata } from "@/lib/public-metadata";
 import type { Metadata } from "next";
 import { ExternalLink } from "lucide-react";
 import { TROPHIES, TROPHY_SOURCES, TROPHY_VIDEOS } from "../../../data/trophies";
@@ -7,7 +8,7 @@ import { Videos } from "@/components/Videos";
 
 export async function generateMetadata(): Promise<Metadata> {
   const ar = (await getLocale()) === "ar";
-  return { title: ar ? "كل كؤوس GTA 6 — بلايستيشن وإكس بوكس" : "All GTA 6 trophies & achievements" };
+  return publicMetadata("/trophies", ar ? "ar" : "en", { title: ar ? "كل كؤوس GTA 6 — بلايستيشن وإكس بوكس" : "All GTA 6 trophies & achievements" });
 }
 
 export default async function TrophiesPage() {

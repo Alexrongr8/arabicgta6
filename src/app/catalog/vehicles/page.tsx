@@ -1,3 +1,4 @@
+import { publicMetadata } from "@/lib/public-metadata";
 import type { Metadata } from "next";
 import { VEHICLES, VEHICLE_SOURCES } from "../../../../data/catalog-vehicles";
 import { getLocale } from "@/lib/session";
@@ -6,10 +7,10 @@ import { catalogImage } from "@/lib/catalog-images";
 
 export async function generateMetadata(): Promise<Metadata> {
   const ar = (await getLocale()) === "ar";
-  return {
+  return publicMetadata("/catalog/vehicles", ar ? "ar" : "en", {
     title: ar ? "كتالوج مركبات GTA 6" : "GTA 6 vehicles catalog",
     description: ar ? `${VEHICLES.length} مركبة في GTA 6: سيارات ودبابات وقوارب وطيارات، و${VEHICLES.filter((v) => v[3]).length} منها بأرقام السرعة والتسارع من داخل اللعبة.` : `${VEHICLES.length} GTA 6 vehicles — cars, bikes, boats and aircraft; ${VEHICLES.filter((v) => v[3]).length} with in-game speed/acceleration stats so far.`,
-  };
+  });
 }
 
 export default async function VehiclesCatalog({ searchParams }: PageProps<"/catalog/vehicles">) {

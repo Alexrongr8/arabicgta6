@@ -8,6 +8,7 @@ import { CATEGORY_MAP } from "./categories";
 import { imageOf } from "./image";
 import { isSpoiler } from "./spoiler";
 import { SEED } from "./seed";
+import { publicRead, publicReadSignal } from "./public-read";
 import type { Item } from "./types";
 
 /**
@@ -36,18 +37,15 @@ export async function loadCard(slug: string): Promise<{ card: Card | null; ok: b
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
   if (!url || !key) return { card: seed, ok: true };
-  const ctrl = new AbortController();
-  const timer = setTimeout(() => ctrl.abort(), 3000);
   try {
     // Anonymous read (items are public); no cookies, so crawlers get the same result.
     const db = createAnonClient(url, key, { auth: { persistSession: false } });
-    const { data, error } = await db.from("items").select("slug,category,title_ar,title_en,image,tags").eq("slug", slug).abortSignal(ctrl.signal).maybeSingle();
-    if (error) return { card: seed, ok: false };
-    return { card: (data as Card) ?? seed, ok: true };
+    const card = await publicRead<Card>("share image item", (signal) => db.from("items")
+      .select("slug,category,title_ar,title_en,image,tags").eq("slug", slug).abortSignal(signal).maybeSingle(), publicReadSignal(3000));
+    // A configured backend is authoritative, including a successful absence/deletion.
+    return { card, ok: true };
   } catch {
-    return { card: seed, ok: false };
-  } finally {
-    clearTimeout(timer);
+    return { card: null, ok: false };
   }
 }
 

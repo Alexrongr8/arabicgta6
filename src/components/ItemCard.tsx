@@ -23,7 +23,7 @@ export function ItemCard({ item, locale, showCategory = true, index = 0 }: { ite
         style={{ background: `${cat.color}22`, color: cat.color, boxShadow: `inset 0 0 0 1px ${cat.color}44` }}
       >
         <CategoryIcon category={item.category} className="size-6" />
-        <Cover src={spoiler ? categoryThumb(item.category, 228) : thumbFor(item, 228)} className="absolute inset-0 size-full object-cover" />
+        <Cover src={spoiler ? categoryThumb(item.category, 228) : thumbFor(item, 228)} fallback={categoryThumb(item.category, 228)} className="absolute inset-0 size-full object-cover" />
       </span>
       <span className="min-w-0 flex-1">
         <span className="mb-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] text-dim">

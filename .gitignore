@@ -43,3 +43,6 @@ next-env.d.ts
 
 # local edit lock between assistants
 /.collab/LOCK
+
+# Local recovery artifacts (never include credentials or user tables)
+/.local-backups/
