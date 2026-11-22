@@ -4,7 +4,7 @@ import { searchText, slugify } from "../../src/lib/normalize";
 import { urlKey } from "./url-key";
 import { BEAMS, chooseBeam, finishState, knownKeys, similar, sinceFor, existingEntity, verifyDraft, type State, type Known, type Lead, type Research, type Draft, type SourceReader, type BeamId } from "./radar-policy";
 
-type Review = { key: string; kind: "article" | "topic" | "catalog-update"; reasons: string[]; lead: Lead; draft?: Draft; evidence?: unknown };
+type Review = { key: string; kind: "article" | "catalog-update"; reasons: string[]; lead: Lead; draft?: Draft; evidence?: unknown };
 export type RadarDeps = {
   state: State; known: Known[]; catalogNames: string[]; now: Date; pinnedBeam?: BeamId;
   discover: (beam: typeof BEAMS[number], since: string, knownTitles: string[]) => Promise<Research<{ leads: Lead[] }>>;
@@ -49,8 +49,8 @@ export async function runRadar(d: RadarDeps): Promise<{ added: number; requests:
     }
     if (!fresh.length) return finish(0, false);
     const lead = fresh[0]; const key = urlKey(lead.url);
-    if (beam.id === "arabic-coverage" || existingEntity(lead, d.catalogNames)) {
-      await d.review({ key, kind: beam.id === "arabic-coverage" ? "topic" : "catalog-update", reasons: [beam.id === "arabic-coverage" ? "topic-only-beam" : "existing-catalog-entity"], lead });
+    if (existingEntity(lead, d.catalogNames)) {
+      await d.review({ key, kind: "catalog-update", reasons: ["existing-catalog-entity"], lead });
       return finish(0, true, key);
     }
     state.pending = { lead, beam: beam.id, discoveredAt: now, retrievedUrls: [lead.url], responseId: r.responseId, attempts: 0 };
@@ -74,9 +74,6 @@ export async function runRadar(d: RadarDeps): Promise<{ added: number; requests:
   draft.item.sources = [{ title: pending.lead.headline, url: pending.lead.url }, ...(draft.item.sources ?? [])];
   const gated = await verifyDraft(draft, [...pending.retrievedUrls, ...researched.retrievedUrls], d.readSource);
   if (!researched.completedSearches) { gated.gates.push("1:editor-search-incomplete"); gated.decision = "review"; }
-  if (pending.beam === "gameplay-discoveries" || pending.beam === "community-creators") {
-    gated.gates.push("4:gameplay-or-creator-evidence-needs-human-review"); gated.decision = "review";
-  }
   if (gated.item.sources.some((source) => { const sourceKey = urlKey(source.url); return sourceKey.startsWith("youtube:") && keys.has(sourceKey); }) || d.known.some((known) => similar(known.title_en, gated.item.title_en) >= .75)) {
     gated.gates.push("duplicate:published-title-or-video"); gated.decision = "review";
   }

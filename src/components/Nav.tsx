@@ -1,12 +1,13 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Compass, Home, Map, Search, UserRound } from "lucide-react";
+import { Clapperboard, Compass, Home, Map, Search, UserRound } from "lucide-react";
 
-type Labels = { home: string; explore: string; map: string; search: string; account: string };
+type Labels = { home: string; explore: string; map: string; shorts: string; search: string; account: string };
 
 const LINKS = [
   { href: "/", key: "home", Icon: Home },
+  { href: "/shorts", key: "shorts", Icon: Clapperboard },
   { href: "/explore", key: "explore", Icon: Compass },
   { href: "/map", key: "map", Icon: Map },
   { href: "/search", key: "search", Icon: Search },
@@ -21,16 +22,16 @@ function isActive(path: string, href: string) {
 
 export function BottomNav({ labels }: { labels: Labels }) {
   const path = usePathname();
-  if (path.startsWith("/map")) return null; // map is full-screen and has its own back button
+  if (path.startsWith("/map") || path.startsWith("/shorts")) return null; // full-screen pages with their own back button
   return (
     <nav className="glass pb-safe fixed inset-x-0 bottom-0 z-40 border-t border-line md:hidden">
-      <ul className="mx-auto grid max-w-lg grid-cols-5">
+      <ul className="mx-auto grid max-w-lg grid-cols-6">
         {LINKS.map(({ href, key, Icon }) => {
           const active = isActive(path, href);
           return (
             <li key={href}>
               <Link href={href} className="flex flex-col items-center gap-1 pt-2.5 pb-1.5 text-[11px] font-bold" aria-current={active ? "page" : undefined}>
-                <span className={`grid h-7 w-12 place-items-center rounded-full transition ${active ? "bg-sunset text-[#241338] shadow-md shadow-pink/40" : "text-dim"}`}>
+                <span className={`grid h-7 w-11 place-items-center rounded-full transition ${active ? "bg-sunset text-[#241338] shadow-md shadow-pink/40" : "text-dim"}`}>
                   <Icon className="size-[19px]" />
                 </span>
                 <span className={active ? "text-fg" : "text-dim"}>{labels[key]}</span>
@@ -47,7 +48,7 @@ export function TopLinks({ labels }: { labels: Labels }) {
   const path = usePathname();
   return (
     <ul className="hidden items-center gap-1 md:flex">
-      {LINKS.slice(0, 4).map(({ href, key, Icon }) => {
+      {LINKS.slice(0, 5).map(({ href, key, Icon }) => {
         const active = isActive(path, href);
         return (
           <li key={href}>

@@ -36,7 +36,7 @@ export const viewport: Viewport = {
 export default async function RootLayout({ children }: LayoutProps<"/">) {
   const [locale, viewer, jar] = await Promise.all([getLocale(), getViewer(), cookies()]);
   const theme = jar.get("theme")?.value === "dark" ? "dark" : "light";
-  const labels = { home: t(locale, "home"), explore: t(locale, "explore"), map: t(locale, "map"), search: t(locale, "search"), account: t(locale, "account") };
+  const labels = { home: t(locale, "home"), explore: t(locale, "explore"), map: t(locale, "map"), shorts: t(locale, "shorts"), search: t(locale, "search"), account: t(locale, "account") };
   return (
     <html lang={locale} dir={locale === "ar" ? "rtl" : "ltr"} data-theme={theme} className={`${body.variable} ${head.variable} ${anton.variable} antialiased`}>
       <body className="flex min-h-dvh flex-col">

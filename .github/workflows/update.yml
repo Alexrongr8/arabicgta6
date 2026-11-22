@@ -1,10 +1,9 @@
-name: Radar (content update every 3 hours)
+name: Radar (news + shorts every hour)
 
 on:
   schedule:
-    # Every 3 hours at minute 7 (8 runs/day). Keep the workflow disabled until
-    # OPENAI_API_KEY and the cost variables below are configured.
-    - cron: "7 */3 * * *"
+    # Every hour at minute 7. Paid radar work is bounded by UPDATE_MAX_ITEMS (topics per run, max 4).
+    - cron: "7 * * * *"
   workflow_dispatch: {}
 
 concurrency:
@@ -27,6 +26,12 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci --ignore-scripts
+      - name: Collect new GTA 6 Shorts (free, no AI)
+        run: npm run shorts
+        continue-on-error: true
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
       - run: npm run update
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}

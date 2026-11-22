@@ -3,7 +3,8 @@ import Link from "next/link";
 import { categoryThumb, thumbFor } from "@/lib/image";
 import { Bidi } from "@/components/Bidi";
 import { CATEGORY_MAP } from "@/lib/categories";
-import { getCounts, getDailyPool, getFeatured, getLatest } from "@/lib/data";
+import { getCounts, getDailyPool, getFeatured, getLatest, getShorts, type Short } from "@/lib/data";
+import { ShortsRail } from "@/components/ShortsRail";
 import { pickDaily, weeklyChallenge } from "@/lib/daily";
 import { DailyCards } from "@/components/DailyCards";
 import { CatalogTiles } from "@/components/CatalogTiles";
@@ -24,8 +25,9 @@ export async function generateMetadata() {
 }
 
 export default async function Home() {
-  const [locale, viewer, counts, featured, latest, news, pool] = await Promise.all([
+  const [locale, viewer, counts, featured, latest, news, pool, shorts] = await Promise.all([
     getLocale(), getViewer(), getCounts(), getFeatured(), getLatest(10), getLatest(6, "news"), getDailyPool(),
+    getShorts(20).catch(() => [] as Short[]), // the shorts strip must never take the homepage down
   ]);
   const total = Object.values(counts).reduce((a, b) => a + b, 0);
 
@@ -33,6 +35,7 @@ export default async function Home() {
   const challenge = weeklyChallenge();
   return (
     <main>
+      <ShortsRail shorts={shorts} locale={locale} />
       <Hero locale={locale} total={total} />
       <DailyCards secret={secret} challenge={challenge} locale={locale} />
 

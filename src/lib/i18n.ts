@@ -11,6 +11,7 @@ const dict = {
   home: { ar: "الرئيسية", en: "Home" },
   explore: { ar: "استكشف", en: "Explore" },
   map: { ar: "الخريطة", en: "Map" },
+  shorts: { ar: "شورتس", en: "Shorts" },
   search: { ar: "بحث", en: "Search" },
   account: { ar: "حسابي", en: "Account" },
   latestNews: { ar: "وش الجديد؟ 📰", en: "What's new 📰" },

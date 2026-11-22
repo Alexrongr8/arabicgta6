@@ -267,3 +267,20 @@ language sql stable security definer set search_path = public as $$
   from public.votes where target = any(p_targets) group by target;
 $$;
 grant execute on function public.vote_totals(text[]) to anon, authenticated;
+
+-- ───────────────────────── GTA 6 Shorts (applied 2026-11-22) ─────────────────────────
+-- Filled hourly by scripts/shorts.ts with the service role; public read of visible rows only.
+create table if not exists public.shorts (
+  video_id text primary key check (video_id ~ '^[A-Za-z0-9_-]{11}$'),
+  title text not null check (char_length(title) between 1 and 300),
+  channel text check (char_length(channel) <= 120),
+  source text not null default 'search' check (source in ('search','hashtag','channel')),
+  added_at timestamptz not null default now(),
+  hidden boolean not null default false
+);
+create index if not exists shorts_added_idx on public.shorts (added_at desc) where not hidden;
+alter table public.shorts enable row level security;
+revoke all on public.shorts from anon, authenticated;
+grant select on public.shorts to anon, authenticated;
+drop policy if exists "public shorts" on public.shorts;
+create policy "public shorts" on public.shorts for select to anon, authenticated using (not hidden);

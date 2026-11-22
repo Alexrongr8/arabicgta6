@@ -25,6 +25,8 @@
     "backup:editorial": "tsx scripts/backup-editorial.ts",
     "typecheck": "next typegen && tsc --noEmit",
     "enrich": "tsx scripts/enrich.ts",
+    "shorts": "tsx scripts/shorts.ts",
+    "test:shorts": "tsx --test scripts/tests/shorts.test.ts",
     "catalog-images": "tsx scripts/catalog-images-ai.ts"
   },
   "dependencies": {

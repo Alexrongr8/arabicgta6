@@ -272,3 +272,13 @@ export async function getDailyPool(): Promise<ItemCard[]> {
   const data = await publicRead<ItemCard[]>("daily pool", supabase.from("items").select(CARD_COLS).in("category", cats).order("slug").limit(1000));
   return ((data ?? []) as ItemCard[]).filter((i) => !isSpoiler(i));
 }
+
+export type Short = { video_id: string; title: string; channel: string | null };
+
+/** Latest GTA 6 YouTube Shorts (filled by scripts/shorts.ts). Empty in the unconfigured preview. */
+export async function getShorts(limit = 30): Promise<Short[]> {
+  if (!supabaseConfigured()) return [];
+  const supabase = await createClient();
+  const data = await publicRead<Short[]>("shorts", supabase.from("shorts").select("video_id,title,channel").order("added_at", { ascending: false }).limit(Math.min(Math.max(limit, 1), 100)));
+  return (data ?? []).filter((s) => /^[A-Za-z0-9_-]{11}$/.test(s.video_id));
+}

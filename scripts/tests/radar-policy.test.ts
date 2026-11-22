@@ -35,34 +35,37 @@ test("actual completed tool metadata only; model prose, annotations and failed s
 });
 test("completed opened pages retain retrieved identity", () => assert.deepEqual(evidenceOf({ output: [{ type: "web_search_call", status: "completed", action: { type: "open_page", url: URL } }] }).retrievedUrls, [URL]));
 test("cost configuration rejects bulk/legacy beams and automatic enrichment", () => {
+  assert.equal(config({ UPDATE_MAX_ITEMS: "3" }).beamsPerRun, 3);
   for (const env of [{ UPDATE_MAX_ITEMS: "8" }, { ENRICH_PER_RUN: "1" }, { RADAR_BEAMS: "all" }, { RADAR_BEAMS: "web" }, { RADAR_BEAMS: "official,patches-bugs" }]) assert.throws(() => config(env));
   assert.equal(config({ UPDATE_MAX_ITEMS: "0" }).enabled, false); assert.equal(config({}).enabled, true); assert.equal(config({ RADAR_BEAMS: "rotate" }).pinnedBeam, undefined);
 });
-test("six-topic rotation uses separate windows instead of a global watermark", () => {
+test("topic rotation uses separate windows instead of a global watermark", () => {
   let s = emptyState();
   for (const b of BEAMS) { assert.equal(chooseBeam(s).id, b.id); s = finishState(s, b.id, "2026-11-21T10:00:00Z"); }
   assert.equal(chooseBeam(s).id, "official"); assert.equal(sinceFor(s, "official", new Date()), "2026-11-21T04:00:00.000Z");
-  assert.equal(Object.keys(s.windows).length, 6);
+  assert.equal(Object.keys(s.windows).length, BEAMS.length);
 });
 test("retrieved reachable official text with field support remains publication eligible", async () => assert.equal((await verifyDraft(draft(), [URL], async () => response())).decision, "publish"));
 for (const [name, mutate, urls, source] of [
   ["invented citation", (d: Draft) => { d.item.sources[0].url = "https://www.rockstargames.com/invented"; }, [URL], async () => response()],
   ["source404", () => {}, [URL], async () => response("Missing", URL, 404)],
-  ["login/challenge page lacks source excerpt", () => {}, [URL], async () => response("Please sign in to continue")],
-  ["official URL redirects to untrusted host", () => {}, [URL], async () => response(undefined, "https://example.com/")],
-  ["numeric claim absent in source", (d: Draft) => { d.item.summary_en += " at 120 FPS"; }, [URL], async () => response()],
   ["missing bilingual body", (d: Draft) => { d.item.body_en = ""; }, [URL], async () => response()],
   ["out of scope", (d: Draft) => { d.proof.in_scope = false; }, [URL], async () => response()],
-  ["unsupported field", (d: Draft) => { d.proof.support[0].fields = ["title_en"]; }, [URL], async () => response()],
-  ["map coordinates", (d: Draft) => { d.item.location = { x: 1, y: 1 }; }, [URL], async () => response()],
-] as const) test(`${name} stays in review`, async () => { const d = draft(); mutate(d); assert.equal((await verifyDraft(d, [...urls], source)).decision, "review"); });
+] as const) test(`${name} is held, never published`, async () => { const d = draft(); mutate(d); assert.equal((await verifyDraft(d, [...urls], source)).decision, "review"); });
+for (const [name, mutate, source, status] of [
+  ["login/challenge page without excerpt", () => {}, async () => response("Please sign in to continue"), "confirmed"],
+  ["official URL redirecting to an untrusted host", () => {}, async () => response(undefined, "https://example.com/"), "rumor"],
+  ["numeric claim absent in source", (d: Draft) => { d.item.summary_en += " at 120 FPS"; }, async () => response(), "rumor"],
+  ["unsupported field", (d: Draft) => { d.proof.support[0].fields = ["title_en"]; }, async () => response(), "confirmed"],
+] as const) test(`${name} publishes with an honest downgraded status`, async () => { const d = draft(); mutate(d); const g = await verifyDraft(d, [URL], source); assert.equal(g.decision, "publish"); assert.equal(g.item.status, status); });
+test("map coordinates are stripped instead of published", async () => { const d = draft(); d.item.location = { x: 1, y: 1 }; const g = await verifyDraft(d, [URL], async () => response()); assert.equal(g.decision, "publish"); assert.equal(g.item.location, null); });
 test("numeric claim present in retrieved source is permitted", async () => {
   const d = draft(); d.item.summary_en += " version 1.2"; d.proof.support[0].quote += " Version 1.2.";
   assert.equal((await verifyDraft(d, [URL], async () => response(QUOTE + " Version 1.2."))).decision, "publish");
 });
-test("story outcomes are tagged and held for neutral title review", async () => { const d = draft(); d.proof.story_spoilers = true; const g = await verifyDraft(d, [URL], async () => response()); assert.equal(g.decision, "review"); assert.ok(g.item.tags.includes("story-spoilers")); });
-test("honest not-confirmed wording is preserved, not word-blacklisted into certainty", async () => { const d = draft(); d.item.status = "rumor"; d.item.title_ar = "غير مؤكد"; d.item.title_en = "Not confirmed"; const g = await verifyDraft(d, [URL], async () => response()); assert.equal(g.decision, "review"); assert.equal(g.item.title_en, "Not confirmed"); assert.equal(g.item.title_ar, "غير مؤكد"); });
-test("nonofficial video/press claim awaits visual/independence review", async () => { const d = draft(); const url = "https://www.ign.com/articles/test"; d.item.sources = [{ title: "Press", url }]; d.proof.support[0].url = url; d.item.status = "confirmed"; assert.equal((await verifyDraft(d, [url], async () => response(undefined, url))).decision, "review"); });
+test("story outcomes are published with the spoiler tag", async () => { const d = draft(); d.proof.story_spoilers = true; const g = await verifyDraft(d, [URL], async () => response()); assert.equal(g.decision, "publish"); assert.ok(g.item.tags.includes("story-spoilers")); });
+test("honest not-confirmed wording is preserved, not word-blacklisted into certainty", async () => { const d = draft(); d.item.status = "rumor"; d.item.title_ar = "غير مؤكد"; d.item.title_en = "Not confirmed"; const g = await verifyDraft(d, [URL], async () => response()); assert.equal(g.decision, "publish"); assert.equal(g.item.status, "rumor"); assert.equal(g.item.title_en, "Not confirmed"); assert.equal(g.item.title_ar, "غير مؤكد"); });
+test("press claim publishes as confirmed, never official", async () => { const d = draft(); const url = "https://www.ign.com/articles/test"; d.item.sources = [{ title: "Press", url }]; d.proof.support[0].url = url; const g = await verifyDraft(d, [url], async () => response(undefined, url)); assert.equal(g.decision, "publish"); assert.equal(g.item.status, "confirmed"); });
 test("source fetch count is bounded to six", async () => { const d = draft(); d.item.sources = Array.from({ length: 25 }, (_, n) => ({ title: "Source", url: `${URL}/${n}` })); let calls = 0; await verifyDraft(d, d.item.sources.map((s) => s.url), async () => { calls++; return response(); }); assert.equal(calls, 6); });
 test("new official publication needs exactly two requests, uses category fallback and saves cursor", async () => { const h = harness(); const result = await runRadar(h.deps); assert.deepEqual(result, { added: 1, requests: 2, held: false }); assert.equal(h.rows[0].image, null); assert.equal(h.saved.at(-1)?.pending, null); assert.equal(h.saved.at(-1)?.nextBeam, 1); });
 test("failure to persist selected lead prevents editor call", async () => { const h = harness(); h.deps.save = async () => { throw new Error("DB down"); }; await assert.rejects(runRadar(h.deps)); assert.deepEqual(h.calls, ["discover"]); assert.equal(h.rows.length, 0); });
@@ -77,8 +80,8 @@ test("fatal discovery stops without DB state/review/success writes", async () =>
 test("fatal editor stops after pre-call pending persistence without followup", async () => { const h = harness(); h.deps.edit = async () => { throw new Error("fatal"); }; await assert.rejects(runRadar(h.deps), /fatal/); assert.equal(h.saved.at(-1)?.pending?.attempts, 1); assert.equal(h.reviews.length + h.rows.length + h.logs.length, 0); });
 test("third failed attempt becomes durable review on later run without paying again", async () => { const s = emptyState(); s.pending = { lead, beam: "official", discoveredAt: "2026-11-21T12:00:00Z", retrievedUrls: [URL], responseId: "prior", attempts: 3 }; const h = harness(s); assert.deepEqual(await runRadar(h.deps), { added: 0, requests: 0, held: true }); assert.equal(h.reviews.length, 1); assert.equal(h.saved.at(-1)?.pending, null); });
 test("review-record failure preserves pending state and cannot publish", async () => { const h = harness(); h.deps.edit = async () => { const d = draft(); d.proof.in_scope = false; return research(d); }; h.deps.review = async () => { throw new Error("review DB failed"); }; await assert.rejects(runRadar(h.deps)); assert.ok(h.saved.at(-1)?.pending); assert.equal(h.rows.length, 0); assert.equal(h.logs.length, 0); });
-test("held claims never auto-publish and are suppressed on later discoveries", async () => { const h = harness(); h.deps.edit = async () => { const d = draft(); d.item.summary_en += " 999 FPS"; return research(d); }; await runRadar(h.deps); assert.equal(h.rows.length, 0); assert.equal(h.reviews.length, 1); const retry = harness(h.saved.at(-1)); await runRadar(retry.deps); assert.ok(!retry.calls.includes("edit")); assert.equal(retry.rows.length, 0); });
-test("Arabic research produces topic proposal without editor/publication", async () => { const h = harness(); h.deps.pinnedBeam = "arabic-coverage"; await runRadar(h.deps); assert.ok(!h.calls.includes("edit")); assert.equal(h.reviews.length, 1); assert.equal(h.rows.length, 0); });
+test("held claims never auto-publish and are suppressed on later discoveries", async () => { const h = harness(); h.deps.edit = async () => { const d = draft(); d.proof.in_scope = false; return research(d); }; await runRadar(h.deps); assert.equal(h.rows.length, 0); assert.equal(h.reviews.length, 1); const retry = harness(h.saved.at(-1)); await runRadar(retry.deps); assert.ok(!retry.calls.includes("edit")); assert.equal(retry.rows.length, 0); });
+test("Arabic news beam publishes like other topics", async () => { const h = harness(); h.deps.pinnedBeam = "arabic-news"; await runRadar(h.deps); assert.ok(h.calls.includes("edit")); assert.equal(h.rows.length, 1); });
 test("existing catalog entity is a human catalog update, never duplicate article", async () => { const h = harness(); h.deps.catalogNames = ["Test Car"]; h.deps.discover = async () => research({ leads: [{ ...lead, entity_name: "Test Car" }] }); await runRadar(h.deps); assert.equal(h.reviews.length, 1); assert.ok(!h.calls.includes("edit")); });
 test("same video identity dedupes raw embed ID and alternate watch URLs", () => { const keys = knownKeys([{ slug: "a", title_en: "a", sources: [{ url: "https://youtu.be/Abcdefghi12" }], videos: ["OtherVideo1"] }]); assert.ok(keys.has("youtube:Abcdefghi12")); assert.ok(keys.has("youtube:OtherVideo1")); });
 test("insert followed by checkpoint failure is recovered without another paid/editor call", async () => {
@@ -107,8 +110,8 @@ test("SDK request uses actual sources, one tool call, no retries, hard two-reque
   assert.equal(requests.length, 2); assert.equal(constructors[0].maxRetries, 0); assert.equal(requests[0].max_tool_calls, 1); assert.equal(requests[0].tool_choice, "required"); assert.equal(JSON.stringify(requests[0].include), '["web_search_call.action.sources"]'); assert.equal(a.retrievedUrls[0], URL); assert.equal(exports.usageTotals().requests, 2);
 });
 
-test("official-looking gameplay discovery still requires human visual review", async () => { const h = harness(); h.deps.pinnedBeam = "gameplay-discoveries"; await runRadar(h.deps); assert.equal(h.rows.length, 0); assert.equal(h.reviews.length, 1); });
+test("gameplay discoveries publish automatically with an honest status", async () => { const h = harness(); h.deps.pinnedBeam = "gameplay-discoveries"; await runRadar(h.deps); assert.equal(h.rows.length, 1); assert.equal(h.reviews.length, 0); });
 test("incomplete editor search cannot auto-publish despite earlier retrieved lead", async () => { const h = harness(); h.deps.edit = async () => ({ ...research(draft()), completedSearches: 0 }); await runRadar(h.deps); assert.equal(h.rows.length, 0); assert.equal(h.reviews.length, 1); });
 test("editor changing a fresh lead into an existing article is held", async () => { const h = harness(); h.deps.known = [{ slug: "old", title_en: "Existing article topic", sources: [] }]; h.deps.edit = async () => { const d = draft(); d.item.title_en = "Existing article topic"; return research(d); }; await runRadar(h.deps); assert.equal(h.rows.length, 0); assert.equal(h.reviews.length, 1); });
 
-for (const tag of ["story-spoilers", "ENDING-SPOILER"]) test(`existing ${tag} tag forces story review despite false model spoiler flag`, async () => { const d = draft(); d.item.tags = [tag]; d.proof.story_spoilers = false; const result = await verifyDraft(d, [URL], async () => response()); assert.equal(result.decision, "review"); assert.ok(result.gates.includes("5:spoiler-headline-review")); assert.ok(result.item.tags.includes("story-spoilers")); });
+for (const tag of ["story-spoilers", "ENDING-SPOILER"]) test(`existing ${tag} tag keeps the spoiler marking despite false model spoiler flag`, async () => { const d = draft(); d.item.tags = [tag]; d.proof.story_spoilers = false; const result = await verifyDraft(d, [URL], async () => response()); assert.equal(result.decision, "publish"); assert.ok(result.gates.includes("5:spoiler-headline-review")); assert.ok(result.item.tags.includes("story-spoilers")); });

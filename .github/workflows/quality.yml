@@ -36,6 +36,7 @@ jobs:
       - run: npm run test:seo
       - run: npm run test:admin
       - run: npm run test:backup
+      - run: npm run test:shorts
       - run: npm run lint -- --quiet
       - run: npm run typecheck
       - run: npm run build

@@ -5,12 +5,15 @@ import type { AiItem } from "./ai";
 
 const CREATOR_IDENTITIES = "Bilal Fadili UCw81FIQlzaVxgiQKiqTuCBQ; BanderitaX UCxEGVXh6fi-XYo58NZrbIHQ; RimaOsta UCFlp8ti7kvEMbiqAE8Zazag; 3mr https://kick.com/3mr and UC6gTOqPVfx6g6Cmi8Ah80pA; Drb7h https://kick.com/drb7h; Xzit UCUwf9tuytTCVP6SzMaGwDVA; SXB https://kick.com/SXB and UC5hnxbraFmMPxv63U4hCwTQ; AboFlah UCqq5n-Oe-r1EEHI3yvhVJcA and UCRu9mro2nPafhMxVy2CRfXA.";
 export const BEAMS = [
-  { id: "official", focus: "Official Rockstar/Take-Two/platform announcements, patch notes and events.", domains: ["rockstargames.com", "take2games.com", "blog.playstation.com", "news.xbox.com"] },
-  { id: "patches-bugs", focus: "Title-update notes, known issues and fixed glitches. Record the tested build, or unknown." },
-  { id: "gameplay-discoveries", focus: "New secrets, easter eggs, money methods, collectibles and hidden places with actual video/screenshot evidence. A video URL alone does not prove its content." },
-  { id: "settings-hardware", focus: "PS5/Xbox, TV/HDR, Remote Play, accessibility and translation helpers; prefer manufacturer documentation. Stream/TV interpolation is not game FPS. PC DLSS/frame generation does not apply to a streamed PS5 game." },
-  { id: "community-creators", focus: `New in-game facts or notable events, never drama. Use exact identities, never free-name searches: ${CREATOR_IDENTITIES} Reactions, RP and general GTA footage are not GTA VI gameplay evidence.` },
-  { id: "arabic-coverage", focus: "Arabic player questions from YouTube/X/Reddit; propose guide topics only, never publish facts from this beam." },
+  { id: "official", focus: "Official Rockstar/Take-Two/platform announcements, Newswire posts, patch notes, events and GTA Online/GTA VI updates.", domains: ["rockstargames.com", "take2games.com", "blog.playstation.com", "news.xbox.com"] },
+  { id: "press-news", focus: "The newest GTA VI news stories from major gaming press (sales records, updates, features, interviews, guides, controversies about the game itself)." },
+  { id: "patches-bugs", focus: "Title-update notes, known issues, glitches and fixes. Record the tested build, or unknown." },
+  { id: "gameplay-discoveries", focus: "New secrets, easter eggs, collectibles, hidden places, strange or funny moments found by players, with video/screenshot evidence or press coverage." },
+  { id: "money-guides", focus: "Money methods, businesses, heists, best cars/weapons to buy, and practical progression tips that players or press have documented." },
+  { id: "reddit-leaks", focus: "Notable community findings, leaks and rumors from Reddit (r/GTA6, r/GTAVI, r/GrandTheftAutoV_PC) and X insiders. Always label unverified claims as rumor or leak." },
+  { id: "settings-hardware", focus: "PS5/Xbox, TV/HDR, Remote Play, accessibility and best settings; prefer manufacturer documentation. Stream/TV interpolation is not game FPS." },
+  { id: "community-creators", focus: `New in-game facts or notable events from known creators, never drama. Use exact identities, never free-name searches: ${CREATOR_IDENTITIES} Reactions, RP and general GTA footage are not GTA VI gameplay evidence.` },
+  { id: "arabic-news", focus: "GTA VI news and guides covered by Arabic gaming outlets and Arab creators (True Gaming, Saudi Gamer, Arab Hardware, YouTube/X in Arabic)." },
 ] as const;
 export type BeamId = typeof BEAMS[number]["id"];
 export type Lead = { headline: string; gist: string; url: string; category: string; confidence: "high" | "medium" | "low"; entity_name: string | null };
@@ -30,11 +33,12 @@ export function similar(a: string, b: string): number {
 }
 export function config(env: Record<string, string | undefined>) {
   const max = env.UPDATE_MAX_ITEMS?.trim() || "1";
-  if (!/^[01]$/.test(max)) throw new Error("RADAR-POLICY permits UPDATE_MAX_ITEMS=0 or 1 only.");
+  // UPDATE_MAX_ITEMS = topics (beams) researched per run; each costs at most two paid requests.
+  if (!/^[0-4]$/.test(max)) throw new Error("RADAR-POLICY permits UPDATE_MAX_ITEMS between 0 and 4.");
   if (env.ENRICH_PER_RUN?.trim() && env.ENRICH_PER_RUN !== "0") throw new Error("Automatic enrichment is disabled by RADAR-POLICY.");
   const beam = env.RADAR_BEAMS?.trim();
   if (beam && beam !== "rotate" && !BEAMS.some((b) => b.id === beam)) throw new Error("Use RADAR_BEAMS=rotate or one policy beam; multiple/all/legacy beams are disabled.");
-  return { enabled: max === "1", pinnedBeam: beam && beam !== "rotate" ? beam as BeamId : undefined };
+  return { enabled: max !== "0", beamsPerRun: Number(max), pinnedBeam: beam && beam !== "rotate" ? beam as BeamId : undefined };
 }
 export function chooseBeam(state: State, pinned?: BeamId) {
   return BEAMS.find((b) => b.id === (state.pending?.beam ?? pinned)) ?? BEAMS[state.nextBeam % BEAMS.length];
@@ -93,7 +97,7 @@ export async function verifyDraft(draft: Draft, retrieved: string[], read: Sourc
   const gates: string[] = [];
   const fields = ["title_ar", "title_en", "summary_ar", "summary_en", "body_ar", "body_en"] as const;
   const texts = fields.map((k) => item?.[k]);
-  if (texts.some((s) => typeof s !== "string" || !s.trim()) || (item?.body_ar?.trim().length ?? 0) < 600 || texts.some((s) => typeof s === "string" && s.length > 12_000)) gates.push("3:bilingual-content");
+  if (texts.some((s) => typeof s !== "string" || !s.trim()) || (item?.body_ar?.trim().length ?? 0) < 300 || texts.some((s) => typeof s === "string" && s.length > 12_000)) gates.push("3:bilingual-content");
   const found = new Set(retrieved.map(urlKey));
   const citations = [...new Map((Array.isArray(item?.sources) ? item.sources : []).filter((s) => typeof s.url === "string" && checkPublicHttpsUrl(s.url) && found.has(urlKey(s.url))).map((s) => [urlKey(s.url), s])).values()].slice(0, 6);
   if (!citations.length) gates.push("1:no-retrieved-source");
@@ -128,5 +132,21 @@ export async function verifyDraft(draft: Draft, retrieved: string[], read: Sourc
   const sourceNumbers = new Set(numberTokens(quotes.join(" ")));
   if (numberTokens(claims).some((n) => !sourceNumbers.has(n))) gates.push("7:unsupported-number");
   if (item.category === "glitches" && !proof?.game_build) gates.push("7:missing-tested-build-or-unknown");
-  return { decision: gates.length ? "review" : "publish", gates, item, sourceChecks };
+  // Owner decision 2026-11-22: publish automatically, but keep the status badge honest.
+  // Only missing/unreachable sources, out-of-scope or incomplete text are held (never published).
+  const hard = gates.some((g) => /^(1|2|3):|^scope:/.test(g));
+  if (!hard) {
+    const tiers = [...fetched.values()].map((f) => f.tier);
+    const unsupportedNumbers = gates.includes("7:unsupported-number");
+    const fullySupported = !gates.includes("4:missing-retrieved-support") && !unsupportedNumbers;
+    const honest: AiItem["status"] =
+      item.status === "official" && tiers.includes("A") && fullySupported ? "official"
+      : item.status === "leak" ? "leak"
+      : (item.status === "official" || item.status === "confirmed") && !unsupportedNumbers && tiers.some((t) => t === "A" || t === "C") ? "confirmed"
+      : "rumor";
+    if (honest !== item.status) gates.push(`status:${item.status}->${honest}`);
+    item.status = honest;
+    item.location = null; // map pins stay a manual, evidence-based step
+  }
+  return { decision: hard ? "review" : "publish", gates, item, sourceChecks };
 }

@@ -74,7 +74,7 @@ export function TipOfVisit({ locale }: { locale: Locale }) {
   const ar = locale === "ar";
 
   useEffect(() => {
-    if (off || path.startsWith("/admin") || shown.current) return;
+    if (off || (path.startsWith("/admin") || path.startsWith("/shorts")) || shown.current) return;
     if (read(() => sessionStorage.getItem(SESSION_KEY)) === "1") return;
     const controller = new AbortController();
     const allowed = () => !controller.signal.aborted && !shown.current && !tipsOff()
@@ -111,7 +111,7 @@ export function TipOfVisit({ locale }: { locale: Locale }) {
     };
   }, [locale, path, off]);
 
-  if (!tip || off || tip.locale !== locale || path.startsWith("/admin")) return null;
+  if (!tip || off || tip.locale !== locale || (path.startsWith("/admin") || path.startsWith("/shorts"))) return null;
   const close = () => setTip(null);
   return (
     <div className="fixed inset-x-3 bottom-[88px] z-[700] md:inset-x-auto md:end-6 md:bottom-6 md:w-96" role="dialog" aria-label={ar ? "نصيحة الزيارة" : "Tip of the visit"} aria-live="polite">
