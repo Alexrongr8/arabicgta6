@@ -9,6 +9,7 @@ import { Footer } from "@/components/Footer";
 import { BottomNav } from "@/components/Nav";
 import { Tracker } from "@/components/Tracker";
 import { SnapPixel } from "@/components/SnapPixel";
+import { AdSense } from "@/components/AdSense";
 import { TipOfVisit } from "@/components/TipOfVisit";
 import { Analytics } from "@vercel/analytics/next";
 
@@ -53,6 +54,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
         <BottomNav labels={labels} />
         <Tracker />
         <SnapPixel />
+        <AdSense />
         <TipOfVisit locale={locale} />
         <Analytics />
       </body>
