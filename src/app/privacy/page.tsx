@@ -17,7 +17,7 @@ export default async function Privacy() {
           <h2>الحساب والمشاركة</h2>
           <p>عند الدخول نحفظ الاسم والإيميل وصورة الحساب من Google، ووقت الدخول وعدده، ونوع الجهاز، والموقع التقريبي الذي توفره الاستضافة مثل الدولة والمدينة. منشوراتك وتعليقاتك واسمك وصورتك ومجموع التصويت تظهر في صفحات المجتمع العامة؛ تجنب نشر معلومات شخصية في النصوص.</p>
           <h2>إحصائيات الزيارة والتفضيلات</h2>
-          <p>نسجل مسار الصفحة واللغة ونوع المتصفح والجهاز والموقع التقريبي ومصدر الزيارة والحملة. نستخدم معرّف زيارة عشوائيًا محفوظًا في متصفحك لتمييز الزيارات، وVercel Analytics لقياس استخدام الموقع. تحفظ ملفات الارتباط جلسة الدخول واللغة والمظهر، ويحفظ المتصفح تفضيل النصائح وما شاهدته منها.</p>
+          <p>نسجل مسار الصفحة واللغة ونوع المتصفح والجهاز والموقع التقريبي ومصدر الزيارة والحملة. نستخدم معرّف زيارة عشوائيًا محفوظًا في متصفحك لتمييز الزيارات، وVercel Analytics لقياس استخدام الموقع. عند تشغيل إعلانات سناب شات نستخدم Snap Pixel لقياس الزيارات القادمة من الإعلانات، وتعالج Snap Inc. بيانات الاتصال وفق سياستها. تحفظ ملفات الارتباط جلسة الدخول واللغة والمظهر، ويحفظ المتصفح تفضيل النصائح وما شاهدته منها.</p>
           <h2>الخدمات التي تشغّل الموقع</h2>
           <p>تستضيف Vercel الموقع، وتحفظ Supabase بيانات الحساب والمحتوى، وتوفر Google تسجيل الدخول. تتصل صور المصادر ولقطات YouTube بخدماتها الخارجية، ويُحمّل مشغّل YouTube عند ضغط التشغيل. تعالج هذه الخدمات بيانات الاتصال اللازمة لعملها وفق سياساتها. لا نبيع بياناتك.</p>
           <h2>النشرة البريدية</h2>
@@ -29,7 +29,7 @@ export default async function Privacy() {
           <h2>Accounts and community posts</h2>
           <p>We store your Google name, email and avatar, sign-in time and count, device type, and approximate location supplied by the host, such as country and city. Posts, comments, author names, avatars and vote totals appear on public community pages. Avoid including personal information in your posts.</p>
           <h2>Visit statistics and preferences</h2>
-          <p>We record page paths, language, browser and device type, approximate location, referral source and campaign. A random visitor identifier is stored in your browser to distinguish visits. We also use Vercel Analytics. Cookies retain your sign-in session, language and theme; browser storage retains your tip preference and seen tips.</p>
+          <p>We record page paths, language, browser and device type, approximate location, referral source and campaign. A random visitor identifier is stored in your browser to distinguish visits. We also use Vercel Analytics. When Snapchat ads run, the Snap Pixel measures visits from those ads, and Snap Inc. processes the connection data under its own policy. Cookies retain your sign-in session, language and theme; browser storage retains your tip preference and seen tips.</p>
           <h2>Services used by the site</h2>
           <p>Vercel hosts the site, Supabase stores account and content data, and Google provides sign-in. Source images and YouTube thumbnails connect to their external services; the YouTube player loads when you press play. These providers process the connection data needed for their services under their own policies. We do not sell your data.</p>
           <h2>Email digest</h2>

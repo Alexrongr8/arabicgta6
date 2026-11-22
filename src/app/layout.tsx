@@ -8,6 +8,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { BottomNav } from "@/components/Nav";
 import { Tracker } from "@/components/Tracker";
+import { SnapPixel } from "@/components/SnapPixel";
 import { TipOfVisit } from "@/components/TipOfVisit";
 import { Analytics } from "@vercel/analytics/next";
 
@@ -51,6 +52,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
         <Footer locale={locale} />
         <BottomNav labels={labels} />
         <Tracker />
+        <SnapPixel />
         <TipOfVisit locale={locale} />
         <Analytics />
       </body>
