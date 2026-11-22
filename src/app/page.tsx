@@ -24,11 +24,11 @@ export async function generateMetadata() {
 }
 
 export default async function Home() {
-  const [locale, viewer] = await Promise.all([getLocale(), getViewer()]);
-  const counts = await getCounts();
+  const [locale, viewer, counts, featured, latest, news, pool] = await Promise.all([
+    getLocale(), getViewer(), getCounts(), getFeatured(), getLatest(10), getLatest(6, "news"), getDailyPool(),
+  ]);
   const total = Object.values(counts).reduce((a, b) => a + b, 0);
 
-  const [featured, latest, news, pool] = await Promise.all([getFeatured(), getLatest(10), getLatest(6, "news"), getDailyPool()]);
   const secret = pickDaily(pool);
   const challenge = weeklyChallenge();
   return (
@@ -63,7 +63,7 @@ export default async function Home() {
         </div>
       </Section>
 
-      <Section title={t(locale, "categories")} href="/explore" linkLabel={t(locale, "viewAll")} locale={locale}>
+      <Section title={t(locale, "categories")} href="/explore" linkLabel={locale === "ar" ? "كل الأقسام" : "All categories"} locale={locale}>
         <CategoryGrid locale={locale} counts={counts} />
       </Section>
 
@@ -86,7 +86,7 @@ export default async function Home() {
 
       <div className="mx-auto grid max-w-6xl gap-x-6 md:grid-cols-2">
         <div>
-          <Section title={t(locale, "latestNews")} href="/c/news" linkLabel={t(locale, "viewAll")} locale={locale}>
+          <Section title={t(locale, "latestNews")} href="/c/news" linkLabel={locale === "ar" ? "كل الأخبار" : "All news"} locale={locale}>
             <div className="grid gap-3">
               {news.map((n, i) => (
                 <ItemCard key={n.slug} item={n} locale={locale} showCategory={false} index={i} />

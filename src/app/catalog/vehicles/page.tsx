@@ -39,8 +39,8 @@ export default async function VehiclesCatalog({ searchParams }: PageProps<"/cata
         <h1 className="text-[28px] leading-tight">{ar ? "كتالوج مركبات GTA 6 🏎️" : "GTA 6 vehicle catalog 🏎️"}</h1>
         <p className="mt-2 text-[14px] text-white/90">
           {ar
-            ? `قائمة متنامية تضم ${VEHICLES.length} مركبة: سيارات، دبابات، دراجات هوائية، قوارب، طيارات ومركبات عسكرية. ${withStats} منها بأرقام قائمة التعديل داخل اللعبة (من 10)، والباقي بنضيف أرقامها أول ما تنشر.`
-            : `A growing list of ${VEHICLES.length} vehicles: cars, motorcycles, bicycles, boats, aircraft and military vehicles. ${withStats} have the in-game tuning stats (out of 10); the rest get stats as they're published.`}
+            ? `قائمة متنامية تضم ${VEHICLES.length} مركبة: سيارات، دبابات، دراجات هوائية، قوارب، طيارات ومركبات عسكرية. تتوفر لدينا أرقام قائمة التعديل داخل اللعبة (من 10) لـ ${withStats} منها.`
+            : `A growing list of ${VEHICLES.length} vehicles: cars, motorcycles, bicycles, boats, aircraft and military vehicles. In-game tuning stats (out of 10) are available here for ${withStats} of them.`}
         </p>
       </header>
       <Catalog

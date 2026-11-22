@@ -21,6 +21,8 @@
     "test:media": "node scripts/tests/media-share.test.mjs",
     "test:seo": "node scripts/tests/seo.test.mjs",
     "test:admin": "node scripts/tests/admin-reads.test.mjs",
+    "test:backup": "tsx --test scripts/tests/editorial-backup.test.ts",
+    "backup:editorial": "tsx scripts/backup-editorial.ts",
     "typecheck": "next typegen && tsc --noEmit",
     "enrich": "tsx scripts/enrich.ts",
     "catalog-images": "tsx scripts/catalog-images-ai.ts"

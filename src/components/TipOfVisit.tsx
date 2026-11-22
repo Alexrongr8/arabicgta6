@@ -114,13 +114,13 @@ export function TipOfVisit({ locale }: { locale: Locale }) {
   if (!tip || off || tip.locale !== locale || path.startsWith("/admin")) return null;
   const close = () => setTip(null);
   return (
-    <div className="fixed inset-x-3 bottom-[88px] z-[700] md:inset-x-auto md:end-6 md:bottom-6 md:w-96" role="dialog" aria-label={ar ? "نصيحة اليوم" : "Tip of the visit"} aria-live="polite">
+    <div className="fixed inset-x-3 bottom-[88px] z-[700] md:inset-x-auto md:end-6 md:bottom-6 md:w-96" role="dialog" aria-label={ar ? "نصيحة الزيارة" : "Tip of the visit"} aria-live="polite">
       <div className="rise relative overflow-hidden rounded-3xl border border-teal/40 bg-card p-4 shadow-2xl shadow-black/60 backdrop-blur-xl">
         <div className="pointer-events-none absolute -top-16 -end-10 size-40 rounded-full bg-teal/25 blur-3xl" />
         <div className="relative mb-2 flex items-center justify-between">
           <div className="flex min-w-0 flex-wrap items-center gap-2">
           <span className="inline-flex items-center gap-1.5 rounded-full bg-teal/15 px-2.5 py-1 text-[11px] font-extrabold text-success">
-            <Lightbulb className="size-3.5" /> {ar ? "نصيحة اليوم" : "Tip of the visit"}
+            <Lightbulb className="size-3.5" /> {ar ? "نصيحة الزيارة" : "Tip of the visit"}
           </span>
           <StatusBadge status={tip.status} locale={locale} />
           </div>

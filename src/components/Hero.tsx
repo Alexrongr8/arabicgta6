@@ -9,7 +9,7 @@ export function Hero({ locale, total, compact }: { locale: Locale; total: number
       <div className={`relative overflow-hidden rounded-[28px] ${compact ? "min-h-[260px]" : "min-h-[440px] md:min-h-[480px]"}`}>
         {/* Official Rockstar screenshot of Vice City */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/img/vice-city.webp" alt="" className="absolute inset-0 size-full object-cover" fetchPriority="high" />
+        <img src="/img/thumb/vice-city-1280.webp" alt="" width={1280} height={720} className="absolute inset-0 size-full object-cover" fetchPriority="high" />
         <div className="absolute inset-0 bg-gradient-to-t from-[#1a0b2e] via-[#1a0b2e]/55 to-[#ff3d8b]/10" />
         <div className="absolute inset-0 bg-gradient-to-l from-transparent via-transparent to-[#1a0b2e]/40 rtl:bg-gradient-to-r" />
 
@@ -47,11 +47,11 @@ export function Hero({ locale, total, compact }: { locale: Locale; total: number
           <p className="mt-4 text-[12px] text-white/75">
             {ar ? (
               <>
-                عندنا الحين <b className="text-white">{total}</b> موضوع، ويزيدون كل يوم 🔥
+                عندنا الحين <b className="text-white">{total}</b> موضوع للاستكشاف 🔥
               </>
             ) : (
               <>
-                <b className="text-white">{total}</b> entries and growing every day 🔥
+                <b className="text-white">{total}</b> entries to explore 🔥
               </>
             )}
           </p>

@@ -11,6 +11,7 @@ export interface Animal {
   dangerAr?: string;
   dangerEn?: string;
   link?: string;
+  unconfirmed?: boolean;
 }
 
 export const ANIMAL_SOURCES = [
@@ -62,7 +63,7 @@ export const ANIMALS: Animal[] = [
   { en: "Eastern Cottontail Rabbit", ar: "أرنب", group: "mammal", hunt: true },
   { en: "Bobcat", ar: "قط بري (بوب كات)", group: "mammal", whereAr: "Grassrivers", whereEn: "Grassrivers", hunt: true },
   { en: "Wild Boar / Feral Hog", ar: "خنزير بري", group: "mammal", whereAr: "مخيمات مستنقعات Grassrivers والأرياف", whereEn: "Grassrivers swamp camps and countryside", hunt: true, dangerAr: "يهجم — انتبه", dangerEn: "Can charge you" },
-  { en: "Black Bear", ar: "دب أسود", group: "mammal", whereAr: "غابات Mount Kalaga", whereEn: "Mount Kalaga forests", hunt: true, dangerAr: "خطير جداً من قريب", dangerEn: "Very dangerous up close" },
+  { en: "Black Bear", ar: "دب أسود", group: "mammal", unconfirmed: true, whereAr: "لم نتحقق من ظهوره أو موقعه داخل اللعبة", whereEn: "We have not verified its in-game appearance or location" },
   { en: "Fox", ar: "ثعلب", group: "mammal" },
   { en: "Beaver", ar: "قندس", group: "mammal" },
   { en: "Otter", ar: "ثعلب الماء", group: "mammal" },

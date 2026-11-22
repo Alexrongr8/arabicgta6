@@ -27,8 +27,8 @@ export function Footer({ locale }: { locale: Locale }) {
           className="group inline-flex items-center gap-3 rounded-2xl border border-line bg-card px-4 py-2.5 shadow-sm transition hover:border-pink/50"
         >
           <span className="text-[12px] text-dim">{ar ? "تطوير" : "Developed by"}</span>
-          <span className="font-display text-[17px] tracking-wider text-fg group-hover:text-pink" dir="ltr">
-            PROTEC<span className="text-pink">-SA</span>
+          <span className="font-display text-[17px] tracking-wider text-fg group-hover:text-accent" dir="ltr">
+            PROTEC<span className="text-accent">-SA</span>
           </span>
           <span className="text-dim" aria-hidden>
             ↗
@@ -36,7 +36,7 @@ export function Footer({ locale }: { locale: Locale }) {
         </a>
         <div className="flex items-center gap-2 text-[12.5px] text-muted">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/img/flag-sa.svg" alt={ar ? "علم المملكة العربية السعودية" : "Flag of Saudi Arabia"} className="h-5 w-auto rounded-[3px] shadow-sm" />
+          <img src="/img/flag-sa.svg" alt={ar ? "علم المملكة العربية السعودية" : "Flag of Saudi Arabia"} width={640} height={480} className="h-5 w-auto rounded-[3px] shadow-sm" />
           <span>{ar ? "صُنع بحب في السعودية" : "Proudly made in Saudi Arabia"}</span>
         </div>
       </div>

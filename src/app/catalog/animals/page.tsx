@@ -5,6 +5,7 @@ import { ANIMALS, ANIMAL_SOURCES, type AGroup } from "../../../../data/catalog-a
 import { getLocale } from "@/lib/session";
 import { catalogImage } from "@/lib/catalog-images";
 import { normalize } from "@/lib/normalize";
+import { StatusBadge } from "@/components/StatusBadge";
 
 export async function generateMetadata(): Promise<Metadata> {
   const ar = (await getLocale()) === "ar";
@@ -12,7 +13,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 const GROUPS: { id: AGroup; ar: string; en: string; emoji: string }[] = [
-  { id: "reptile", ar: "زواحف", en: "Reptiles", emoji: "🐊" },
+  { id: "reptile", ar: "زواحف وبرمائيات", en: "Reptiles & amphibians", emoji: "🐊" },
   { id: "mammal", ar: "ثدييات", en: "Mammals", emoji: "🦌" },
   { id: "bird", ar: "طيور", en: "Birds", emoji: "🦩" },
   { id: "sea", ar: "كائنات بحرية", en: "Sea life", emoji: "🦈" },
@@ -35,8 +36,8 @@ export default async function AnimalsCatalog({ searchParams }: PageProps<"/catal
         <h1 className="text-[28px] leading-tight">{ar ? "حيوانات GTA 6 🐊" : "GTA 6 animals 🐊"}</h1>
         <p className="mt-2 text-[14px] text-white/90">
           {ar
-            ? "Rockstar ما نشرت قائمة رسمية للحيوانات. دفتر الحيوانات داخل اللعبة فيه 255 خانة في 8 أقسام (الصيد 61، صيد السمك 35، الطيور 60، القطط والكلاب 34…). هنا كل حيوان تأكد ظهوره لين الحين: وين تلقاه، وش تقدر تصطاد، ووش اللي لازم تبعد عنه."
-            : "The in-game wildlife tracker has 255 entries across 8 tabs (Hunting 61, Fishing 35, Birds 60…). Here are the animals revealed so far: where to find them, what you can hunt and what to avoid."}
+            ? `استكشف ${ANIMALS.length} مدخلاً عن حيوانات Leonida، مع المواقع المذكورة في المصادر وملاحظات التحقق. الصور مرجعية من الواقع، وصور التماثيل موضّحة باسمها.`
+            : `Explore ${ANIMALS.length} wildlife entries, with reported locations and verification notes. Photos are real-world references; statue references are labeled.`}
         </p>
         <div className="mt-3 flex flex-wrap gap-2 text-[12px] font-extrabold">
           <span className="rounded-full bg-white/20 px-3 py-1">🎯 {ar ? "يصطاد" : "Huntable"}</span>
@@ -79,6 +80,7 @@ export default async function AnimalsCatalog({ searchParams }: PageProps<"/catal
                   <div className="flex flex-wrap items-center gap-1.5">
                     <span className="font-extrabold">{ar ? a.ar : a.en}</span>
                     {ar && <span className="text-[12px] text-dim" dir="ltr">{a.en}</span>}
+                    {a.unconfirmed && <StatusBadge status="rumor" locale={ar ? "ar" : "en"} />}
                     {a.hunt && <span className="rounded-full bg-chip2 px-2 py-0.5 text-[11px] font-bold">🎯 {ar ? "يصطاد" : "Hunt"}</span>}
                     {a.fish && <span className="rounded-full bg-chip2 px-2 py-0.5 text-[11px] font-bold">🎣 {ar ? "صيد" : "Fish"}</span>}
                   </div>

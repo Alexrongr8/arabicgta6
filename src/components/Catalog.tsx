@@ -139,7 +139,7 @@ export function Catalog({
                 {r.sub && <p className="text-[11px] text-dim">{r.sub}</p>}
               </div>
             ) : (
-              <p className="text-[12px] text-dim">{ar ? "الإحصائيات لسه ما انشرت — بنضيفها أول ما تتوفر." : "Stats not published yet — added as soon as they are."}</p>
+              <p className="text-[12px] text-dim">{ar ? "ما تتوفر لدينا إحصائيات موثقة لهذا العنصر حالياً." : "Verified stats are not available here yet."}</p>
             )}
             </div>
           </li>

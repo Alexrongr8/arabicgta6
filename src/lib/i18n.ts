@@ -59,7 +59,7 @@ const dict = {
   region: { ar: "المنطقة", en: "Region" },
   category: { ar: "القسم", en: "Category" },
   status: { ar: "الحالة", en: "Status" },
-  updated: { ar: "أُضيف", en: "Added" },
+  updated: { ar: "التاريخ", en: "Date" },
   open: { ar: "افتح", en: "Open" },
   all: { ar: "الكل", en: "All" },
   items: { ar: "موضوع", en: "entries" },
