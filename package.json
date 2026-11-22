@@ -13,6 +13,7 @@
     "check:seed": "tsx scripts/check-seed.ts",
     "test:scripts": "tsx scripts/tests/url-key.test.ts",
     "test:boundaries": "node scripts/tests/request-boundaries.test.mjs",
+    "test:search": "node scripts/tests/search-client.test.mjs",
     "typecheck": "tsc --noEmit",
     "enrich": "tsx scripts/enrich.ts",
     "catalog-images": "tsx scripts/catalog-images-ai.ts"

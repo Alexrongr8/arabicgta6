@@ -683,7 +683,7 @@ export default entries.flatMap(({ category, ...entry }) => {
       ...entry,
       bEn: `${entry.bEn}\n\n${addition.bEn}`,
       bAr: `${entry.bAr}\n\n${addition.bAr}`,
-      srcUrls: [...(entry.srcUrls ?? []), ...addition.srcUrls].filter(([_, url], index, all) => all.findIndex((source) => source[1] === url) === index),
+      srcUrls: [...(entry.srcUrls ?? []), ...addition.srcUrls].filter(([, url], index, all) => all.findIndex((source) => source[1] === url) === index),
       related: [...new Set([...(entry.related ?? []), ...addition.related])],
     };
   }

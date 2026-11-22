@@ -15,7 +15,7 @@ const POPULAR = ["Vice City", "Lucia", "Jason", "UFO", "Infernus", "شوزن", "
 export default async function SearchPage({ searchParams }: PageProps<"/search">) {
   const locale = await getLocale();
   const sp = await searchParams;
-  const q = typeof sp.q === "string" ? sp.q : "";
+  const q = typeof sp.q === "string" ? sp.q.slice(0, 80) : "";
   const initial = q ? await search(q, 30) : [];
   return (
     <main className="mx-auto max-w-3xl px-4 pt-5">

@@ -1,6 +1,5 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
 import { Loader2, Search, X } from "lucide-react";
 import { CATEGORIES } from "@/lib/categories";
 import type { ItemCard as Card, Locale } from "@/lib/types";
@@ -11,13 +10,13 @@ import type { CatalogHit } from "@/lib/catalog-search";
 type Labels = { placeholder: string; empty: string; hint: string; popular: string; results: string };
 
 export function SearchClient({ locale, initialQuery, initialResults, initialCatalog = [], popular, labels }: { locale: Locale; initialQuery: string; initialResults: Card[]; initialCatalog?: CatalogHit[]; popular: string[]; labels: Labels }) {
-  const router = useRouter();
   const [q, setQ] = useState(initialQuery);
   const [results, setResults] = useState<Card[]>(initialResults);
   const [catalog, setCatalog] = useState<CatalogHit[]>(initialCatalog);
   const [failed, setFailed] = useState(false);
   const [loading, setLoading] = useState(false);
   const [cat, setCat] = useState<string | null>(null);
+  const [retry, setRetry] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
   const reqId = useRef(0);
 
@@ -27,42 +26,61 @@ export function SearchClient({ locale, initialQuery, initialResults, initialCata
 
   useEffect(() => {
     const term = q.trim();
-    if (!term) return;
+    if (!term || (term === initialQuery.trim() && retry === 0)) return;
     const id = ++reqId.current;
+    const controller = new AbortController();
+    let stale = false;
+    let deadline: ReturnType<typeof setTimeout> | undefined;
     const h = setTimeout(async () => {
+      deadline = setTimeout(() => controller.abort(), 8000);
       try {
-        const r = await fetch(`/api/search?q=${encodeURIComponent(term)}`);
+        const r = await fetch(`/api/search?q=${encodeURIComponent(term)}`, { signal: controller.signal });
         if (!r.ok) throw new Error(String(r.status));
         const j = await r.json();
-        if (id !== reqId.current) return; // a newer query is in flight: drop this stale answer
-        setResults(j.results ?? []);
-        setCatalog(j.catalog ?? []);
+        if (stale || id !== reqId.current) return;
+        if (controller.signal.aborted) throw new Error("Search deadline exceeded");
+        if (!Array.isArray(j.results) || !Array.isArray(j.catalog)) throw new Error("Invalid search response");
+        setResults(j.results);
+        setCatalog(j.catalog);
         setFailed(false);
-        router.replace(`/search?q=${encodeURIComponent(term)}`, { scroll: false });
       } catch {
-        if (id === reqId.current) setFailed(true);
+        if (!stale && id === reqId.current) setFailed(true);
       } finally {
-        if (id === reqId.current) setLoading(false);
+        clearTimeout(deadline);
+        if (!stale && id === reqId.current) setLoading(false);
       }
     }, 220);
-    return () => clearTimeout(h);
-  }, [q, router]);
+    return () => {
+      stale = true;
+      clearTimeout(h);
+      clearTimeout(deadline);
+      controller.abort();
+    };
+  }, [q, initialQuery, retry]);
 
   /** Every change of the query goes through here; clearing cancels any request still in flight. */
   const change = (v: string) => {
+    v = v.slice(0, 80);
+    reqId.current++; // invalidate answers immediately, including before the next effect runs
     setQ(v);
     setCat(null);
     setFailed(false);
-    if (v.trim()) {
-      setLoading(true);
-    } else {
-      reqId.current++; // invalidate pending answers
+    setRetry(0);
+    const term = v.trim();
+    // Native history changes keep this shareable without repeating the same query in an RSC request.
+    window.history.replaceState(null, "", term ? `/search?q=${encodeURIComponent(term)}` : "/search");
+    if (term === initialQuery.trim()) {
+      setResults(initialResults);
+      setCatalog(initialCatalog);
       setLoading(false);
-      router.replace("/search", { scroll: false });
+    } else {
+      setResults([]);
+      setCatalog([]);
+      setLoading(Boolean(term));
     }
   };
 
-  const cats = q.trim() ? CATEGORIES.filter((c) => results.some((r) => r.category === c.slug)) : [];
+  const cats = q.trim() && !loading ? CATEGORIES.filter((c) => results.some((r) => r.category === c.slug)) : [];
   const shown = !q.trim() ? [] : cat ? results.filter((r) => r.category === cat) : results;
 
   return (
@@ -78,6 +96,8 @@ export function SearchClient({ locale, initialQuery, initialResults, initialCata
             aria-label={locale === "ar" ? "ابحث في الموقع" : "Search the site"}
             enterKeyHint="search"
             type="search"
+            maxLength={80}
+            aria-busy={loading}
             className="h-full min-w-0 flex-1 bg-transparent text-[16px] font-bold outline-none placeholder:font-normal placeholder:text-dim"
           />
           {q && (
@@ -120,8 +140,15 @@ export function SearchClient({ locale, initialQuery, initialResults, initialCata
             ))}
           </div>
         </div>
-      ) : failed && !loading ? (
-        <p className="mt-10 text-center text-sm text-muted" role="alert">{locale === "ar" ? "صار خطأ في البحث، جرّب مرة ثانية." : "Search failed, please try again."}</p>
+      ) : loading ? (
+        <p className="mt-10 text-center text-sm text-muted" role="status">{locale === "ar" ? "جاري البحث…" : "Searching…"}</p>
+      ) : failed ? (
+        <div className="mt-10 text-center">
+          <p className="mb-3 text-sm text-muted" role="alert">{locale === "ar" ? "تعذر تحميل نتائج البحث مؤقتًا." : "Search results are temporarily unavailable."}</p>
+          <button type="button" onClick={() => { setFailed(false); setLoading(true); setRetry((value) => value + 1); }} className="rounded-xl bg-pink px-4 py-2 text-sm font-bold text-black">
+            {locale === "ar" ? "حاول مرة ثانية" : "Try again"}
+          </button>
+        </div>
       ) : shown.length === 0 && (cat || catalog.length === 0) && !loading ? (
         <p className="mt-10 text-center text-sm text-muted" role="status">{labels.empty}</p>
       ) : (

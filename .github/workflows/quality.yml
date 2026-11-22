@@ -1,0 +1,34 @@
+name: Site quality checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: quality-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - run: npm run check:seed
+      - run: npm run test:scripts
+      - run: npm run test:boundaries
+      - run: npm run test:search
+      - run: npm run test:digest --if-present
+      - run: npm run lint -- --quiet
+      - run: npm run typecheck
+      - run: npm run build

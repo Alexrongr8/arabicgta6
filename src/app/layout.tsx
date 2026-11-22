@@ -40,11 +40,14 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang={locale} dir={locale === "ar" ? "rtl" : "ltr"} data-theme={theme} className={`${body.variable} ${head.variable} ${anton.variable} antialiased`}>
       <body className="flex min-h-dvh flex-col">
+        <a href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:start-4 focus:top-4 focus:z-[1000] focus:rounded-xl focus:bg-card focus:px-4 focus:py-3 focus:font-bold focus:text-fg">
+          {locale === "ar" ? "انتقل إلى المحتوى" : "Skip to content"}
+        </a>
         <Header locale={locale} viewer={viewer} labels={labels} theme={theme} />
         {viewer.demo && (
           <div className="border-b border-line bg-chip px-4 py-1.5 text-center text-[11px] text-muted">{t(locale, "demoMode")}</div>
         )}
-        <div className="flex-1">{children}</div>
+        <div id="main-content" tabIndex={-1} className="flex-1 scroll-mt-20">{children}</div>
         <Footer locale={locale} />
         <BottomNav labels={labels} />
         <Tracker />

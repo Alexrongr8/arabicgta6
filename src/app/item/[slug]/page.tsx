@@ -160,7 +160,7 @@ export default async function ItemPage({ params }: PageProps<"/item/[slug]">) {
             </section>
           )}
 
-          <Videos ids={item.videos ?? []} title={locale === "ar" ? "شوفها بالفيديو" : "Watch it"} />
+          <Videos ids={item.videos ?? []} locale={locale} title={locale === "ar" ? "شوفها بالفيديو" : "Watch it"} />
 
           {/* Infobox on mobile comes before the body, like a wiki (inside the gate for spoilers, on all widths) */}
           <Infobox item={item} locale={locale} className={`mb-5 ${spoiler ? "" : "lg:hidden"}`} />

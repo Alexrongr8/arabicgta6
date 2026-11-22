@@ -9,11 +9,11 @@ const root = fileURLToPath(new URL('../../', import.meta.url));
 let passed = 0;
 const checks = [];
 async function check(name, run) { await run(); passed++; checks.push(name); }
-function load(file, modules = {}) {
+function load(file, modules = {}, globals = {}) {
   const context = { exports: {}, require: (name) => {
     if (!(name in modules)) throw new Error('Unexpected import: ' + name);
     return modules[name];
-  }, URL, Request, Response, Headers, TextDecoder, Uint8Array, AbortSignal, setTimeout, clearTimeout };
+  }, URL, Request, Response, Headers, TextDecoder, Uint8Array, AbortSignal, setTimeout, clearTimeout, ...globals };
   vm.runInNewContext(ts.transpileModule(fs.readFileSync(path.join(root, file), 'utf8'), {
     compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 },
   }).outputText, context, { filename: file });
@@ -43,6 +43,30 @@ async function status(promise, expected) { await assert.rejects(promise, e => e.
   await check('avatar scheme and credentials are restricted', () => {
     for (const avatar_url of ['javascript:alert(1)', 'data:image/svg+xml,x', 'http://example.com/a', 'https://user:pass@example.com/a']) assert.equal(profile.profilePresentation({ avatar_url }).avatar, undefined);
     assert.equal(profile.profilePresentation({ avatar_url: 'https://example.com/a.png' }).avatar, 'https://example.com/a.png');
+  });
+  await check('server fetch retains method/body/headers and caller cancellation', async () => {
+    let received;
+    const net = load('src/lib/server-fetch.ts', {}, { fetch: async (_input, init) => { received = init; return new Response('ok'); } });
+    const controller = new AbortController();
+    await net.serverFetch('https://backend.invalid', { method: 'POST', body: '{}', headers: { test: 'value' }, signal: controller.signal });
+    assert.equal(received.method, 'POST'); assert.equal(received.body, '{}'); assert.equal(received.headers.test, 'value');
+    controller.abort(); assert.equal(received.signal.aborted, true);
+  });
+  await check('server fetch deadline aborts a stalled request and respects Request signals', async () => {
+    let received;
+    const stalled = load('src/lib/server-fetch.ts', {}, { fetch: (_input, init) => {
+      received = init;
+      return new Promise((_resolve, reject) => init.signal.addEventListener('abort', () => reject(init.signal.reason), { once: true }));
+    } });
+    await Promise.all([
+      assert.rejects(stalled.serverFetch('https://backend.invalid', undefined, 20), e => e.name === 'TimeoutError'),
+      new Promise(resolve => setTimeout(resolve, 30)),
+    ]);
+    assert.equal(received.signal.aborted, true);
+    const net = load('src/lib/server-fetch.ts', {}, { fetch: async (_input, init) => { received = init; return new Response('ok'); } });
+    const controller = new AbortController();
+    await net.serverFetch(new Request('https://backend.invalid', { signal: controller.signal }));
+    controller.abort(); assert.equal(received.signal.aborted, true);
   });
   await check('small JSON accepts valid UTF-8 split across chunks', async () => {
     const bytes = new TextEncoder().encode('{"text":"مرحبا"}');
@@ -100,6 +124,36 @@ async function status(promise, expected) { await assert.rejects(promise, e => e.
     const vid = 'f4d22709-b693-4c01-a385-72b24bcb977a';
     await track({ path: '/', vid }); await track({ path: '/', vid }); await track({ path: '/map', vid });
     assert.equal(writes.length, 3); assert.equal(authReads, 3);
+  });
+  await check('tracker strips referrer query and bounds campaign data before transmission', () => {
+    let effect, payload;
+    const tracker = load('src/components/Tracker.tsx', {
+      react: { useEffect: fn => { effect = fn; } }, 'next/navigation': { usePathname: () => '/map' },
+    }, {
+      URLSearchParams, Blob,
+      window: { location: { search: '?utm_source=' + 'a'.repeat(500) } },
+      document: { referrer: 'https://example.com/private/path?token=secret' },
+      localStorage: { getItem: () => 'f4d22709-b693-4c01-a385-72b24bcb977a' },
+      navigator: { sendBeacon: (_url, blob) => { payload = blob; return true; } },
+      fetch: () => { throw new Error('Unnecessary fallback'); },
+    });
+    tracker.Tracker(); effect();
+    return payload.text().then(text => {
+      const value = JSON.parse(text); assert.equal(value.ref, 'https://example.com'); assert.equal(value.utm_source.length, 80); assert(!text.includes('secret'));
+    });
+  });
+  await check('a rejected beacon queue uses one quiet fetch fallback', async () => {
+    let effect, calls = 0;
+    const tracker = load('src/components/Tracker.tsx', {
+      react: { useEffect: fn => { effect = fn; } }, 'next/navigation': { usePathname: () => '/' },
+    }, {
+      URLSearchParams, Blob,
+      window: { location: { search: '' } }, document: { referrer: '' },
+      localStorage: { getItem: () => { throw new Error('blocked storage'); } },
+      navigator: { sendBeacon: () => false },
+      fetch: () => { calls++; return Promise.reject(new Error('offline')); },
+    });
+    tracker.Tracker(); effect(); await new Promise(setImmediate); assert.equal(calls, 1);
   });
   console.log(`PASS ${passed} offline request-boundary checks`);
 })().catch(e => { console.error(e); process.exitCode = 1; });

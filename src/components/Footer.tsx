@@ -17,6 +17,7 @@ export function Footer({ locale }: { locale: Locale }) {
           </Link>
         ))}
         <Link href="/trophies" className="hover:text-pink">{ar ? "كؤوس GTA 6" : "GTA 6 trophies"}</Link>
+        <Link href="/privacy" className="hover:text-accent">{ar ? "سياسة الخصوصية" : "Privacy policy"}</Link>
       </nav>
       <div className="mx-auto flex max-w-6xl flex-col items-center gap-3 text-center">
         <a

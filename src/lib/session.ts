@@ -27,7 +27,7 @@ export interface Viewer {
 export const getViewer = cache(async (): Promise<Viewer> => {
   if (!supabaseConfigured()) return { member: true, signedIn: false, demo: true };
   const supabase = await createClient();
-  const { data } = await supabase.auth.getUser();
+  const { data } = await supabase.auth.getUser().catch(() => ({ data: { user: null } }));
   const u = data.user;
   if (!u) return { member: true, signedIn: false, demo: false };
   const presentation = profilePresentation(u.user_metadata);

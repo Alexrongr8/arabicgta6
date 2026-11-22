@@ -83,7 +83,9 @@ export async function recordSignIn(user: User, h: Headers) {
   const db = adminClient();
   const geo = geoFrom(h);
   const presentation = profilePresentation(user.user_metadata);
-  const { data: existing } = await db.from("profiles").select("sign_in_count").eq("id", user.id).maybeSingle();
+  const deadline = AbortSignal.timeout(2000);
+  const { data: existing, error } = await db.from("profiles").select("sign_in_count").eq("id", user.id).abortSignal(deadline).maybeSingle();
+  if (error) return;
   await db.from("profiles").upsert({
     id: user.id,
     email: user.email,
@@ -95,7 +97,7 @@ export async function recordSignIn(user: User, h: Headers) {
     region: geo.region,
     city: geo.city,
     device: uaInfo(h).device,
-  });
+  }).abortSignal(deadline);
 }
 
 export async function recordView(

@@ -1,11 +1,14 @@
 "use client";
 import { useState } from "react";
 import { Play } from "lucide-react";
+import type { Locale } from "@/lib/types";
 
 /** Lightweight YouTube embeds: show the thumbnail, load the player only when tapped. */
-export function Videos({ ids, title }: { ids: string[]; title: string }) {
+export function Videos({ ids, title, locale }: { ids: string[]; title: string; locale: Locale }) {
   const [playing, setPlaying] = useState<string | null>(null);
-  if (!ids.length) return null;
+  const videos = [...new Set((Array.isArray(ids) ? ids : []).filter((id) => typeof id === "string" && /^[A-Za-z0-9_-]{11}$/.test(id)))].slice(0, 10);
+  const ar = locale === "ar";
+  if (!videos.length) return null;
   return (
     <section className="mb-5">
       <h2 className="mb-3 flex items-center gap-2 text-[20px]">
@@ -15,18 +18,19 @@ export function Videos({ ids, title }: { ids: string[]; title: string }) {
         {title}
       </h2>
       <div className="no-scrollbar -mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-1">
-        {ids.map((id) => (
+        {videos.map((id, index) => (
           <div key={id} className="relative aspect-video w-[86%] shrink-0 snap-start overflow-hidden rounded-2xl border border-line bg-black shadow-md sm:w-[420px]">
             {playing === id ? (
               <iframe
                 src={`https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0&playsinline=1`}
-                title="YouTube video"
+                title={`${ar ? "فيديو يوتيوب" : "YouTube video"} ${index + 1} — ${title}`}
+                referrerPolicy="strict-origin-when-cross-origin"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
                 className="absolute inset-0 size-full"
               />
             ) : (
-              <button type="button" onClick={() => setPlaying(id)} className="group absolute inset-0" aria-label="Play video">
+              <button type="button" onClick={() => setPlaying(id)} className="group absolute inset-0" aria-label={`${ar ? "تشغيل الفيديو" : "Play video"} ${index + 1}`}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={`https://i.ytimg.com/vi/${id}/hqdefault.jpg`} alt="" loading="lazy" className="size-full object-cover opacity-90 transition group-hover:opacity-100" />
                 <span className="absolute inset-0 grid place-items-center">

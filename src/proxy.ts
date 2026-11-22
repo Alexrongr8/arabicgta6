@@ -1,5 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
+import { serverFetch } from "@/lib/server-fetch";
 
 /** Refreshes the Supabase auth session cookie on each request. */
 export async function proxy(request: NextRequest) {
@@ -9,6 +10,7 @@ export async function proxy(request: NextRequest) {
   if (!url || !key) return response;
 
   const supabase = createServerClient(url, key, {
+    global: { fetch: serverFetch },
     cookies: {
       getAll() {
         return request.cookies.getAll();
@@ -20,7 +22,8 @@ export async function proxy(request: NextRequest) {
       },
     },
   });
-  await supabase.auth.getUser();
+  // Refresh is optional for public reading. Protected actions still verify getUser themselves.
+  await supabase.auth.getUser().catch(() => {});
   return response;
 }
 

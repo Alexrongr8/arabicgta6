@@ -39,7 +39,7 @@ export default async function TrophiesPage() {
         {ar ? " — سوّ تأمل Lucia في البلكونة بالفصل الأول قبل ما يخلص، وبعدها تأمّل في كل أماكن التأمل." : " — do Lucia's balcony meditation in Chapter 1 before it ends, then meditate at every spot."}
       </div>
 
-      <Videos ids={TROPHY_VIDEOS} title={ar ? "شوف دليل البلاتينيوم بالفيديو" : "Platinum guides on video"} />
+      <Videos ids={TROPHY_VIDEOS} locale={locale} title={ar ? "شوف دليل البلاتينيوم بالفيديو" : "Platinum guides on video"} />
 
       <TrophyList trophies={TROPHIES} locale={locale} />
 
