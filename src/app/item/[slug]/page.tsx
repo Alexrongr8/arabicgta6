@@ -13,6 +13,7 @@ import { ItemCard } from "@/components/ItemCard";
 import { Prose } from "@/components/Prose";
 import { SignInGate } from "@/components/SignInGate";
 import { StatusBadge } from "@/components/StatusBadge";
+import { SourceUnknownBadge, sourceUnknown } from "@/components/SourceUnknown";
 import { ShareButton } from "@/components/ShareButton";
 import { CoverFigure } from "@/components/Cover";
 import { Videos } from "@/components/Videos";
@@ -104,6 +105,7 @@ export default async function ItemPage({ params }: PageProps<"/item/[slug]">) {
             <CategoryIcon category={item.category} className="absolute -end-4 -top-4 size-32 opacity-15" style={{ color: c.color }} />
             <div className="relative mb-3 flex flex-wrap items-center gap-2">
               <StatusBadge status={item.status} locale={locale} size="md" />
+              {sourceUnknown(item.tags) && <SourceUnknownBadge locale={locale} size="md" />}
               <span className="text-xs text-muted">
                 {t(locale, "updated")} {formatDate(item.published_at, locale)}
               </span>
@@ -174,6 +176,9 @@ export default async function ItemPage({ params }: PageProps<"/item/[slug]">) {
 
           </SpoilerWrap>
 
+          {sourceUnknown(item.tags) && item.sources.length === 0 && (
+            <p className="mt-5 text-[13px] text-muted">{t(locale, "sources")}: {locale === "ar" ? "مصدر غير معروف — تعامل مع الخبر كإشاعة لين يتأكد." : "Unknown source — treat this as a rumor until confirmed."}</p>
+          )}
           {item.sources.length > 0 && (
             <section className="mt-5">
               <h2 className="mb-2 text-sm font-extrabold text-muted">{t(locale, "sources")}</h2>

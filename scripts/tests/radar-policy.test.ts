@@ -47,8 +47,6 @@ test("topic rotation uses separate windows instead of a global watermark", () =>
 });
 test("retrieved reachable official text with field support remains publication eligible", async () => assert.equal((await verifyDraft(draft(), [URL], async () => response())).decision, "publish"));
 for (const [name, mutate, urls, source] of [
-  ["invented citation", (d: Draft) => { d.item.sources[0].url = "https://www.rockstargames.com/invented"; }, [URL], async () => response()],
-  ["source404", () => {}, [URL], async () => response("Missing", URL, 404)],
   ["missing bilingual body", (d: Draft) => { d.item.body_en = ""; }, [URL], async () => response()],
   ["out of scope", (d: Draft) => { d.proof.in_scope = false; }, [URL], async () => response()],
 ] as const) test(`${name} is held, never published`, async () => { const d = draft(); mutate(d); assert.equal((await verifyDraft(d, [...urls], source)).decision, "review"); });
@@ -58,6 +56,10 @@ for (const [name, mutate, source, status] of [
   ["numeric claim absent in source", (d: Draft) => { d.item.summary_en += " at 120 FPS"; }, async () => response(), "rumor"],
   ["unsupported field", (d: Draft) => { d.proof.support[0].fields = ["title_en"]; }, async () => response(), "confirmed"],
 ] as const) test(`${name} publishes with an honest downgraded status`, async () => { const d = draft(); mutate(d); const g = await verifyDraft(d, [URL], source); assert.equal(g.decision, "publish"); assert.equal(g.item.status, status); });
+for (const [name, mutate, source] of [
+  ["invented citation", (d: Draft) => { d.item.sources[0].url = "https://www.rockstargames.com/invented"; }, async () => response()],
+  ["source404", () => {}, async () => response("Missing", URL, 404)],
+] as const) test(`${name} publishes as rumor marked unknown source`, async () => { const d = draft(); mutate(d); const g = await verifyDraft(d, [URL], source); assert.equal(g.decision, "publish"); assert.equal(g.item.status, "rumor"); assert.ok(g.item.tags.includes("source-unknown")); });
 test("map coordinates are stripped instead of published", async () => { const d = draft(); d.item.location = { x: 1, y: 1 }; const g = await verifyDraft(d, [URL], async () => response()); assert.equal(g.decision, "publish"); assert.equal(g.item.location, null); });
 test("numeric claim present in retrieved source is permitted", async () => {
   const d = draft(); d.item.summary_en += " version 1.2"; d.proof.support[0].quote += " Version 1.2.";
@@ -111,7 +113,7 @@ test("SDK request uses actual sources, one tool call, no retries, hard two-reque
 });
 
 test("gameplay discoveries publish automatically with an honest status", async () => { const h = harness(); h.deps.pinnedBeam = "gameplay-discoveries"; await runRadar(h.deps); assert.equal(h.rows.length, 1); assert.equal(h.reviews.length, 0); });
-test("incomplete editor search cannot auto-publish despite earlier retrieved lead", async () => { const h = harness(); h.deps.edit = async () => ({ ...research(draft()), completedSearches: 0 }); await runRadar(h.deps); assert.equal(h.rows.length, 0); assert.equal(h.reviews.length, 1); });
+test("incomplete editor search publishes only as an unknown-source rumor", async () => { const h = harness(); h.deps.edit = async () => ({ ...research(draft()), completedSearches: 0 }); await runRadar(h.deps); assert.equal(h.rows.length, 1); assert.equal(h.rows[0].status, "rumor"); assert.ok((h.rows[0].tags as string[]).includes("source-unknown")); });
 test("editor changing a fresh lead into an existing article is held", async () => { const h = harness(); h.deps.known = [{ slug: "old", title_en: "Existing article topic", sources: [] }]; h.deps.edit = async () => { const d = draft(); d.item.title_en = "Existing article topic"; return research(d); }; await runRadar(h.deps); assert.equal(h.rows.length, 0); assert.equal(h.reviews.length, 1); });
 
 for (const tag of ["story-spoilers", "ENDING-SPOILER"]) test(`existing ${tag} tag keeps the spoiler marking despite false model spoiler flag`, async () => { const d = draft(); d.item.tags = [tag]; d.proof.story_spoilers = false; const result = await verifyDraft(d, [URL], async () => response()); assert.equal(result.decision, "publish"); assert.ok(result.gates.includes("5:spoiler-headline-review")); assert.ok(result.item.tags.includes("story-spoilers")); });

@@ -6,6 +6,7 @@ import { formatDate, pick } from "@/lib/i18n";
 import type { ItemCard as Card, Locale } from "@/lib/types";
 import { CategoryIcon } from "./CategoryIcon";
 import { StatusBadge } from "./StatusBadge";
+import { SourceUnknownBadge, sourceUnknown } from "./SourceUnknown";
 import { Cover } from "./Cover";
 import { isSpoiler, SPOILER_TEASER } from "@/lib/spoiler";
 
@@ -33,6 +34,7 @@ export function ItemCard({ item, locale, showCategory = true, index = 0 }: { ite
             </span>
           )}
           <StatusBadge status={item.status} locale={locale} />
+          {sourceUnknown(item.tags) && <SourceUnknownBadge locale={locale} />}
           <span>{formatDate(item.published_at, locale)}</span>
         </span>
         <span className="block text-[15px] leading-snug font-bold text-fg group-hover:text-accent"><Bidi text={pick(item, "title", locale)} /></span>

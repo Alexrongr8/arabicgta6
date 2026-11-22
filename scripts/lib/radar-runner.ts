@@ -73,7 +73,12 @@ export async function runRadar(d: RadarDeps): Promise<{ added: number; requests:
   const draft = researched.data;
   draft.item.sources = [{ title: pending.lead.headline, url: pending.lead.url }, ...(draft.item.sources ?? [])];
   const gated = await verifyDraft(draft, [...pending.retrievedUrls, ...researched.retrievedUrls], d.readSource);
-  if (!researched.completedSearches) { gated.gates.push("1:editor-search-incomplete"); gated.decision = "review"; }
+  if (!researched.completedSearches && gated.decision === "publish") {
+    // Owner decision: still publish, but honestly as an unverified rumor with an unknown source.
+    gated.gates.push("1:editor-search-incomplete");
+    gated.item.status = gated.item.status === "leak" ? "leak" : "rumor";
+    gated.item.tags = [...new Set([...(gated.item.tags ?? []), "source-unknown"])];
+  }
   if (gated.item.sources.some((source) => { const sourceKey = urlKey(source.url); return sourceKey.startsWith("youtube:") && keys.has(sourceKey); }) || d.known.some((known) => similar(known.title_en, gated.item.title_en) >= .75)) {
     gated.gates.push("duplicate:published-title-or-video"); gated.decision = "review";
   }
@@ -85,7 +90,7 @@ export async function runRadar(d: RadarDeps): Promise<{ added: number; requests:
   // Category fallback is deliberate: fetching an og:image is not a visual identity check.
   const row = { slug: leadSlug(pending.lead), category: item.category, status: item.status,
     title_en: item.title_en.trim(), title_ar: item.title_ar.trim(), summary_en: item.summary_en.trim(), summary_ar: item.summary_ar.trim(), body_en: item.body_en.trim(), body_ar: item.body_ar.trim(),
-    aliases: item.aliases.slice(0, 15), tags: [...new Set([...item.tags.slice(0, 8), `via:${beam.id}`])], facts: item.facts.slice(0, 10), location: null, region: item.region,
+    aliases: item.aliases.slice(0, 15), tags: [...new Set([...item.tags.filter((t) => t === "source-unknown" || t === "story-spoilers"), ...item.tags.slice(0, 8), `via:${beam.id}`])], facts: item.facts.slice(0, 10), location: null, region: item.region,
     related: item.related.filter((s) => d.known.some((k) => k.slug === s)).slice(0, 8), sources: item.sources, image: null,
     published_at: item.event_date && Number.isFinite(Date.parse(item.event_date)) && Date.parse(item.event_date) <= d.now.getTime() ? new Date(item.event_date).toISOString() : now, origin: "auto" };
   const inserted = await d.insert({ ...row, search_text: searchText(row) });

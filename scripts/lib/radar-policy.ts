@@ -134,8 +134,15 @@ export async function verifyDraft(draft: Draft, retrieved: string[], read: Sourc
   if (item.category === "glitches" && !proof?.game_build) gates.push("7:missing-tested-build-or-unknown");
   // Owner decision 2026-11-22: publish automatically, but keep the status badge honest.
   // Only missing/unreachable sources, out-of-scope or incomplete text are held (never published).
-  const hard = gates.some((g) => /^(1|2|3):|^scope:/.test(g));
-  if (!hard) {
+  // Owner decision 2026-11-22 (2): items without a verifiable source are still published,
+  // as rumor and visibly marked "unknown source". Only off-topic or incomplete drafts are held.
+  const hard = gates.some((g) => /^3:|^scope:/.test(g));
+  const unsourced = gates.some((g) => /^(1|2):/.test(g));
+  if (!hard && unsourced) {
+    item.status = item.status === "leak" ? "leak" : "rumor";
+    item.tags = [...new Set([...(item.tags ?? []), "source-unknown"])];
+    item.location = null;
+  } else if (!hard) {
     const tiers = [...fetched.values()].map((f) => f.tier);
     const unsupportedNumbers = gates.includes("7:unsupported-number");
     const fullySupported = !gates.includes("4:missing-retrieved-support") && !unsupportedNumbers;
