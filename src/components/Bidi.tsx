@@ -1,6 +1,7 @@
 import { Fragment } from "react";
 
-const LATIN = /[A-Za-z\u00C0-\u024F][A-Za-z\u00C0-\u024F0-9 .,'’&\-:+#|$]*[A-Za-z\u00C0-\u024F0-9.'$]|[A-Za-z\u00C0-\u024F]/g;
+// Middle characters include all Unicode hyphens/dashes (U+2010-2015), so "Take‑Two" stays one run.
+const LATIN = /[A-Za-z\u00C0-\u024F][A-Za-z\u00C0-\u024F0-9 .,'’&\-\u2010-\u2015:+#|$/_@]*[A-Za-z\u00C0-\u024F0-9.'$]|[A-Za-z\u00C0-\u024F]/g;
 
 /** Isolates Latin runs inside Arabic text so names like "(Lucia Caminos)" render correctly in RTL. */
 export function Bidi({ text }: { text: string }) {

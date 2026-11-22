@@ -104,7 +104,7 @@ export function TipOfVisit({ locale }: { locale: Locale }) {
       } finally {
         clearTimeout(timeout);
       }
-    }, 1200);
+    }, 20000); // only after the visitor has been reading for a while, never right on landing
     return () => {
       clearTimeout(timer);
       controller.abort();

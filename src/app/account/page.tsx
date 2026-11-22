@@ -21,7 +21,8 @@ export default async function Account({ searchParams }: PageProps<"/account">) {
     return (
       <main className="mx-auto max-w-md px-4 pt-8">
         <SignInGate locale={locale} next="/account" />
-        <div className="mt-6 flex justify-center">
+        <div className="card mt-4 flex items-center justify-between p-4">
+          <span className="font-bold">{locale === "ar" ? "اللغة" : "Language"}</span>
           <LangToggle locale={locale} />
         </div>
       </main>
