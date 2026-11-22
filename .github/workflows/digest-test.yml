@@ -1,0 +1,37 @@
+name: Digest test email (one recipient)
+
+# Manual only. Sends ONE plain test message to the address typed at dispatch time.
+# It never reads the subscriber list and never sends the real digest.
+on:
+  workflow_dispatch:
+    inputs:
+      to:
+        description: "Single recipient (the owner's own inbox)"
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Send one test email through Resend
+        env:
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          DIGEST_FROM: ${{ secrets.DIGEST_FROM }}
+          TO: ${{ inputs.to }}
+        run: |
+          set -euo pipefail
+          payload=$(jq -n --arg from "$DIGEST_FROM" --arg to "$TO" '{
+            from: $from, to: [$to],
+            subject: "رسالة اختبار من عربي GTA 6 ✅",
+            html: "<div dir=\"rtl\" style=\"font-family:sans-serif\"><h2>أهلاً 👋</h2><p>هذي رسالة اختبار من arabicgta6.com للتأكد إن النشرة الأسبوعية توصل صح.</p><p>لو وصلتك، كل شي تمام.</p></div>",
+            text: "رسالة اختبار من arabicgta6.com للتأكد إن النشرة الأسبوعية توصل صح."
+          }')
+          code=$(curl -sS -o resp.json -w '%{http_code}' https://api.resend.com/emails \
+            -H "Authorization: Bearer $RESEND_API_KEY" -H 'Content-Type: application/json' -d "$payload")
+          echo "HTTP $code"; jq '{id, name, message}' resp.json
+          test "$code" = 200
