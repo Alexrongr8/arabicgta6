@@ -18,7 +18,7 @@ const nextConfig: NextConfig = {
     }];
   },
   // fonts read with fs at runtime by the share-image routes
-  outputFileTracingIncludes: { "/item/[slug]/*": ["./assets/fonts/**", "./public/img/**"], "/t/[slug]": ["./public/img/**"] },
+  outputFileTracingIncludes: { "/item/[slug]/*": ["./assets/fonts/**", "./public/img/**"], "/opengraph-image": ["./assets/fonts/**", "./public/img/**"], "/t/[slug]": ["./public/img/**"] },
   turbopack: {
     rules: {
       "*.css": {

@@ -64,16 +64,6 @@ export async function coverBytes(src: string): Promise<Buffer | null> {
   }
 }
 
-async function coverLayer(src: string): Promise<Buffer | null> {
-  const bytes = await coverBytes(src);
-  if (!bytes) return null;
-  try {
-    return await sharp(bytes, { limitInputPixels: 40_000_000 }).resize(W, H, { fit: "cover", position: "attention" }).png().toBuffer();
-  } catch {
-    return null;
-  }
-}
-
 const esc = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
 /** Pango text block. `align: "left"` means start-aligned, i.e. right-aligned for Arabic paragraphs. */
@@ -102,84 +92,154 @@ function cleanTitle(t: string) {
   return clean.length > 120 ? `${clean.slice(0, 117).trim()}…` : clean;
 }
 
-/** Biggest font that keeps the title within ~3 lines (250 px). */
-async function titleLayer(title: string) {
-  for (const size of [66, 58, 52, 46, 40, 36]) {
-    const t = await textLayer(title, { size, color: "#ffffff", width: W - PAD * 2 });
-    if (t.height <= 250) return t;
-  }
-  return textLayer(title, { size: 32, color: "#ffffff", width: W - PAD * 2 });
-}
-
 const pill = (w: number, h: number, fill: string, opacity = 1) =>
   Buffer.from(
     `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}"><rect width="${w}" height="${h}" rx="${h / 2}" fill="${fill}" fill-opacity="${opacity}"/></svg>`,
   );
 
-function backdrop(withCover: boolean) {
-  const sun = withCover
-    ? ""
-    : `<defs><linearGradient id="s" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffd166"/><stop offset=".45" stop-color="#ff9a3d"/><stop offset=".85" stop-color="#ff3d8b"/></linearGradient></defs>
-       <circle cx="980" cy="150" r="280" fill="url(#s)" opacity=".55"/>`;
+/** Light, warm "Vice City sunset" backdrop with soft glows. */
+function backdrop() {
   return Buffer.from(
     `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}">
-      <defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0" stop-color="#0b0613" stop-opacity=".05"/>
-        <stop offset=".45" stop-color="#0b0613" stop-opacity=".55"/>
-        <stop offset="1" stop-color="#0b0613" stop-opacity=".95"/>
-      </linearGradient></defs>
-      ${sun}
-      <rect width="${W}" height="${H}" fill="url(#g)"/>
+      <defs>
+        <linearGradient id="bg" x1="1" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#fff9f1"/><stop offset=".55" stop-color="#fff1ea"/><stop offset="1" stop-color="#ffe3ef"/>
+        </linearGradient>
+        <radialGradient id="sun" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#ffd166" stop-opacity=".75"/><stop offset="1" stop-color="#ffd166" stop-opacity="0"/></radialGradient>
+        <radialGradient id="pink" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#ff3d8b" stop-opacity=".28"/><stop offset="1" stop-color="#ff3d8b" stop-opacity="0"/></radialGradient>
+        <radialGradient id="teal" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#19d3c5" stop-opacity=".22"/><stop offset="1" stop-color="#19d3c5" stop-opacity="0"/></radialGradient>
+      </defs>
+      <rect width="${W}" height="${H}" fill="url(#bg)"/>
+      <circle cx="1120" cy="40" r="260" fill="url(#sun)"/>
+      <circle cx="700" cy="660" r="300" fill="url(#pink)"/>
+      <circle cx="1180" cy="600" r="220" fill="url(#teal)"/>
     </svg>`,
   );
 }
 
-export async function renderItemOg(slug: string): Promise<Response> {
-  const { card, ok } = await loadCard(slug);
-  const cat = card ? CATEGORY_MAP[card.category] : null;
-  const accent = cat?.color ?? "#ff3d8b";
-  // Spoiler articles share with the category's neutral official image, never their own cover.
-  const cover = card ? await coverLayer(isSpoiler(card) ? imageOf({ category: card.category }) : imageOf(card)) : null;
-  const title = cleanTitle(card ? card.title_ar || card.title_en : "عربي GTA 6 — أسرار وأخبار وخريطة لعبة GTA VI");
+const PHOTO = { left: 40, top: 40, width: 520, height: H - 80, radius: 36 };
 
-  const base = cover ? sharp(cover) : sharp({ create: { width: W, height: H, channels: 4, background: "#1a0b2e" } });
-  const layers: OverlayOptions[] = [{ input: backdrop(Boolean(cover)), top: 0, left: 0 }];
+/** Cover photo cropped into a rounded frame with a white border and soft shadow. */
+async function photoLayers(src: string): Promise<OverlayOptions[] | null> {
+  const bytes = await coverBytes(src);
+  if (!bytes) return null;
+  try {
+    const { left, top, width, height, radius } = PHOTO;
+    const mask = Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}"><rect width="${width}" height="${height}" rx="${radius}" fill="#fff"/></svg>`);
+    const photo = await sharp(bytes, { limitInputPixels: 40_000_000 }).resize(width, height, { fit: "cover", position: "attention" })
+      .composite([{ input: mask, blend: "dest-in" }]).png().toBuffer();
+    const shadow = Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="${width + 80}" height="${height + 80}"><defs><filter id="b" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="16"/></filter></defs><rect x="40" y="52" width="${width}" height="${height - 10}" rx="${radius}" fill="#7a2c5a" fill-opacity=".28" filter="url(#b)"/></svg>`);
+    const frame = Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="${width + 12}" height="${height + 12}"><rect width="${width + 12}" height="${height + 12}" rx="${radius + 6}" fill="#ffffff"/></svg>`);
+    return [
+      { input: shadow, left: left - 40, top: top - 40 },
+      { input: frame, left: left - 6, top: top - 6 },
+      { input: photo, left, top },
+    ];
+  } catch {
+    return null;
+  }
+}
 
-  // brand pill (top-left)
-  const brandA = await textLayer("ARABIC", { size: 28, color: "#ffffff" });
-  const brandB = await textLayer("GTA6", { size: 28, color: "#ff9a3d" });
-  const brandH = Math.max(brandA.height, brandB.height) + 18;
-  const brandW = brandA.width + brandB.width + 12 + 36;
-  layers.push({ input: pill(brandW, brandH, "#0b0613", 0.72), top: 36, left: 44 });
-  layers.push({ input: brandA.data, top: 36 + Math.round((brandH - brandA.height) / 2), left: 44 + 18 });
-  layers.push({ input: brandB.data, top: 36 + Math.round((brandH - brandB.height) / 2), left: 44 + 18 + brandA.width + 12 });
+const isLight = (hex: string) => {
+  const m = /^#?([\da-f]{2})([\da-f]{2})([\da-f]{2})$/i.exec(hex);
+  if (!m) return false;
+  const [r, g, b] = m.slice(1).map((x) => parseInt(x, 16));
+  return 0.299 * r + 0.587 * g + 0.114 * b > 170;
+};
 
-  // category badge (top-right)
-  if (cat) {
-    const c = await textLayer(cat.ar, { size: 28, color: "#ffffff", bold: false });
+const TEXT_RIGHT = W - PAD;
+const TEXT_WIDTH = W - PHOTO.left - PHOTO.width - PAD - 44;
+
+/** Biggest font that keeps the title within ~4 lines in the text column. */
+async function columnTitle(title: string, maxHeight: number) {
+  for (const size of [64, 58, 52, 46, 42, 38, 34]) {
+    const t = await textLayer(title, { size, color: "#1c1030", width: TEXT_WIDTH });
+    if (t.height <= maxHeight) return t;
+  }
+  return textLayer(title, { size: 30, color: "#1c1030", width: TEXT_WIDTH });
+}
+
+/** The shared light card: photo on the left, Arabic text column on the right. */
+async function renderCard(opts: { cover: string; title: string; subtitle?: string; badge?: { text: string; color: string } }): Promise<{ png: Buffer; full: boolean }> {
+  const layers: OverlayOptions[] = [{ input: backdrop(), top: 0, left: 0 }];
+  const photo = await photoLayers(opts.cover);
+  if (photo) layers.push(...photo);
+
+  // badge (top of the text column, right-aligned)
+  let y = 64;
+  if (opts.badge) {
+    const dark = isLight(opts.badge.color);
+    const c = await textLayer(opts.badge.text, { size: 28, color: dark ? "#1c1030" : "#ffffff", bold: false });
     const bw = c.width + 44;
-    const bh = c.height + 14;
-    layers.push({ input: pill(bw, bh, accent), top: 36, left: W - 44 - bw });
-    layers.push({ input: c.data, top: 36 + Math.round((bh - c.height) / 2), left: W - 44 - bw + 22 });
+    const bh = c.height + 16;
+    layers.push({ input: pill(bw, bh, opts.badge.color), top: y, left: TEXT_RIGHT - bw });
+    layers.push({ input: c.data, top: y + Math.round((bh - c.height) / 2), left: TEXT_RIGHT - bw + 22 });
+    y += bh + 26;
+  } else {
+    y += 10;
   }
 
-  // title: right-aligned above the footer
-  const t = await titleLayer(title);
-  layers.push({ input: t.data, top: H - 96 - t.height, left: W - PAD - t.width });
+  // title + optional subtitle
+  const footerTop = H - 120;
+  const sub = opts.subtitle ? await textLayer(opts.subtitle, { size: 28, color: "#6a5480", width: TEXT_WIDTH, bold: false }) : null;
+  const t = await columnTitle(opts.title, footerTop - y - 40 - (sub ? sub.height + 18 : 0));
+  layers.push({ input: t.data, top: y, left: TEXT_RIGHT - t.width });
+  y += t.height + 18;
+  if (sub) { layers.push({ input: sub.data, top: y, left: TEXT_RIGHT - sub.width }); y += sub.height + 18; }
 
-  // footer: domain + accent bar
-  const domain = await textLayer("arabicgta6.com", { size: 30, color: "#ffd166", bold: false });
-  layers.push({ input: domain.data, top: H - 34 - domain.height, left: PAD });
-  layers.push({ input: pill(160, 8, accent), top: H - 34 - Math.round(domain.height / 2) - 4, left: W - PAD - 160 });
+  // sunset accent bar
+  const bar = Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="150" height="10"><defs><linearGradient id="a" x1="0" x2="1"><stop offset="0" stop-color="#ff3d8b"/><stop offset=".5" stop-color="#ff9a3d"/><stop offset="1" stop-color="#ffd166"/></linearGradient></defs><rect width="150" height="10" rx="5" fill="url(#a)"/></svg>`);
+  layers.push({ input: bar, top: Math.min(y + 6, footerTop - 10), left: TEXT_RIGHT - 150 });
 
-  const png = await base.composite(layers).png({ compressionLevel: 8 }).toBuffer();
+  // footer: flag + ARABIC GTA6 (right), domain pill (left of the column)
+  const brandA = await textLayer("ARABIC", { size: 34, color: "#1c1030" });
+  const brandB = await textLayer("GTA6", { size: 34, color: "#ff5c7a" });
+  const fy = H - 92;
+  const flag = await sharp(join(process.cwd(), "public/img/flag-sa-3x2.svg"), { density: 300 }).resize(42, 28).png().toBuffer();
+  let x = TEXT_RIGHT - brandB.width;
+  layers.push({ input: brandB.data, top: fy, left: x });
+  x -= brandA.width + 10;
+  layers.push({ input: brandA.data, top: fy, left: x });
+  x -= 42 + 14;
+  layers.push({ input: flag, top: fy + Math.round((brandA.height - 28) / 2), left: x });
+  const domain = await textLayer("arabicgta6.com", { size: 26, color: "#7a2c5a", bold: false });
+  const dw = domain.width + 36;
+  const dh = domain.height + 14;
+  const dx = TEXT_RIGHT - TEXT_WIDTH;
+  layers.push({ input: pill(dw, dh, "#ffffff", 0.85), top: fy - 4, left: dx });
+  layers.push({ input: domain.data, top: fy - 4 + Math.round((dh - domain.height) / 2), left: dx + 18 });
 
-  // Full card: cache a day. Degraded card (DB unreachable, unknown slug or missing cover): 5 minutes, so it recovers.
-  const full = ok && card && cover;
+  const png = await sharp({ create: { width: W, height: H, channels: 4, background: "#fff6ef" } }).composite(layers).png({ compressionLevel: 8 }).toBuffer();
+  return { png, full: Boolean(photo) };
+}
+
+function pngResponse(png: Buffer, full: boolean) {
   return new Response(new Uint8Array(png), {
     headers: {
       "Content-Type": "image/png",
       "Cache-Control": full ? "public, max-age=3600, s-maxage=86400, stale-while-revalidate=604800" : "public, max-age=60, s-maxage=300",
     },
   });
+}
+
+export async function renderItemOg(slug: string): Promise<Response> {
+  const { card, ok } = await loadCard(slug);
+  const cat = card ? CATEGORY_MAP[card.category] : null;
+  // Spoiler articles share with the category's neutral official image, never their own cover.
+  const cover = card ? (isSpoiler(card) ? imageOf({ category: card.category }) : imageOf(card)) : "/img/thumb/vice-city-1280.webp";
+  const title = cleanTitle(card ? card.title_ar || card.title_en : "عربي GTA 6 — أسرار وأخبار وخريطة لعبة GTA VI");
+  const { png, full } = await renderCard({ cover, title, badge: cat ? { text: cat.ar, color: cat.color } : undefined });
+  // Full card: cache a day. Degraded card (DB unreachable, unknown slug or missing cover): 5 minutes, so it recovers.
+  return pngResponse(png, Boolean(ok && card && full));
+}
+
+/** Site-wide share card (homepage and pages without their own image). */
+export async function renderSiteOg(): Promise<Response> {
+  const { png, full } = await renderCard({
+    cover: "/img/thumb/vice-city-1280.webp",
+    title: "كل أسرار GTA 6 بالعربي",
+    subtitle: "أخبار وأسرار وفلوس وخريطة وشورتس، تتحدّث كل ساعة",
+    badge: { text: "موسوعة GTA 6 الأولى بالعربي", color: "#ff3d8b" },
+  });
+  return pngResponse(png, full);
 }
