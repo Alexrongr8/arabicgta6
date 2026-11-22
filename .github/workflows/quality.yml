@@ -28,6 +28,7 @@ jobs:
       - run: npm run test:scripts
       - run: npm run test:boundaries
       - run: npm run test:search
+      - run: npm run test:reads
       - run: npm run test:digest --if-present
       - run: npm run lint -- --quiet
       - run: npm run typecheck

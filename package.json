@@ -14,7 +14,8 @@
     "test:scripts": "tsx scripts/tests/url-key.test.ts",
     "test:boundaries": "node scripts/tests/request-boundaries.test.mjs",
     "test:search": "node scripts/tests/search-client.test.mjs",
-    "typecheck": "tsc --noEmit",
+    "test:reads": "node scripts/tests/read-resilience.test.mjs",
+    "typecheck": "next typegen && tsc --noEmit",
     "enrich": "tsx scripts/enrich.ts",
     "catalog-images": "tsx scripts/catalog-images-ai.ts"
   },
