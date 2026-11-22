@@ -604,11 +604,6 @@
     "credit": "Rockstar Games / NiaMeowDB",
     "page": "https://meowdb.com/gta6/weapons"
   },
-  "weapon:Godwin Comshot 12": {
-    "url": "https://meowdb.com/gta6/media/footage/launch-godwin-comshot-12.webp",
-    "credit": "Rockstar Games / NiaMeowDB",
-    "page": "https://meowdb.com/gta6/weapons"
-  },
   "weapon:Kozlov KVGA-12": {
     "url": "https://meowdb.com/gta6/media/footage/launch-kozlov-kvga-12.webp",
     "credit": "Rockstar Games / NiaMeowDB",
@@ -1633,21 +1628,6 @@
     "url": "https://gta6motors.com/img/vehicles/karin-futo-85-gta6.webp",
     "credit": "Rockstar Games / GTA6 Motors",
     "page": "https://gta6motors.com/vehicles/karin-futo-85/"
-  },
-  "vehicle:Invetero Coquette D10 Pursuit": {
-    "url": "https://www.gtabase.com/images/gta-6/vehicles/temp/coquette-d10-pursuit.jpg",
-    "credit": "Rockstar Games / GTABase",
-    "page": "https://www.gtabase.com/gta-6/vehicles/coquette-d10-pursuit"
-  },
-  "vehicle:Dinka Verus Lifeguard": {
-    "url": "https://www.gtabase.com/images/gta-6/vehicles/temp/verus-lifeguard.jpg",
-    "credit": "Rockstar Games / GTABase",
-    "page": "https://www.gtabase.com/gta-6/vehicles/verus-lifeguard"
-  },
-  "vehicle:Airgator Airboat Police": {
-    "url": "https://www.gtabase.com/images/gta-6/vehicles/temp/airboat-police.jpg",
-    "credit": "Rockstar Games / GTABase",
-    "page": "https://www.gtabase.com/gta-6/vehicles/airboat-police"
   },
   "vehicle:Buckingham News Maverick": {
     "url": "https://cdn.nexzyapp.com/hub/grand-theft-auto-vi/photo/mwjgi0ob-4ee4d93f.avif",

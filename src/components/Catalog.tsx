@@ -85,15 +85,15 @@ export function Catalog({
           </button>
         </div>
       )}
-      <ol className="grid gap-2.5 md:grid-cols-2">
+      <ol className="grid grid-cols-2 gap-2 sm:gap-2.5 lg:grid-cols-3">
         {shown.map((r) => (
           <li key={r.name} className="card overflow-hidden p-0">
             <div className="noimg relative aspect-[16/9] w-full overflow-hidden" style={{ background: "linear-gradient(135deg,var(--chip-2),var(--chip))" }}>
               {!r.image && (
                 <span className="absolute inset-0 grid place-items-center">
                   <span className="flex flex-col items-center gap-1.5">
-                    <span className="text-5xl opacity-50">{r.emoji ?? "✨"}</span>
-                    <span className="rounded-full bg-card px-3 py-1 text-[12px] font-extrabold text-muted shadow-sm">📷 {ar ? "تتوفر الصورة قريباً" : "Image coming soon"}</span>
+                    <span className="text-4xl opacity-50 sm:text-5xl">{r.emoji ?? "✨"}</span>
+                    <span className="rounded-full bg-card px-2.5 py-1 text-[10.5px] font-extrabold text-muted shadow-sm sm:text-[12px]">📷 {ar ? "تتوفر الصورة قريباً" : "Image coming soon"}</span>
                   </span>
                 </span>
               )}
@@ -106,40 +106,40 @@ export function Catalog({
                   }} />
               )}
               {r.image && (r.image.page ? (
-                <a href={r.image.page} target="_blank" rel="noopener noreferrer nofollow" aria-label={ar ? `مصدر صورة ${r.name}` : `Image source for ${r.name}`} className="absolute bottom-1.5 end-1.5 rounded-full bg-black/70 px-2 py-1 text-[11px] text-white underline decoration-white/40 underline-offset-2" dir="ltr">📷 {r.image.credit}</a>
+                <a href={r.image.page} target="_blank" rel="noopener noreferrer nofollow" aria-label={ar ? `مصدر صورة ${r.name}` : `Image source for ${r.name}`} className="absolute bottom-1.5 end-1.5 max-w-[90%] truncate rounded-full bg-black/70 px-2 py-0.5 text-[10px] text-white underline decoration-white/40 underline-offset-2 sm:text-[11px]" dir="ltr">📷 {r.image.credit}</a>
               ) : (
-                <span className="absolute bottom-1.5 end-1.5 rounded-full bg-black/70 px-2 py-1 text-[11px] text-white" dir="ltr">📷 {r.image.credit}</span>
+                <span className="absolute bottom-1.5 end-1.5 max-w-[90%] truncate rounded-full bg-black/70 px-2 py-0.5 text-[10px] text-white sm:text-[11px]" dir="ltr">📷 {r.image.credit}</span>
               ))}
             </div>
-            <div className="p-3.5">
+            <div className="p-2.5 sm:p-3.5">
             <div className="mb-1 flex flex-wrap items-center gap-1.5">
-              <span className="font-display text-[16px] tracking-wide" dir="ltr">
+              <span className="font-display text-[14px] leading-tight tracking-wide sm:text-[16px]" dir="ltr">
                 {r.name}
               </span>
               {r.badge && <span className="rounded-full bg-[#ffd166] px-2 py-0.5 text-[10.5px] font-extrabold text-[#2a1240]">{r.badge}</span>}
             </div>
             {r.note && (
-              <p className="mb-2 text-[12.5px] text-muted" dir="auto">
+              <p className="mb-2 line-clamp-3 text-[11.5px] text-muted sm:text-[12.5px]" dir="auto">
                 📍 {r.note}
               </p>
             )}
             {r.stats ? (
               <div className="space-y-1.5">
                 {r.stats.map((v, i) => (
-                  <div key={i} className="grid grid-cols-[86px_1fr_32px] items-center gap-2 text-[12px]">
-                    <span className="text-dim">{statLabels[i]}</span>
-                    <span className="h-2 overflow-hidden rounded-full bg-chip2">
+                  <div key={i} className="text-[11.5px] sm:text-[12px]">
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="text-dim">{statLabels[i]}</span>
+                      <span className="font-bold" dir="ltr">{v.toFixed(1)}</span>
+                    </div>
+                    <span className="mt-0.5 block h-1.5 overflow-hidden rounded-full bg-chip2">
                       <span className="block h-full rounded-full" style={{ width: `${v * 10}%`, background: "linear-gradient(90deg,#ff8a1f,#f0287a)" }} />
-                    </span>
-                    <span className="text-end font-bold" dir="ltr">
-                      {v.toFixed(1)}
                     </span>
                   </div>
                 ))}
                 {r.sub && <p className="text-[11px] text-dim">{r.sub}</p>}
               </div>
             ) : (
-              <p className="text-[12px] text-dim">{ar ? "ما تتوفر لدينا إحصائيات موثقة لهذا العنصر حالياً." : "Verified stats are not available here yet."}</p>
+              <p className="text-[11.5px] text-dim sm:text-[12px]">{ar ? "ما تتوفر لدينا إحصائيات موثقة لهذا العنصر حالياً." : "Verified stats are not available here yet."}</p>
             )}
             </div>
           </li>
