@@ -9,12 +9,13 @@ import { SignInGate } from "@/components/SignInGate";
 import { LangToggle } from "@/components/LangToggle";
 import { setDigest } from "./actions";
 import { TipsToggle } from "@/components/TipOfVisit";
+import { digestEnabled } from "@/lib/digest-config";
 
 export async function generateMetadata(): Promise<Metadata> {
   return { title: t(await getLocale(), "account") };
 }
 
-export default async function Account() {
+export default async function Account({ searchParams }: PageProps<"/account">) {
   const [locale, viewer] = await Promise.all([getLocale(), getViewer()]);
   if (!viewer.signedIn) {
     return (
@@ -26,11 +27,15 @@ export default async function Account() {
       </main>
     );
   }
-  let optIn = true;
+  const digest = digestEnabled();
+  const params = await searchParams;
+  let optIn: boolean | null = null;
   if (supabaseConfigured()) {
-    const supabase = await createClient();
-    const { data } = await supabase.from("profiles").select("digest_opt_in").eq("id", viewer.id!).maybeSingle();
-    optIn = data?.digest_opt_in ?? true;
+    try {
+      const supabase = await createClient();
+      const { data, error } = await supabase.from("profiles").select("digest_opt_in").eq("id", viewer.id!).abortSignal(AbortSignal.timeout(4000)).maybeSingle();
+      if (!error && typeof data?.digest_opt_in === "boolean") optIn = data.digest_opt_in;
+    } catch { /* Show unknown rather than claiming a saved subscription. */ }
   }
   return (
     <main className="mx-auto max-w-md px-4 pt-8">
@@ -52,12 +57,16 @@ export default async function Account() {
         <div className="mb-2 flex items-center gap-2 font-extrabold">
           <Mail className="size-5 text-pink" /> {t(locale, "digest")}
         </div>
-        <p className="mb-4 text-sm text-muted">{t(locale, "digestDesc")}</p>
+        <p className="mb-4 text-sm text-muted">{t(locale, digest ? "digestDesc" : "digestPaused")}</p>
+        {params.digest === "failed" && <p role="alert" className="mb-3 text-sm text-error">{t(locale, "digestSaveFailed")}</p>}
+        {optIn === null ? <p role="status" className="text-sm text-muted">{t(locale, "digestUnavailable")}</p> : <>
+        {!digest && optIn && <p className="mb-3 text-sm text-muted">{t(locale, "digestSavedPaused")}</p>}
         <form action={setDigest.bind(null, !optIn)}>
-          <button className={`h-11 w-full rounded-xl font-extrabold ${optIn ? "border border-line" : "bg-sunset text-[#241338]"}`}>
-            {optIn ? `${t(locale, "subscribed")} ✓ — ${t(locale, "unsubscribe")}` : t(locale, "subscribe")}
+          <button disabled={!digest && !optIn} className={`h-11 w-full rounded-xl font-extrabold disabled:opacity-60 ${optIn ? "border border-line" : "bg-sunset text-[#241338]"}`}>
+            {optIn ? (digest ? `${t(locale, "subscribed")} ✓ — ${t(locale, "unsubscribe")}` : t(locale, "unsubscribe")) : t(locale, digest ? "subscribe" : "digestSubscribePaused")}
           </button>
         </form>
+        </>}
       </div>
 
       <div className="card mb-4 flex items-center justify-between p-5">

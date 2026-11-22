@@ -2,12 +2,26 @@ name: Weekly digest email
 
 on:
   schedule:
-    # Fridays 16:00 UTC (19:00 Saudi time)
+    # Fridays16:00 UTC (19:00 Saudi). Runtime refuses sends outside the following12h.
     - cron: "0 16 * * 5"
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Offline seed preview only (no subscriber/provider calls)"
+        type: boolean
+        default: true
+
+concurrency:
+  group: weekly-digest
+  cancel-in-progress: false
+
+permissions:
+  contents: read
 
 jobs:
   digest:
+    # Scheduled sends stay OFF until configuration, recipient review and delivery are verified.
+    if: ${{ github.event_name == 'workflow_dispatch' || (vars.DIGEST_ENABLED == 'true' && vars.DIGEST_DELIVERY_VERIFIED == 'true') }}
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -17,8 +31,19 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci --ignore-scripts
-      - run: npm run digest
+      - name: Preview or send the verified edition
+        shell: bash
+        run: |
+          if [ "$DIGEST_DRY_RUN" = "true" ]; then
+            npm run digest -- --dry
+          else
+            npm run digest -- --send
+          fi
         env:
+          DIGEST_DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run }}
+          DIGEST_ENABLED: ${{ vars.DIGEST_ENABLED }}
+          DIGEST_DELIVERY_VERIFIED: ${{ vars.DIGEST_DELIVERY_VERIFIED }}
+          DIGEST_MAX_RECIPIENTS: ${{ vars.DIGEST_MAX_RECIPIENTS }}
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}

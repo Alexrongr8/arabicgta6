@@ -6,8 +6,10 @@ import { LangToggle } from "./LangToggle";
 import { Logo } from "./Logo";
 import { TopLinks } from "./Nav";
 import { ThemeToggle } from "./ThemeToggle";
+import { digestEnabled } from "@/lib/digest-config";
 
 export function Header({ locale, viewer, labels, theme }: { locale: Locale; viewer: Viewer; labels: Parameters<typeof TopLinks>[0]["labels"]; theme: "light" | "dark" }) {
+  const digest = digestEnabled();
   return (
     <header className="glass sticky top-0 z-40 border-b border-line">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-2 px-3 md:px-4">
@@ -30,10 +32,10 @@ export function Header({ locale, viewer, labels, theme }: { locale: Locale; view
           ) : (
             <Link
               href="/login"
-              aria-label={locale === "ar" ? "النشرة الأسبوعية" : "Weekly digest"}
+              aria-label={digest ? (locale === "ar" ? "النشرة الأسبوعية" : "Weekly digest") : t(locale, "signIn")}
               className="bg-sunset inline-flex h-9 min-w-9 items-center justify-center gap-1 rounded-full px-2.5 text-[13px] font-extrabold text-[#241338] shadow-md shadow-pink/30 min-[480px]:px-3.5"
             >
-              ✉️<span className="hidden min-[480px]:inline">{locale === "ar" ? "النشرة" : "Digest"}</span>
+              {digest ? "✉️" : "👤"}<span className="hidden min-[480px]:inline">{digest ? (locale === "ar" ? "النشرة" : "Digest") : t(locale, "signIn")}</span>
             </Link>
           )}
         </div>

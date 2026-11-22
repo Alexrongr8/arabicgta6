@@ -70,7 +70,7 @@ export default async function Community() {
           ) : (
             <Link href="/login?next=/community" className="card block p-5 text-center">
               <p className="font-head text-[19px]">{ar ? "🕵️ عندك اكتشاف؟" : "🕵️ Got a discovery?"}</p>
-              <p className="mt-1 text-[13.5px] text-muted">{ar ? "سجّل بحساب Google وانشره باسمك — وتوصلك النشرة الأسبوعية بعد." : "Sign in with Google to publish it under your name — and get the weekly digest."}</p>
+              <p className="mt-1 text-[13.5px] text-muted">{ar ? "سجّل بحساب Google وانشر اكتشافك باسمك." : "Sign in with Google to publish your discovery under your name."}</p>
               <span className="mt-3 inline-block rounded-xl bg-pink px-5 py-2.5 text-sm font-extrabold text-black">{ar ? "سجّل الدخول" : "Sign in"}</span>
             </Link>
           )}

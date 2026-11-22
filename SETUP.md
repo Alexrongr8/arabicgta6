@@ -1,85 +1,78 @@
-# دليل تشغيل موقع arabicgta6.com خطوة بخطوة
+# تشغيل arabicgta6.com
 
-> لا ترسل أي مفتاح سري في مكان عام، ولا ترفع ملف `.env.local` على GitHub (الملف محمي تلقائياً).
+الموقع الحالي يعمل على Vercel، وقاعدة البيانات وتسجيل الدخول على Supabase. DreamHost هي جهة تسجيل النطاق. رفع تغيير إلى `main` يشغّل نشر Vercel؛ اكتمال رفع الكود لا يعني نجاح النشر حتى تظهر نتيجته وتُفحص الصفحة العامة.
 
-## 1) GitHub (مكان الكود + التحديث التلقائي كل 6 ساعات)
-
-افتح الطرفية (Terminal) واكتب:
+## التطوير والفحص
 
 ```bash
-sudo apt install gh
+npm ci
+npm run dev
 ```
+
+من دون إعداد Supabase تعمل معاينة محلية من البيانات الأولية. عند إعداد Supabase تُستخدم بياناته؛ تعطل القراءة يظهر كخطأ يمكن إعادة محاولته.
 
 ```bash
-gh auth login
+npm run check:seed
+npm run test:scripts
+npm run test:boundaries
+npm run test:search
+npm run test:reads
+npm run test:digest
+npm run test:radar
+npm run lint -- --max-warnings 0
+npm run typecheck
+npm run build
 ```
 
-اختر: GitHub.com ← HTTPS ← Login with a web browser، وانسخ الكود اللي يطلع لك في المتصفح.
-بعدها أنا أسوي المستودع (private) وأرفع الكود.
+هذه الاختبارات لا ترسل بريدًا ولا تستخدم OpenAI المدفوع. فحص GitHub في `.github/workflows/quality.yml` يعيد التحقق من نسخة نظيفة، لكنه ليس بحد ذاته حماية دمج أو شرطًا يمنع نشر Vercel.
 
-## 2) Supabase (قاعدة البيانات + تسجيل الدخول)
+## الإعدادات والأسرار
 
-1. ادخل https://supabase.com وسجل دخول بحساب GitHub أو Google.
-2. New project ← الاسم: `arabicgta6` ← المنطقة: **Frankfurt (eu-central-1)** ← اختر كلمة سر قوية واحفظها عندك.
-3. بعد ما يجهز: من القائمة **SQL Editor** ← New query ← الصق محتوى ملف `supabase/schema.sql` كامل ← **Run**.
-4. من **Project Settings ← API** انسخ ثلاث قيم وأرسلها لي:
-   - Project URL
-   - `anon` `public` key
-   - `service_role` key (سري)
-5. من **Authentication ← URL Configuration**:
-   - Site URL: `https://arabicgta6.com`
-   - Redirect URLs: أضف `https://arabicgta6.com/**` و `http://localhost:3100/**`
+استخدم `.env.example` لمعرفة أسماء المتغيرات، ثم ضع القيم المحلية في `.env.local` المتجاهل من Git. أدخل الأسرار مباشرة في مخزن أسرار الخدمة المناسب؛ لا ترسلها في المحادثة أو تحفظها في مستندات المشروع.
 
-## 3) Google (زر الدخول بحساب Google)
-
-1. ادخل https://console.cloud.google.com ← أنشئ مشروع جديد باسم `arabicgta6`.
-2. **APIs & Services ← OAuth consent screen**:
-   - User type: External
-   - App name: `Arabic GTA 6` ، إيميل الدعم: إيميلك
-   - Authorized domains: `arabicgta6.com` و `supabase.co`
-   - Scopes: email, profile, openid (الافتراضية)
-   - بعد الإعداد اضغط **Publish app** عشان يقدر أي أحد يسجل.
-3. **Credentials ← Create credentials ← OAuth client ID**:
-   - Application type: Web application
-   - Authorized JavaScript origins: `https://arabicgta6.com`
-   - Authorized redirect URIs: `https://<رمز مشروعك>.supabase.co/auth/v1/callback` (موجود في Supabase تحت Authentication ← Providers ← Google)
-4. انسخ **Client ID** و **Client Secret** والصقهم في Supabase: **Authentication ← Providers ← Google ← Enable**.
-
-## 4) Vercel (استضافة الموقع)
-
-1. ادخل https://vercel.com وسجل دخول بحساب GitHub.
-2. Add New ← Project ← اختر مستودع `arabicgta6` ← Import.
-3. في **Environment Variables** أضف (أنا أجهز لك القيم):
-   `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `NEXT_PUBLIC_SITE_URL=https://arabicgta6.com`, `OWNER_EMAILS=إيميلك`
-4. Deploy.
-5. **Settings ← Domains** ← أضف `arabicgta6.com` و `www.arabicgta6.com` ← وانسخ سجلات DNS اللي يعطيك إياها Vercel في لوحة شركة الدومين.
-6. **Analytics** ← Enable (إحصائيات زيارات مجانية).
-
-## 5) Resend (النشرة الأسبوعية على الإيميل)
-
-1. ادخل https://resend.com وسجل.
-2. **Domains ← Add domain** ← `arabicgta6.com` ← أضف سجلات DNS اللي يعطيك إياها في لوحة الدومين ← Verify.
-3. **API Keys ← Create** وأرسلها لي.
-
-## 6) أسرار GitHub Actions (للتحديث التلقائي والنشرة)
-
-أنا أضيفها بنفسي بعد ما تعطيني المفاتيح:
-`SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `OPENAI_API_KEY`, `RESEND_API_KEY`, `DIGEST_FROM`
-
-## تغيير سرعة التحديث
-
-ملف `.github/workflows/update.yml`: السطر `cron: "7 * * * *"` يعني كل ساعة (الرادار).
-لو تبغى كل 6 ساعات غيّره إلى `cron: "7 */6 * * *"`.
-
-الرادار يمسح كل ساعة: مواقع الأخبار (بحث مثل Google)، Reddit، YouTube، Instagram/X/TikTok، وأخبار الستريمرز والمشاهير مثل Speed. وبعدها يكتب مقالات عميقة بالعربي والإنجليزي مع صورة، ويعمّق 4 مقالات قديمة قصيرة كل مرة لين تصير كل الصفحات مفصلة.
-
-> التكلفة: كل ساعة تقريباً 5 عمليات بحث + كتابة المقالات الجديدة على مفتاح OpenAI. حط حد شهري للصرف من لوحة OpenAI (Settings ← Limits) عشان تكون مطمّن.
-
-## أوامر مفيدة
-
-| الأمر | الوظيفة |
+| المكان | الإعدادات |
 | --- | --- |
-| `npm run dev` | تشغيل الموقع محلياً |
-| `npm run seed` | رفع الموسوعة الأولية إلى Supabase |
-| `npm run update -- --dry` | تجربة التحديث التلقائي بدون نشر |
-| `npm run digest -- --to=you@example.com` | تجربة النشرة على إيميل واحد |
+| موقع Vercel | `NEXT_PUBLIC_SUPABASE_URL` و`NEXT_PUBLIC_SUPABASE_ANON_KEY` و`NEXT_PUBLIC_SITE_URL` |
+| خادم Vercel فقط | `SUPABASE_SERVICE_ROLE_KEY` و`OWNER_EMAILS` |
+| أسرار GitHub للرادار | `SUPABASE_URL` و`SUPABASE_SERVICE_ROLE_KEY` و`OPENAI_API_KEY` |
+| أسرار GitHub للنشرة | `SUPABASE_URL` و`SUPABASE_SERVICE_ROLE_KEY` و`RESEND_API_KEY` و`DIGEST_FROM` |
+
+مفتاح `service_role` سري ويتجاوز صلاحيات الصفوف؛ لا تضعه في متغير يبدأ بـ`NEXT_PUBLIC_`. إعداد Google OAuth يجب أن يطابق مشروع Supabase والنطاق الحاليين. اختبر الدخول والخروج بحساب مصرح به قبل اعتماد الجاهزية؛ وجود الزر وحده لا يثبت نجاح الدخول.
+
+## التحديث كل3ساعات
+
+الجدولة في `.github/workflows/update.yml` هي `7 */3 * * *`: ثماني فرص تشغيل يوميًا. قد تتأخر جدولة GitHub؛ هذا ليس وعدًا بوقت نشر دقيق. لن يعمل التشغيل المجدول أو اليدوي ما لم يكن متغير المستودع `CONTENT_AUTOMATION_ENABLED` مساويًا تمامًا لـ`true`.
+
+ابدأ بهذه المتغيرات بعد اكتمال إعداد المفتاح والتحقق من النموذج والتكلفة:
+
+- `OPENAI_MODEL`: اسم نموذج مدعوم ومختار صراحة؛ لا يوجد افتراضي مدفوع.
+- `OPENAI_RADAR_MODEL`: اختياري، وإلا يُستخدم النموذج نفسه.
+- `RADAR_BEAMS=rotate`: موضوع واحد من ستة، بالتناوب.
+- `UPDATE_MAX_ITEMS=1` و`ENRICH_PER_RUN=0`.
+
+الرادار يسترجع المصادر ثم يراجع مسودة واحدة. النص الرسمي المستوفي للضوابط يمكن نشره؛ المقاطع والادعاءات غير المحققة وصور الكتالوج وتعديلات المقالات القائمة تنتظر مراجعة بشرية. لا يُعاد نشر المقترح المعلّق تلقائيًا. راجع [سياسة الرادار](docs/RADAR-POLICY.md) لتفاصيل المصادر وإعادة المحاولة وسجل المراجعة الخاص في `update_runs`.
+
+الحد المطلوب للحساب120دولار شهريًا. تأكد من إنفاذ الحد في حساب OpenAI الصحيح قبل التفعيل. يتوقف البرنامج عند أخطاء الرصيد والحد والمصادقة، ولا يعيد طلباتها تلقائيًا. محاسبة المزود قد تتأخر، لذا لا تَعِد بقطع لحظي دقيق عند120.00دولار أو تعتبر عدد الطلبات ضمانًا لتكلفة ثابتة. أبقِ التشغيل معطّلًا حتى التحقق من الإعداد والحد.
+
+`npm run update -- --dry` **يستخدم AI مدفوعًا** لكنه لا ينشر ولا يحفظ حالة. وكذلك `enrich --review --slug=... --dry` و`catalog-images --review --dry`. استخدم الاختبارات أعلاه للفحص المجاني. لا تشغّل نسخًا محلية متزامنة مع الرادار المجدول؛ تزامن GitHub يحمي تشغيلاته فقط.
+
+## النشرة البريدية
+
+النشرة متوقفة افتراضيًا. `npm run digest` أو `npm run digest -- --dry` يعرضان معاينة من البيانات المحلية فقط، بلا قراءة مشتركين أو إرسال. الإرسال الحقيقي يحتاج `--send`، وكلًا من `DIGEST_ENABLED=true` و`DIGEST_DELIVERY_VERIFIED=true` في بيئة الإرسال، وإعداد مرسل ومفتاح وقاعدة بيانات صالح.
+
+قبل تفعيل العلمين:
+
+1. راجع وطبّق تغيير الاشتراك الافتراضي المستقبلي في `supabase/pending/20261122_03_digest_future_opt_in.sql` منفصلًا. لا يغيّر تفضيلات المستخدمين الحاليين؛ راجع أهلية وموافقة القائمة القديمة قبل إرسالها.
+2. تحقق من نطاق المرسل وتسليم رسالة اختبار مأذون بها والتوقيع على ترويسات إلغاء الاشتراك؛ وجود الكود لا يثبت وصول البريد أو صحة DKIM.
+3. اختبر إلغاء الاشتراك بهوية اختبار مصرح بها، وتأكد من أن فتح الرابط لا يغيّر التفضيل وأن التأكيد عبر POST يعمل. لا تستخدم مشتركًا حقيقيًا كاختبار بلا إذن.
+4. اضبط العلمين في Vercel أيضًا كي تعكس الواجهة حالة الخدمة. هذه أعلام جاهزية وليست فحصًا مباشرًا لصحة المزود.
+
+الإصدار الأسبوعي يبدأ الجمعة16:00UTC، أي19:00بتوقيت السعودية. يسمح البرنامج بالإرسال وإعادته خلال12ساعة فقط بالمفتاح الثابت نفسه لكل عنوان؛ إذا فاتت النافذة انتظر الإصدار التالي ولا تغيّر مفاتيح منع التكرار لفرض إعادة إرسال. `--to=...` يقيد الإرسال بمشترك مسجل فعلًا ولا يتجاوز أي شرط. الحد الافتراضي100سجل، و`DIGEST_MAX_RECIPIENTS` يسمح بقيمة مدروسة من1إلى500؛ تُفحص القائمة كاملة قبل أول رسالة. قبول المزود للرسالة ليس إثباتًا لوصولها.
+
+## قاعدة البيانات والنشر
+
+التغييرات الموجودة في `supabase/pending/` مقترحات غير مطبّقة تلقائيًا. اتبع [خطة المجتمع المرحلية](docs/operations/community-rollout.md): المرحلةB لا تُطبّق قبل المرحلةA وتحويل التطبيق إلى RPC والتحقق منه. تطبيقها الآن على التطبيق القديم قد يعطّل المشاركة.
+
+`npm run seed` يضيف العناصر المفقودة إلى قاعدة البيانات المهيأة ويتجاوز المعرّفات الموجودة. إضافة `--force` تستبدل حقول المقالات الموجودة بالنسخة الأولية. لا تستخدم `--force` لتحديث الإنتاج المعتاد؛ خذ نسخة من الصفوف المقصودة، وراجع فرقًا محدودًا، ثم تحقق من النتيجة. احتفظ بأحدث سجل `radar_state` إذا نظفت سجلات التشغيل.
+
+قبل الإعلان افحص النسخة المنشورة فعليًا، وراجع نجاح CI وVercel، والدخول والمشاركة والإشراف، والبحث وصور المشاركة. افصل ما تم إثباته على الموقع العام عما اختُبر محليًا أو ما يزال متوقفًا بسبب إعداد حساب.

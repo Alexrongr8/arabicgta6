@@ -1,6 +1,8 @@
 import OpenAI from "openai";
 import { need } from "./env";
 import { CATEGORIES } from "../../src/lib/categories";
+import { evidenceOf } from "./ai-evidence";
+import type { Research, Usage } from "./radar-policy";
 
 // No silent expensive default: the model must be chosen explicitly (repo variable OPENAI_MODEL).
 export const MODEL = process.env.OPENAI_MODEL || "";
@@ -122,8 +124,11 @@ export type AiItem = {
   event_date: string | null;
 };
 
-/** One web-search-enabled call returning JSON that matches `schema`. */
-export async function askJson<T>(opts: {
+/** No command may silently exceed the initial policy budget. No automatic API retries. */
+const totals: Usage = { requests: 0, inputTokens: 0, outputTokens: 0, searchCalls: 0 };
+export const usageTotals = (): Usage => ({ ...totals });
+
+export type AskOptions = {
   model?: string;
   prompt: string;
   schema: Record<string, unknown>;
@@ -132,16 +137,23 @@ export async function askJson<T>(opts: {
   search?: boolean;
   /** cap on generated tokens (default 1500 for leads; pass ~6000 for bilingual articles) */
   maxOutputTokens?: number;
-}): Promise<T> {
+};
+
+export async function askJsonWithEvidence<T>(opts: AskOptions): Promise<Research<T>> {
+  if (totals.requests >= 2) throw new FatalAiError("Per-command paid request ceiling reached (2). No further calls allowed.");
+  preflight();
   const tools =
     opts.search === false
       ? []
       : [{ type: "web_search" as const, search_context_size: "low" as const, ...(opts.domains?.length ? { filters: { allowed_domains: opts.domains } } : {}) }];
   let res;
   try {
+    totals.requests++;
     res = await ai().responses.create({
       model: opts.model ?? MODEL,
       tools,
+      include: opts.search === false ? [] : ["web_search_call.action.sources"],
+      tool_choice: opts.search === false ? undefined : "required",
       max_tool_calls: opts.search === false ? undefined : 1,
       max_output_tokens: opts.maxOutputTokens ?? 1500,
       reasoning: { effort: "low" },
@@ -153,9 +165,19 @@ export async function askJson<T>(opts: {
     throw e;
   }
   const u = res.usage;
-  console.log(`  [usage] ${opts.name}: status=${res.status} in=${u?.input_tokens ?? "?"} out=${u?.output_tokens ?? "?"}`);
+  const evidence = evidenceOf(res);
+  totals.inputTokens += u?.input_tokens ?? 0;
+  totals.outputTokens += u?.output_tokens ?? 0;
+  totals.searchCalls += evidence.searchCalls;
+  console.log(`  [usage] ${opts.name}: status=${res.status} in=${u?.input_tokens ?? "?"} out=${u?.output_tokens ?? "?"} searches=${evidence.searchCalls}`);
   if (res.status !== "completed" || !res.output_text) throw new Error(`${opts.name}: incomplete response (${res.status})`);
-  return JSON.parse(res.output_text) as T;
+  return { data: JSON.parse(res.output_text) as T, retrievedUrls: evidence.retrievedUrls, completedSearches: evidence.completedSearches, responseId: res.id,
+    usage: { requests: 1, inputTokens: u?.input_tokens ?? 0, outputTokens: u?.output_tokens ?? 0, searchCalls: evidence.searchCalls } };
+}
+
+/** Compatibility wrapper for callers that do not publish researched content. */
+export async function askJson<T>(opts: AskOptions): Promise<T> {
+  return (await askJsonWithEvidence<T>(opts)).data;
 }
 
 export function youtubeThumb(url: string): string | null {

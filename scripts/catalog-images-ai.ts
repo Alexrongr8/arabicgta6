@@ -1,54 +1,27 @@
-/**
- * Finds a GTA VI picture for weapons and vehicles that still have none:
- * asks OpenAI (web search) for a page specifically about that item in GTA 6, then takes the page's preview image.
- * Writes data/catalog-images.json (committed back to the repo by the hourly workflow).
- *   npx tsx scripts/catalog-images-ai.ts --count=15
- */
+/** One explicit paid search creates a private review record only. Never writes catalog-images.json. */
 import "./lib/env";
-import { readFileSync, writeFileSync } from "node:fs";
-import { askJson } from "./lib/ai";
-import { findImage } from "./lib/og";
+import { readFileSync } from "node:fs";
+import { db } from "./lib/db";
+import { askJsonWithEvidence, preflight, usageTotals } from "./lib/ai";
+import { writeRecord } from "./lib/radar-store";
+import { imageCandidates } from "./lib/image-review";
+import { safeGet } from "../src/lib/safe-fetch";
 import { WEAPONS } from "../data/catalog-weapons";
 import { VEHICLES } from "../data/catalog-vehicles";
 
-const OUT = "data/catalog-images.json";
-const COUNT = Number(process.argv.find((a) => a.startsWith("--count="))?.slice(8) ?? 15);
-
-const schema = {
-  type: "object",
-  additionalProperties: false,
-  required: ["pages"],
-  properties: { pages: { type: "array", items: { type: "string" } } },
-} as const;
-
 async function main() {
-  const out = JSON.parse(readFileSync(OUT, "utf8")) as Record<string, { url: string; credit: string; page: string }>;
-  const todo = [
-    ...WEAPONS.map((w) => ({ key: `weapon:${w[0]}`, name: w[0], kind: "weapon" })),
-    ...VEHICLES.map((v) => ({ key: `vehicle:${v[0]}`, name: v[0], kind: "vehicle" })),
-  ].filter((t) => !out[t.key]);
-  let found = 0;
-  for (const t of todo.slice(0, COUNT)) {
-    try {
-      const r = await askJson<{ pages: string[] }>({
-        prompt: `Find up to 3 web pages that are specifically about the ${t.kind} "${t.name}" in Grand Theft Auto VI (GTA 6, released November 2026) and show a picture of it from GTA 6 (not GTA V or GTA Online). Prefer GTABase, MeowDB, GTA Wiki, IGN, GameSpot, Sportskeeda or similar. Return only the page URLs.`,
-        schema: schema as unknown as Record<string, unknown>,
-        name: "image_pages",
-      });
-      for (const page of r.pages ?? []) {
-        if (!/^https:\/\//.test(page)) continue;
-        const img = await findImage(page);
-        if (!img || /gta-?5|gtav[^i]|gta-online|gtao/i.test(img)) continue;
-        out[t.key] = { url: img, credit: new URL(page).hostname.replace(/^www\./, ""), page };
-        found++;
-        console.log(" +", t.key, img.slice(0, 80));
-        break;
-      }
-    } catch (e) {
-      console.warn("failed", t.key, (e as Error).message);
-    }
-  }
-  writeFileSync(OUT, JSON.stringify(out, null, 1) + "\n");
-  console.log(`catalog images: +${found} (remaining ${todo.length - found})`);
+  const count = process.argv.find((a) => a.startsWith("--count="))?.slice(8) ?? "1";
+  if (!process.argv.includes("--review") || count !== "1") throw new Error("Use --review [--count=1] [--key=vehicle:NAME]. One paid search; review-only. --dry still calls AI.");
+  const images = JSON.parse(readFileSync("data/catalog-images.json", "utf8")) as Record<string, unknown>;
+  const key = process.argv.find((a) => a.startsWith("--key="))?.slice(6);
+  const selected = [...WEAPONS.map((v) => ({ key: `weapon:${v[0]}`, name: v[0], kind: "weapon" })), ...VEHICLES.map((v) => ({ key: `vehicle:${v[0]}`, name: v[0], kind: "vehicle" }))].find((t) => !images[t.key] && (!key || t.key === key));
+  if (!selected) { console.log("No matching missing image; no request made."); return; }
+  preflight();
+  const r = await askJsonWithEvidence<{ pages: string[] }>({ name: "catalog_image_review", schema: { type: "object", additionalProperties: false, required: ["pages"], properties: { pages: { type: "array", maxItems: 3, items: { type: "string" } } } },
+    prompt: `Research exact GTA VI ${selected.kind} ${JSON.stringify(selected.name)}. Return up to3 actually retrieved source pages which may show that exact entity in GTA VI. Prefer official Rockstar images; never claim GTA V/Online/reference footage is GTA VI. Empty is valid. These are unverified human-review candidates, not images to publish.`,
+  });
+  const candidates = await imageCandidates(r.data.pages, r.retrievedUrls, (url) => safeGet(url, { timeoutMs: 5000, maxBytes: 750000 }));
+  if (!process.argv.includes("--dry")) await writeRecord(db(), "radar_review", { kind: "catalog-image", key: selected.key, reasons: ["manual-visual-and-game-provenance-review-required"], candidates, responseId: r.responseId, usage: usageTotals() });
+  console.log(`Held ${candidates.length} candidate pages for ${selected.key}; catalog mapping unchanged.`);
 }
-main();
+main().catch((e) => { console.error(e instanceof Error ? e.message : "Catalog image review failed"); process.exitCode = 1; });

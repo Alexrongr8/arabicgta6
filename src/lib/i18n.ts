@@ -29,6 +29,17 @@ const dict = {
     ar: ["ملخص أسبوعي كل جمعة بأهم الأخبار", "أول من يعرف بالأسرار والقلتشات الجديدة", "بدون إزعاج — تقدر تلغي بضغطة", "بدون كلمة سر، بس حساب Google"],
     en: ["A Friday summary of the biggest news", "Be first to hear about new secrets and glitches", "No spam — unsubscribe in one tap", "No password, just your Google account"],
   },
+  gatePausedTitle: { ar: "حسابك في الموسوعة", en: "Your encyclopedia account" },
+  gatePausedBody: { ar: "سجّل بحساب Google للمشاركة وضبط إعداداتك. إرسال النشرة البريدية متوقف حالياً.", en: "Sign in with Google to participate and manage your preferences. Newsletter sending is currently paused." },
+  gatePausedPerks: {
+    ar: ["شارك اكتشافاتك باسمك", "علّق وصوّت على مشاركات المجتمع", "تحكّم باللغة والنصائح", "بدون كلمة مرور — بحساب Google"],
+    en: ["Share discoveries under your name", "Comment and vote in the community", "Control language and tips", "No password — use your Google account"],
+  },
+  digestPaused: { ar: "إرسال النشرة متوقف حالياً. لن تصلك رسائل حتى يُفعّل الإرسال.", en: "Newsletter sending is currently paused. No newsletters are being sent until delivery is enabled." },
+  digestSavedPaused: { ar: "تفضيل الاشتراك محفوظ، لكن الإرسال متوقف.", en: "Your subscription preference is saved, but delivery is paused." },
+  digestUnavailable: { ar: "تعذر تحميل تفضيل الاشتراك. حاول لاحقاً.", en: "Your subscription preference could not be loaded. Please try again." },
+  digestSaveFailed: { ar: "تعذر حفظ التفضيل. حاول مرة ثانية.", en: "Your preference could not be saved. Please try again." },
+  digestSubscribePaused: { ar: "الاشتراك متاح عند تفعيل النشرة", en: "Subscription opens when the newsletter is enabled" },
   guestNewsNote: {
     ar: "هذي آخر 10 أخبار للزوار 👀 سجّل دخولك وشوف كل شي.",
     en: "Guests see the latest 10 news items only. Sign in to see everything.",
