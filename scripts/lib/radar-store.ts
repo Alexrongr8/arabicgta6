@@ -15,7 +15,7 @@ export async function readState(database: Database): Promise<State> {
   }
   return s;
 }
-export async function writeRecord(database: Database, kind: "radar_state" | "radar_review" | "update" | "update_partial", value: unknown, added = 0) {
+export async function writeRecord(database: Database, kind: "radar_state" | "radar_review" | "update" | "update_partial" | "radar_spend", value: unknown, added = 0) {
   const note = JSON.stringify(value);
   if (note.length > 64_000) throw new Error(`Bounded ${kind} record exceeds64KB; not writing a truncated checkpoint.`);
   const { error } = await database.from("update_runs").insert({ kind, added, note });

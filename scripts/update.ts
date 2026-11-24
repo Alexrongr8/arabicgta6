@@ -20,6 +20,14 @@ async function main() {
     const { data: last } = await db().from("update_runs").select("ran_at").in("kind", ["update", "update_partial"]).order("id", { ascending: false }).limit(1).maybeSingle();
     if (last && Date.now() - Date.parse(last.ran_at) < 40 * 60_000) { console.log("Radar ran less than 40 minutes ago; scheduled duplicate skipped."); return; }
   }
+  // Owner cap (24 Nov 2026): at most ~$100/month on the radar. Estimated spend is summed from the
+  // per-run radar_spend records; when the month reaches the budget, paid research stops until the 1st.
+  const budget = Number(process.env.RADAR_MONTHLY_BUDGET_USD || 95);
+  const monthStart = new Date(Date.UTC(new Date().getUTCFullYear(), new Date().getUTCMonth(), 1)).toISOString();
+  const { data: spendRows, error: spendError } = await db().from("update_runs").select("note").eq("kind", "radar_spend").gte("ran_at", monthStart).limit(2000);
+  if (spendError) throw spendError;
+  const spent = (spendRows ?? []).reduce((sum, row) => { try { return sum + (Number(JSON.parse(row.note ?? "{}").usd) || 0); } catch { return sum; } }, 0);
+  if (spent >= budget) { console.log(`Monthly radar budget reached (~$${spent.toFixed(2)} of $${budget}); no paid requests until next month.`); return; }
   allowRequests(settings.beamsPerRun * 2);
   const dry = process.argv.includes("--dry");
   const database = db();
@@ -56,6 +64,10 @@ async function main() {
   results.push(result);
   if (dry) break; // dry runs do not persist state, so the next topic would repeat this one
   }
-  console.log(JSON.stringify({ results, added: results.reduce((a, r) => a + r.added, 0), dry, usage: usageTotals() }));
+  const u = usageTotals();
+  // Estimated cost (gpt-5-mini list prices + $10 per 1,000 web searches); override with env if prices change.
+  const usd = u.inputTokens * Number(process.env.PRICE_IN_PER_M || 0.25) / 1e6 + u.outputTokens * Number(process.env.PRICE_OUT_PER_M || 2) / 1e6 + u.searchCalls * Number(process.env.PRICE_PER_SEARCH || 0.01);
+  if (!dry && u.requests > 0) await writeRecord(database, "radar_spend", { usd: Math.round(usd * 10000) / 10000, ...u, monthToDate: Math.round((spent + usd) * 100) / 100 });
+  console.log(JSON.stringify({ estUsd: Math.round(usd * 1000) / 1000, monthToDateUsd: Math.round((spent + usd) * 100) / 100, results, added: results.reduce((a, r) => a + r.added, 0), dry, usage: usageTotals() }));
 }
 main().catch((e) => { console.error(e instanceof Error ? e.message : "Radar failed"); console.error(JSON.stringify({ usage: usageTotals() })); process.exitCode = 1; });
