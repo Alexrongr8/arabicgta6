@@ -6,14 +6,23 @@ import type { AiItem } from "./ai";
 const CREATOR_IDENTITIES = "Bilal Fadili UCw81FIQlzaVxgiQKiqTuCBQ; BanderitaX UCxEGVXh6fi-XYo58NZrbIHQ; RimaOsta UCFlp8ti7kvEMbiqAE8Zazag; 3mr https://kick.com/3mr and UC6gTOqPVfx6g6Cmi8Ah80pA; Drb7h https://kick.com/drb7h; Xzit UCUwf9tuytTCVP6SzMaGwDVA; SXB https://kick.com/SXB and UC5hnxbraFmMPxv63U4hCwTQ; AboFlah UCqq5n-Oe-r1EEHI3yvhVJcA and UCRu9mro2nPafhMxVy2CRfXA.";
 export const BEAMS = [
   { id: "official", focus: "Official Rockstar/Take-Two/platform announcements, Newswire posts, patch notes, events and GTA Online/GTA VI updates.", domains: ["rockstargames.com", "take2games.com", "blog.playstation.com", "news.xbox.com"] },
-  { id: "press-news", focus: "The newest GTA VI news stories from major gaming press (sales records, updates, features, interviews, guides, controversies about the game itself)." },
+  { id: "press-news", focus: "The newest GTA VI news stories from major English-language gaming press (IGN, GameSpot, Eurogamer, VGC, Polygon, PC Gamer, Kotaku, GamesRadar, TheGamer, Dexerto, Insider Gaming)." },
+  { id: "business-sales", focus: "GTA VI sales figures, records, Take-Two earnings comments, charts, player counts, reviews and awards coverage." },
   { id: "patches-bugs", focus: "Title-update notes, known issues, glitches and fixes. Record the tested build, or unknown." },
   { id: "gameplay-discoveries", focus: "New secrets, easter eggs, collectibles, hidden places, strange or funny moments found by players, with video/screenshot evidence or press coverage." },
   { id: "money-guides", focus: "Money methods, businesses, heists, best cars/weapons to buy, and practical progression tips that players or press have documented." },
-  { id: "reddit-leaks", focus: "Notable community findings, leaks and rumors from Reddit (r/GTA6, r/GTAVI, r/GrandTheftAutoV_PC) and X insiders. Always label unverified claims as rumor or leak." },
-  { id: "settings-hardware", focus: "PS5/Xbox, TV/HDR, Remote Play, accessibility and best settings; prefer manufacturer documentation. Stream/TV interpolation is not game FPS." },
+  { id: "missions-story", focus: "Mission guides, side activities, characters, choices and consequences, collectibles and 100% completion guides (spoiler-aware)." },
+  { id: "reddit-leaks", focus: "Notable community findings, leaks and rumors from Reddit (r/GTA6, r/GTAVI, r/GamingLeaksAndRumours) and X/Twitter insiders. Label unverified claims as rumor or leak." },
+  { id: "online-multiplayer", focus: "GTA VI Online / multiplayer news, rumors, datamines, roadmap and community events." },
+  { id: "settings-hardware", focus: "PS5/Xbox, PS5 Pro, TV/HDR, Remote Play, accessibility and best settings; PC version rumors. Prefer manufacturer documentation." },
   { id: "community-creators", focus: `New in-game facts or notable events from known creators, never drama. Use exact identities, never free-name searches: ${CREATOR_IDENTITIES} Reactions, RP and general GTA footage are not GTA VI gameplay evidence.` },
-  { id: "arabic-news", focus: "GTA VI news and guides covered by Arabic gaming outlets and Arab creators (True Gaming, Saudi Gamer, Arab Hardware, YouTube/X in Arabic)." },
+  { id: "arabic-news", focus: "GTA VI news and guides covered by Arabic gaming outlets and Arab creators (True Gaming, Saudi Gamer, Arab Hardware, Sky News Arabia tech, YouTube/X in Arabic)." },
+  { id: "europe-press", focus: "GTA VI news from non-English European gaming press: German (GameStar, PC Games, 4Players), French (Jeuxvideo.com, Gamekult, Millenium), Spanish (Vandal, 3DJuegos, MeriStation), Italian (Multiplayer.it, Everyeye), Portuguese, Polish, Turkish and Russian sites. Translate into Arabic and English." },
+  { id: "asia-press", focus: "GTA VI news from Asian gaming press and communities: Japan (Famitsu, 4Gamer, Game Watch, Automaton), Korea (Inven, Ruliweb), China/Taiwan (Gamersky, 3DM, Bahamut), India and Southeast Asia. Translate into Arabic and English." },
+  { id: "latam-press", focus: "GTA VI news from Latin American and Brazilian gaming press and creators (Tecmundo, The Enemy, Voxel, LevelUp, Atomix). Translate into Arabic and English." },
+  { id: "social-viral", focus: "Viral GTA VI moments, memes, celebrity/athlete reactions to the game and trending clips on TikTok, YouTube Shorts and X (describe what happened; label unverified as rumor)." },
+  { id: "mods-pc", focus: "GTA VI PC port news, modding scene, FiveM/roleplay plans and datamining findings (never piracy or cheats)." },
+  { id: "world-places", focus: "Leonida locations, landmarks, real-life places they are based on, wildlife, vehicles and weapons newly documented by players or press." },
 ] as const;
 export type BeamId = typeof BEAMS[number]["id"];
 export type Lead = { headline: string; gist: string; url: string; category: string; confidence: "high" | "medium" | "low"; entity_name: string | null };
@@ -33,8 +42,8 @@ export function similar(a: string, b: string): number {
 }
 export function config(env: Record<string, string | undefined>) {
   const max = env.UPDATE_MAX_ITEMS?.trim() || "1";
-  // UPDATE_MAX_ITEMS = topics (beams) researched per run; each costs at most two paid requests.
-  if (!/^[0-4]$/.test(max)) throw new Error("RADAR-POLICY permits UPDATE_MAX_ITEMS between 0 and 4.");
+  // UPDATE_MAX_ITEMS = topics (beams) researched per run (max 8); each costs at most two paid requests.
+  if (!/^[0-8]$/.test(max)) throw new Error("RADAR-POLICY permits UPDATE_MAX_ITEMS between 0 and 8.");
   if (env.ENRICH_PER_RUN?.trim() && env.ENRICH_PER_RUN !== "0") throw new Error("Automatic enrichment is disabled by RADAR-POLICY.");
   const beam = env.RADAR_BEAMS?.trim();
   if (beam && beam !== "rotate" && !BEAMS.some((b) => b.id === beam)) throw new Error("Use RADAR_BEAMS=rotate or one policy beam; multiple/all/legacy beams are disabled.");

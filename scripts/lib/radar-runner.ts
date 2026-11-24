@@ -44,7 +44,7 @@ export async function runRadar(d: RadarDeps): Promise<{ added: number; requests:
     for (const l of (Array.isArray(r.data.leads) ? r.data.leads : []).slice(0, 8)) {
       if (!l || typeof l.url !== "string" || typeof l.headline !== "string" || typeof l.gist !== "string" || l.headline.length > 240 || l.gist.length > 1200 || l.url.length > 2048 || !checkPublicHttpsUrl(l.url) || !retrieved.has(urlKey(l.url))) { rejected.push("1:unretrieved-lead"); continue; }
       const key = urlKey(l.url);
-      if (l.confidence === "low" || keys.has(key) || state.reviewedKeys.includes(key) || d.known.some((k) => isDuplicateOf(k, l.headline, undefined, d.now)) || fresh.some((k) => similar(k.headline, l.headline) >= .7)) { rejected.push("duplicate-or-low-confidence"); continue; }
+      if (keys.has(key) || state.reviewedKeys.includes(key) || d.known.some((k) => isDuplicateOf(k, l.headline, undefined, d.now)) || fresh.some((k) => similar(k.headline, l.headline) >= .7)) { rejected.push("duplicate"); continue; }
       fresh.push(l);
     }
     if (!fresh.length) return finish(0, false);

@@ -21,14 +21,21 @@ jobs:
     # Paid automation is off unless the repo variable CONTENT_AUTOMATION_ENABLED is exactly "true".
     if: ${{ vars.CONTENT_AUTOMATION_ENABLED == 'true' }}
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
-      - run: npm ci --ignore-scripts
+      # Reuse node_modules between hourly runs (saves ~30s of billed minutes per run).
+      - id: modules
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: modules-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+      - if: steps.modules.outputs.cache-hit != 'true'
+        run: npm ci --ignore-scripts
       - name: Collect new GTA 6 Shorts (free, no AI)
         run: npm run shorts
         continue-on-error: true

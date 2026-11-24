@@ -36,7 +36,7 @@ test("actual completed tool metadata only; model prose, annotations and failed s
 test("completed opened pages retain retrieved identity", () => assert.deepEqual(evidenceOf({ output: [{ type: "web_search_call", status: "completed", action: { type: "open_page", url: URL } }] }).retrievedUrls, [URL]));
 test("cost configuration rejects bulk/legacy beams and automatic enrichment", () => {
   assert.equal(config({ UPDATE_MAX_ITEMS: "3" }).beamsPerRun, 3);
-  for (const env of [{ UPDATE_MAX_ITEMS: "8" }, { ENRICH_PER_RUN: "1" }, { RADAR_BEAMS: "all" }, { RADAR_BEAMS: "web" }, { RADAR_BEAMS: "official,patches-bugs" }]) assert.throws(() => config(env));
+  for (const env of [{ UPDATE_MAX_ITEMS: "9" }, { ENRICH_PER_RUN: "1" }, { RADAR_BEAMS: "all" }, { RADAR_BEAMS: "web" }, { RADAR_BEAMS: "official,patches-bugs" }]) assert.throws(() => config(env));
   assert.equal(config({ UPDATE_MAX_ITEMS: "0" }).enabled, false); assert.equal(config({}).enabled, true); assert.equal(config({ RADAR_BEAMS: "rotate" }).pinnedBeam, undefined);
 });
 test("topic rotation uses separate windows instead of a global watermark", () => {

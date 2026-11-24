@@ -127,8 +127,8 @@ export type AiItem = {
 /** No command may silently exceed the initial policy budget. No automatic API retries. */
 const totals: Usage = { requests: 0, inputTokens: 0, outputTokens: 0, searchCalls: 0 };
 let ceiling = 2;
-/** Raise the per-process paid request ceiling (bounded to 12). Default stays 2. */
-export function allowRequests(n: number) { ceiling = Math.min(12, Math.max(1, Math.floor(n))); }
+/** Raise the per-process paid request ceiling (bounded to 20). Default stays 2. */
+export function allowRequests(n: number) { ceiling = Math.min(20, Math.max(1, Math.floor(n))); }
 export const usageTotals = (): Usage => ({ ...totals });
 
 export type AskOptions = {
