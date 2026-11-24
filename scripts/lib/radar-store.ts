@@ -27,7 +27,7 @@ export async function readKnown(database: Database) {
   const rows: import("./radar-policy").Known[] = [];
   const pageSize = 500;
   for (let offset = 0; offset <= 20000; offset += pageSize) {
-    const { data, error } = await database.from("items").select("slug,title_en,sources,videos").order("slug").range(offset, offset + pageSize - 1);
+    const { data, error } = await database.from("items").select("slug,title_en,title_ar,published_at,sources,videos").order("slug").range(offset, offset + pageSize - 1);
     if (error) throw error;
     if (offset === 20000 && data?.length) throw new Error("Dedupe snapshot exceeds20000 items; increase the reviewed bound before running.");
     rows.push(...(data ?? []));

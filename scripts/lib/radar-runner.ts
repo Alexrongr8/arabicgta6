@@ -2,7 +2,7 @@ import { createHash } from "node:crypto";
 import { checkPublicHttpsUrl } from "../../src/lib/safe-fetch";
 import { searchText, slugify } from "../../src/lib/normalize";
 import { urlKey } from "./url-key";
-import { BEAMS, chooseBeam, finishState, knownKeys, similar, sinceFor, existingEntity, verifyDraft, type State, type Known, type Lead, type Research, type Draft, type SourceReader, type BeamId } from "./radar-policy";
+import { BEAMS, chooseBeam, finishState, knownKeys, similar, isDuplicateOf, sinceFor, existingEntity, verifyDraft, type State, type Known, type Lead, type Research, type Draft, type SourceReader, type BeamId } from "./radar-policy";
 
 type Review = { key: string; kind: "article" | "catalog-update"; reasons: string[]; lead: Lead; draft?: Draft; evidence?: unknown };
 export type RadarDeps = {
@@ -44,7 +44,7 @@ export async function runRadar(d: RadarDeps): Promise<{ added: number; requests:
     for (const l of (Array.isArray(r.data.leads) ? r.data.leads : []).slice(0, 8)) {
       if (!l || typeof l.url !== "string" || typeof l.headline !== "string" || typeof l.gist !== "string" || l.headline.length > 240 || l.gist.length > 1200 || l.url.length > 2048 || !checkPublicHttpsUrl(l.url) || !retrieved.has(urlKey(l.url))) { rejected.push("1:unretrieved-lead"); continue; }
       const key = urlKey(l.url);
-      if (l.confidence === "low" || keys.has(key) || state.reviewedKeys.includes(key) || d.known.some((k) => similar(k.title_en, l.headline) >= .75) || fresh.some((k) => similar(k.headline, l.headline) >= .7)) { rejected.push("duplicate-or-low-confidence"); continue; }
+      if (l.confidence === "low" || keys.has(key) || state.reviewedKeys.includes(key) || d.known.some((k) => isDuplicateOf(k, l.headline, undefined, d.now)) || fresh.some((k) => similar(k.headline, l.headline) >= .7)) { rejected.push("duplicate-or-low-confidence"); continue; }
       fresh.push(l);
     }
     if (!fresh.length) return finish(0, false);
@@ -79,7 +79,7 @@ export async function runRadar(d: RadarDeps): Promise<{ added: number; requests:
     gated.item.status = gated.item.status === "leak" ? "leak" : "rumor";
     gated.item.tags = [...new Set([...(gated.item.tags ?? []), "source-unknown"])];
   }
-  if (gated.item.sources.some((source) => { const sourceKey = urlKey(source.url); return sourceKey.startsWith("youtube:") && keys.has(sourceKey); }) || d.known.some((known) => similar(known.title_en, gated.item.title_en) >= .75)) {
+  if (gated.item.sources.some((source) => { const sourceKey = urlKey(source.url); return sourceKey.startsWith("youtube:") && keys.has(sourceKey); }) || d.known.some((known) => isDuplicateOf(known, gated.item.title_en, gated.item.title_ar, d.now))) {
     gated.gates.push("duplicate:published-title-or-video"); gated.decision = "review";
   }
   if (gated.decision === "review") {

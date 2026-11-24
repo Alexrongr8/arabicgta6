@@ -2,8 +2,11 @@ name: Radar (news + shorts every hour)
 
 on:
   schedule:
-    # Every hour at minute 7. Paid radar work is bounded by UPDATE_MAX_ITEMS (topics per run, max 4).
-    - cron: "7 * * * *"
+    # Primary trigger: Supabase pg_cron dispatches this workflow hourly (GitHub's own cron is
+    # best-effort and fired only ~5 of 48 hours on 22-24 Nov). This cron is a backup only; the
+    # radar skips a scheduled start that follows another run within 40 minutes.
+    # 04-23 UTC = 07:00-02:00 Riyadh, keeps the private repo within its free Actions minutes.
+    - cron: "7 4-23 * * *"
   workflow_dispatch: {}
 
 concurrency:

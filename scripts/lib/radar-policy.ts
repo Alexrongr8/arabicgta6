@@ -23,7 +23,7 @@ export type Support = { url: string; quote: string; fields: string[] };
 export type Draft = { item: AiItem; proof: { support: Support[]; story_spoilers: boolean; game_build: string | null; in_scope: boolean } };
 export type Pending = { lead: Lead; beam: BeamId; discoveredAt: string; retrievedUrls: string[]; responseId: string; attempts: number };
 export type State = { version: 1; nextBeam: number; windows: Partial<Record<BeamId, string>>; pending: Pending | null; reviewedKeys: string[] };
-export type Known = { slug: string; title_en: string; sources: { url: string }[]; videos?: string[] };
+export type Known = { slug: string; title_en: string; title_ar?: string; published_at?: string; sources: { url: string }[]; videos?: string[] };
 export const emptyState = (): State => ({ version: 1, nextBeam: 0, windows: {}, pending: null, reviewedKeys: [] });
 const normalized = (s: string) => s.normalize("NFKC").toLowerCase().replace(/\s+/g, " ").trim();
 export function similar(a: string, b: string): number {
@@ -51,6 +51,12 @@ export function finishState(state: State, beam: BeamId, at: string, reviewKey?: 
   return { ...state, nextBeam: (BEAMS.findIndex((b) => b.id === beam) + 1) % BEAMS.length,
     windows: { ...state.windows, [beam]: at }, pending: null,
     reviewedKeys: [...new Set([...(reviewKey ? [reviewKey] : []), ...state.reviewedKeys])].slice(0, 100) };
+}
+/** Same story already published? Stricter for the last 3 days, and Arabic titles are compared too. */
+export function isDuplicateOf(known: Known, titleEn: string, titleAr: string | undefined, now: Date): boolean {
+  const recent = known.published_at ? now.getTime() - Date.parse(known.published_at) < 72 * 3600e3 : false;
+  if (similar(known.title_en, titleEn) >= (recent ? 0.5 : 0.75)) return true;
+  return Boolean(titleAr && known.title_ar && similar(known.title_ar, titleAr) >= (recent ? 0.5 : 0.7));
 }
 export function knownKeys(rows: Known[]): Set<string> {
   return new Set(rows.flatMap((r) => [...(r.sources ?? []).map((s) => urlKey(s.url)), ...(r.videos ?? []).map((v) => /^[\w-]{11}$/.test(v) ? `youtube:${v}` : urlKey(v))]));

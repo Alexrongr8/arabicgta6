@@ -14,6 +14,12 @@ async function main() {
   const settings = config(process.env);
   if (!settings.enabled) { console.log("Radar disabled by UPDATE_MAX_ITEMS=0; no paid request."); return; }
   preflight();
+  // Two schedulers can trigger this workflow (Supabase pg_cron dispatch + GitHub's best-effort cron).
+  // A scheduled start right after another run is skipped so the same hour is never paid for twice.
+  if (process.env.GITHUB_EVENT_NAME === "schedule") {
+    const { data: last } = await db().from("update_runs").select("ran_at").in("kind", ["update", "update_partial"]).order("id", { ascending: false }).limit(1).maybeSingle();
+    if (last && Date.now() - Date.parse(last.ran_at) < 40 * 60_000) { console.log("Radar ran less than 40 minutes ago; scheduled duplicate skipped."); return; }
+  }
   allowRequests(settings.beamsPerRun * 2);
   const dry = process.argv.includes("--dry");
   const database = db();
