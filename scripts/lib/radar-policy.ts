@@ -107,12 +107,33 @@ export function numberTokens(s: string): string[] {
 export type SourceReader = (url: string) => Promise<SafeResult | null>;
 export type GateResult = { decision: "publish" | "review"; gates: string[]; item: AiItem; sourceChecks: { url: string; finalUrl: string; tier: string; status: number }[] };
 /** Structural proof gates, not a claim of automatic semantic/video verification. Uncertain cases are held. */
+/** Share of letters that are Arabic (names in Latin script are expected, so thresholds are low). */
+export function arabicShare(text: string | undefined | null): number {
+  const letters = (text ?? "").match(/\p{L}/gu) ?? [];
+  if (!letters.length) return 0;
+  return letters.filter((c) => /[\u0600-\u06FF]/.test(c)).length / letters.length;
+}
+/** First sentences of the Arabic body, used when the model left summary_ar in the source language. */
+export function summaryFromBody(body: string): string {
+  const text = body.replace(/^#{2,3} .*$/gm, " ").replace(/^- /gm, "").replace(/\s+/g, " ").trim();
+  if (text.length <= 220) return text;
+  const cut = text.slice(0, 240);
+  const end = Math.max(cut.lastIndexOf("."), cut.lastIndexOf("؟"), cut.lastIndexOf("!"), cut.lastIndexOf("،"));
+  return (end > 80 ? cut.slice(0, end + 1) : cut.slice(0, cut.lastIndexOf(" ")) + "…").trim();
+}
 export async function verifyDraft(draft: Draft, retrieved: string[], read: SourceReader): Promise<GateResult> {
   const item = draft.item;
   const gates: string[] = [];
   const fields = ["title_ar", "title_en", "summary_ar", "summary_en", "body_ar", "body_en"] as const;
   const texts = fields.map((k) => item?.[k]);
-  if (texts.some((s) => typeof s !== "string" || !s.trim()) || (item?.body_ar?.trim().length ?? 0) < 300 || texts.some((s) => typeof s === "string" && s.length > 12_000)) gates.push("3:bilingual-content");
+  // Arabic fields must really be Arabic (foreign-press beams sometimes leave them in the source
+  // language). A non-Arabic summary is rebuilt from the Arabic body; a non-Arabic body is held.
+  if (item && typeof item.body_ar === "string" && arabicShare(item.body_ar) >= 0.5 && arabicShare(item.summary_ar) < 0.4) {
+    item.summary_ar = summaryFromBody(item.body_ar);
+    gates.push("arabic:summary-rebuilt-from-body");
+  }
+  if (texts.some((s) => typeof s !== "string" || !s.trim()) || (item?.body_ar?.trim().length ?? 0) < 300 || texts.some((s) => typeof s === "string" && s.length > 12_000)
+    || arabicShare(item?.body_ar) < 0.5 || arabicShare(item?.title_ar) < 0.3) gates.push("3:bilingual-content");
   const found = new Set(retrieved.map(urlKey));
   const citations = [...new Map((Array.isArray(item?.sources) ? item.sources : []).filter((s) => typeof s.url === "string" && checkPublicHttpsUrl(s.url) && found.has(urlKey(s.url))).map((s) => [urlKey(s.url), s])).values()].slice(0, 6);
   if (!citations.length) gates.push("1:no-retrieved-source");

@@ -117,3 +117,13 @@ test("incomplete editor search publishes only as an unknown-source rumor", async
 test("editor changing a fresh lead into an existing article is held", async () => { const h = harness(); h.deps.known = [{ slug: "old", title_en: "Existing article topic", sources: [] }]; h.deps.edit = async () => { const d = draft(); d.item.title_en = "Existing article topic"; return research(d); }; await runRadar(h.deps); assert.equal(h.rows.length, 0); assert.equal(h.reviews.length, 1); });
 
 for (const tag of ["story-spoilers", "ENDING-SPOILER"]) test(`existing ${tag} tag keeps the spoiler marking despite false model spoiler flag`, async () => { const d = draft(); d.item.tags = [tag]; d.proof.story_spoilers = false; const result = await verifyDraft(d, [URL], async () => response()); assert.equal(result.decision, "publish"); assert.ok(result.gates.includes("5:spoiler-headline-review")); assert.ok(result.item.tags.includes("story-spoilers")); });
+
+test("a summary left in the source language is rebuilt in Arabic from the Arabic body", async () => {
+  const d = draft(); d.item.summary_ar = "jeuxvideo.com lance un marathon en direct de 37 heures";
+  const g = await verifyDraft(d, [URL], async () => response());
+  assert.equal(g.decision, "publish"); assert.ok(/[؀-ۿ]/.test(g.item.summary_ar)); assert.ok(g.gates.includes("arabic:summary-rebuilt-from-body"));
+});
+test("an article whose Arabic body is not Arabic is held, never published", async () => {
+  const d = draft(); d.item.body_ar = "Ceci est un article en français. ".repeat(20);
+  assert.equal((await verifyDraft(d, [URL], async () => response())).decision, "review");
+});
