@@ -284,3 +284,27 @@ revoke all on public.shorts from anon, authenticated;
 grant select on public.shorts to anon, authenticated;
 drop policy if exists "public shorts" on public.shorts;
 create policy "public shorts" on public.shorts for select to anon, authenticated using (not hidden);
+
+-- ───────────────────────── Hourly radar trigger (applied 2026-11-24) ─────────────────────────
+-- GitHub's own cron is best-effort (fired 5 of 48 hours on 22-24 Nov). pg_cron dispatches the
+-- workflow instead. The owner stored a fine-grained token (Actions read/write, arabicgta6 only)
+-- in Supabase Vault as github_dispatch_token; it never appears in this repository.
+create extension if not exists pg_cron;
+create extension if not exists pg_net;
+create or replace function public.dispatch_radar() returns bigint
+language plpgsql security definer set search_path = '' as $fn$
+declare tok text; rid bigint;
+begin
+  select decrypted_secret into tok from vault.decrypted_secrets where name = 'github_dispatch_token' limit 1;
+  if tok is null then raise exception 'github_dispatch_token missing from Vault'; end if;
+  select net.http_post(
+    url := 'https://api.github.com/repos/Alexrongr8/arabicgta6/actions/workflows/update.yml/dispatches',
+    body := '{"ref":"main"}'::jsonb,
+    headers := jsonb_build_object('Authorization', 'Bearer ' || tok, 'Accept', 'application/vnd.github+json',
+      'X-GitHub-Api-Version', '2022-11-28', 'User-Agent', 'arabicgta6-cron', 'Content-Type', 'application/json')
+  ) into rid;
+  return rid;
+end $fn$;
+revoke all on function public.dispatch_radar() from public, anon, authenticated;
+-- 04-23 UTC = 07:00-02:00 Riyadh. Check deliveries: select status_code from net._http_response order by id desc;
+select cron.schedule('radar-hourly', '5 4-23 * * *', 'select public.dispatch_radar()');
