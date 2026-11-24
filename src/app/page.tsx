@@ -5,6 +5,7 @@ import { Bidi } from "@/components/Bidi";
 import { CATEGORY_MAP } from "@/lib/categories";
 import { getCounts, getDailyPool, getFeatured, getLatest, getShorts, type Short } from "@/lib/data";
 import { ShortsRail } from "@/components/ShortsRail";
+import { NewsTicker } from "@/components/NewsTicker";
 import { pickDaily, weeklyChallenge } from "@/lib/daily";
 import { DailyCards } from "@/components/DailyCards";
 import { CatalogTiles } from "@/components/CatalogTiles";
@@ -26,7 +27,7 @@ export async function generateMetadata() {
 
 export default async function Home() {
   const [locale, viewer, counts, featured, latest, news, pool, shorts] = await Promise.all([
-    getLocale(), getViewer(), getCounts(), getFeatured(), getLatest(10), getLatest(6, "news"), getDailyPool(),
+    getLocale(), getViewer(), getCounts(), getFeatured(), getLatest(14), getLatest(6, "news"), getDailyPool(),
     getShorts(20).catch(() => [] as Short[]), // the shorts strip must never take the homepage down
   ]);
   const total = Object.values(counts).reduce((a, b) => a + b, 0);
@@ -35,6 +36,7 @@ export default async function Home() {
   const challenge = weeklyChallenge();
   return (
     <main>
+      <NewsTicker items={latest} locale={locale} />
       <Hero locale={locale} total={total} />
       <ShortsRail shorts={shorts} locale={locale} />
       <DailyCards secret={secret} challenge={challenge} locale={locale} />
