@@ -28,6 +28,12 @@ async function main() {
   if (spendError) throw spendError;
   const spent = (spendRows ?? []).reduce((sum, row) => { try { return sum + (Number(JSON.parse(row.note ?? "{}").usd) || 0); } catch { return sum; } }, 0);
   if (spent >= budget) { console.log(`Monthly radar budget reached (~$${spent.toFixed(2)} of $${budget}); no paid requests until next month.`); return; }
+  // Pace the budget across the month so news keeps flowing until the last day: skip a run while
+  // spending is ahead of the even daily pace (plus a $3 cushion).
+  const now = new Date();
+  const daysInMonth = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() + 1, 0)).getUTCDate();
+  const paced = budget * ((now.getTime() - Date.parse(monthStart)) / (daysInMonth * 864e5)) + 3;
+  if (spent >= paced) { console.log(`Ahead of the monthly budget pace (~$${spent.toFixed(2)} vs $${paced.toFixed(2)} allowed so far); skipping this run.`); return; }
   allowRequests(settings.beamsPerRun * 2);
   const dry = process.argv.includes("--dry");
   const database = db();

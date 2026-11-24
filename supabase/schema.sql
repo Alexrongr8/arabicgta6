@@ -306,5 +306,5 @@ begin
   return rid;
 end $fn$;
 revoke all on function public.dispatch_radar() from public, anon, authenticated;
--- 04-23 UTC = 07:00-02:00 Riyadh. Check deliveries: select status_code from net._http_response order by id desc;
-select cron.schedule('radar-hourly', '5 4-23 * * *', 'select public.dispatch_radar()');
+-- Every hour (repo public since 24 Nov 2026, Actions minutes free). Check deliveries: select status_code from net._http_response order by id desc;
+select cron.schedule('radar-hourly', '5 * * * *', 'select public.dispatch_radar()');
