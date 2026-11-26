@@ -5,7 +5,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ExternalLink, MapPin } from "lucide-react";
 import { CATEGORY_MAP } from "@/lib/categories";
-import { getBySlugs, getItem, itemExists } from "@/lib/data";
+import { getBySlugs, getItem, getLatest, itemExists } from "@/lib/data";
 import { formatDate, pick, t } from "@/lib/i18n";
 import { getLocale, getViewer } from "@/lib/session";
 import { CategoryIcon } from "@/components/CategoryIcon";
@@ -23,6 +23,10 @@ import { getVotes } from "@/lib/community/data";
 import { imageCredit } from "@/lib/image";
 import { isSpoiler, SPOILER_TEASER } from "@/lib/spoiler";
 import { jsonLd } from "@/lib/jsonld";
+import { ReadTracker } from "@/components/player/ReadTracker";
+import { SaveButton } from "@/components/player/SaveButton";
+import { KeepReading } from "@/components/player/KeepReading";
+import { ago } from "@/lib/ago";
 
 const SITE = process.env.NEXT_PUBLIC_SITE_URL ?? "https://arabicgta6.com";
 
@@ -65,9 +69,15 @@ export default async function ItemPage({ params }: PageProps<"/item/[slug]">) {
   }
 
   const c = CATEGORY_MAP[item.category];
-  const related = await getBySlugs(item.related);
-  const votes = (await getVotes([`item:${item.slug}`], viewer.id))[`item:${item.slug}`];
+  const [related, fresh, votes] = await Promise.all([
+    getBySlugs(item.related),
+    // "Keep reading" must never break the article itself.
+    getLatest(14).catch(() => []),
+    getVotes([`item:${item.slug}`], viewer.id).then((v) => v[`item:${item.slug}`]),
+  ]);
+  const more = fresh.filter((f) => f.slug !== item.slug && !isSpoiler(f) && !item.related.includes(f.slug)).slice(0, 10);
   const body = pick(item, "body", locale);
+  const stamp = ago(item.published_at, locale); // "3 hours ago" during the first week, the date after that
   const spoiler = isSpoiler(item);
 
   const ld = {
@@ -86,6 +96,7 @@ export default async function ItemPage({ params }: PageProps<"/item/[slug]">) {
   return (
     <main className="mx-auto max-w-5xl px-4 pt-5">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(ld) }} />
+      <ReadTracker slug={item.slug} category={item.category} />
       <nav className="mb-4 flex items-center gap-2 text-xs text-dim">
         <Link href="/explore" className="hover:text-fg">{t(locale, "explore")}</Link>
         <span>/</span>
@@ -108,6 +119,7 @@ export default async function ItemPage({ params }: PageProps<"/item/[slug]">) {
               {sourceUnknown(item.tags) && <SourceUnknownBadge locale={locale} size="md" />}
               <span className="text-xs text-muted">
                 {t(locale, "updated")} {formatDate(item.published_at, locale)}
+                {stamp !== formatDate(item.published_at, locale) && <> · {stamp}</>}
               </span>
             </div>
             <h1 className="relative text-[28px] leading-snug md:text-4xl"><Bidi text={pick(item, "title", locale)} /></h1>
@@ -121,6 +133,7 @@ export default async function ItemPage({ params }: PageProps<"/item/[slug]">) {
                   <MapPin className="size-4" /> {t(locale, "showOnMap")}
                 </Link>
               )}
+              <SaveButton slug={item.slug} ar={locale === "ar"} />
               <ShareButton title={pick(item, "title", locale)} label={locale === "ar" ? "مشاركة" : "Share"} locale={locale} />
               <a
                 href={`https://wa.me/?text=${encodeURIComponent(`${pick(item, "title", locale)} ${SITE}/item/${item.slug}`)}`}
@@ -210,6 +223,16 @@ export default async function ItemPage({ params }: PageProps<"/item/[slug]">) {
               <ItemCard key={r.slug} item={r} locale={locale} index={i} />
             ))}
           </div>
+        </section>
+      )}
+
+      {more.length > 0 && (
+        <section className="mt-8">
+          <div className="mb-3 flex items-end justify-between">
+            <h2 className="text-lg font-extrabold">{locale === "ar" ? "كمّل، فيه جديد 👇" : "Keep going, there's more 👇"}</h2>
+            <Link href="/play" className="text-sm font-bold text-accent">{locale === "ar" ? "🎮 تحدي اليوم" : "🎮 Daily challenge"}</Link>
+          </div>
+          <KeepReading items={more} locale={locale} />
         </section>
       )}
     </main>

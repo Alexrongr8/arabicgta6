@@ -7,6 +7,7 @@ import { Logo } from "./Logo";
 import { TopLinks } from "./Nav";
 import { ThemeToggle } from "./ThemeToggle";
 import { digestEnabled } from "@/lib/digest-config";
+import { PlayerChip } from "./player/PlayerChip";
 
 export function Header({ locale, viewer, labels, theme }: { locale: Locale; viewer: Viewer; labels: Parameters<typeof TopLinks>[0]["labels"]; theme: "light" | "dark" }) {
   const digest = digestEnabled();
@@ -18,6 +19,7 @@ export function Header({ locale, viewer, labels, theme }: { locale: Locale; view
         </Link>
         <TopLinks labels={labels} />
         <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
+          <PlayerChip locale={locale} />
           <ThemeToggle initial={theme} label={locale === "ar" ? "الوضع الداكن" : "Dark mode"} />
           <LangToggle locale={locale} />
           {viewer.signedIn ? (

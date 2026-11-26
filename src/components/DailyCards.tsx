@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { categoryThumb, thumbFor } from "@/lib/image";
-import { KeyRound, Target } from "lucide-react";
+import { Gamepad2, KeyRound, Shuffle, Target } from "lucide-react";
 import type { ItemCard, Locale } from "@/lib/types";
 import type { Challenge } from "../../data/challenges";
 import { Bidi } from "./Bidi";
@@ -10,7 +10,7 @@ import { StatusBadge } from "./StatusBadge";
 export function DailyCards({ secret, challenge, locale }: { secret: ItemCard | null; challenge: Challenge; locale: Locale }) {
   const ar = locale === "ar";
   return (
-    <section className="mx-auto mt-6 grid max-w-6xl gap-3 px-4 md:grid-cols-2">
+    <section className="mx-auto mt-6 grid max-w-6xl gap-3 px-4 md:grid-cols-2 lg:grid-cols-3">
       {secret && (
         <Link href={`/item/${secret.slug}`} className="card-hover relative flex min-h-[170px] flex-col justify-end overflow-hidden rounded-3xl p-4 text-white shadow-lg" style={{ background: "linear-gradient(150deg,#7c3aed,#2a1240)" }}>
           <Cover src={thumbFor(secret, 640)} fallback={categoryThumb(secret.category, 640)} className="absolute inset-0 size-full object-cover opacity-60" />
@@ -45,6 +45,23 @@ export function DailyCards({ secret, challenge, locale }: { secret: ItemCard | n
           💡 <Bidi text={ar ? challenge.hintAr : challenge.hintEn} />
         </span>
       </Link>
+      <div className="grid gap-3 md:col-span-2 md:grid-cols-2 lg:col-span-1 lg:grid-cols-1">
+        <Link href="/play" className="card-hover relative flex min-h-[80px] items-center gap-3 overflow-hidden rounded-3xl p-4 text-white shadow-lg" style={{ background: "linear-gradient(135deg,#2a1240,#7c3aed)" }}>
+          <Gamepad2 className="absolute -end-2 -bottom-3 size-24 opacity-15" />
+          <span className="grid size-12 shrink-0 place-items-center rounded-2xl bg-white/15"><Gamepad2 className="size-6" /></span>
+          <span className="relative">
+            <span className="font-head block text-[20px] leading-tight">{ar ? "تحدي اليوم 🎮" : "Daily challenge 🎮"}</span>
+            <span className="block text-[12.5px] text-white/85">{ar ? "5 أسئلة جديدة عن سيارات وأسلحة Leonida. كم تجيب؟" : "5 new questions on Leonida's cars and weapons. How many can you get?"}</span>
+          </span>
+        </Link>
+        <a href="/random" className="card-hover relative flex min-h-[80px] items-center gap-3 overflow-hidden rounded-3xl p-4 text-[#241338] shadow-lg" style={{ background: "linear-gradient(135deg,#ffd166,#ff8a1f)" }}>
+          <span className="grid size-12 shrink-0 place-items-center rounded-2xl bg-white/40"><Shuffle className="size-6" /></span>
+          <span>
+            <span className="font-head block text-[20px] leading-tight">{ar ? "فاجئني 🎲" : "Surprise me 🎲"}</span>
+            <span className="block text-[12.5px] font-bold opacity-80">{ar ? "سر أو موقف عشوائي ما تتوقعه" : "A random secret or moment you didn't expect"}</span>
+          </span>
+        </a>
+      </div>
     </section>
   );
 }

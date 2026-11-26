@@ -11,6 +11,7 @@ import { Tracker } from "@/components/Tracker";
 import { SnapPixel } from "@/components/SnapPixel";
 import { AdSense } from "@/components/AdSense";
 import { TipOfVisit } from "@/components/TipOfVisit";
+import { PlayerBoot } from "@/components/player/PlayerBoot";
 import { Analytics } from "@vercel/analytics/next";
 
 const body = Tajawal({ variable: "--font-body", subsets: ["arabic", "latin"], weight: ["400", "500", "700", "800"] });
@@ -23,6 +24,7 @@ export async function generateMetadata(): Promise<Metadata> {
     title: { default: `${t(locale, "siteName")} — ${locale === "ar" ? "أسرار وأخبار وخريطة" : "secrets, news & map"}`, template: `%s · ${t(locale, "siteName")}` },
     description: t(locale, "tagline"),
     applicationName: "Arabic GTA 6",
+    appleWebApp: { capable: true, title: "Arabic GTA6", statusBarStyle: "default" },
     metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://arabicgta6.com"),
     openGraph: { title: "Arabic GTA 6", description: t(locale, "tagline"), type: "website" },
   };
@@ -38,7 +40,7 @@ export const viewport: Viewport = {
 export default async function RootLayout({ children }: LayoutProps<"/">) {
   const [locale, viewer, jar] = await Promise.all([getLocale(), getViewer(), cookies()]);
   const theme = jar.get("theme")?.value === "dark" ? "dark" : "light";
-  const labels = { home: t(locale, "home"), explore: t(locale, "explore"), map: t(locale, "map"), shorts: t(locale, "shorts"), search: t(locale, "search"), account: t(locale, "account") };
+  const labels = { home: t(locale, "home"), explore: t(locale, "explore"), map: t(locale, "map"), shorts: t(locale, "shorts"), search: t(locale, "search"), account: t(locale, "account"), play: locale === "ar" ? "العب" : "Play", me: locale === "ar" ? "ملفي" : "Me" };
   return (
     <html lang={locale} dir={locale === "ar" ? "rtl" : "ltr"} data-theme={theme} className={`${body.variable} ${head.variable} ${anton.variable} antialiased`}>
       <body className="flex min-h-dvh flex-col">
@@ -56,6 +58,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
         <SnapPixel />
         <AdSense />
         <TipOfVisit locale={locale} />
+        <PlayerBoot locale={locale} />
         <Analytics />
       </body>
     </html>

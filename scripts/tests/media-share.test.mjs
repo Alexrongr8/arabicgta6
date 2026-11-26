@@ -24,7 +24,7 @@ function component(file, name, props, navigator = {}) {
     useState(initial) { const i = cursor++; if (!(i in slots)) slots[i] = initial; return [slots[i], value => { slots[i] = typeof value === 'function' ? value(slots[i]) : value; }]; },
     useRef(initial) { const i = cursor++; return slots[i] ?? (slots[i] = { current: initial }); },
   };
-  const modules = { react, 'lucide-react': {}, 'react/jsx-runtime': { jsx: (type, props) => ({ type, props }), jsxs: (type, props) => ({ type, props }) } };
+  const modules = { react, 'lucide-react': {}, '@/lib/player': { recordShare() {} }, 'react/jsx-runtime': { jsx: (type, props) => ({ type, props }), jsxs: (type, props) => ({ type, props }) } };
   const context = { exports: {}, URL, navigator, window: { location: { origin: 'https://arabicgta6.com', pathname: '/item/example', href: 'https://arabicgta6.com/item/example?utm_campaign=private#section' } }, require: id => { assert(id in modules, id); return modules[id]; } };
   vm.runInNewContext(compile(file), context);
   const render = () => { cursor = 0; tree = context.exports[name](props); return tree; };

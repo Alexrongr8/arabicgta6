@@ -2,7 +2,9 @@ import Link from "next/link";
 import { categoryThumb, thumbFor } from "@/lib/image";
 import { Bidi } from "@/components/Bidi";
 import { CATEGORY_MAP } from "@/lib/categories";
-import { formatDate, pick } from "@/lib/i18n";
+import { pick } from "@/lib/i18n";
+import { ago } from "@/lib/ago";
+import { CardMarks } from "./player/CardMarks";
 import type { ItemCard as Card, Locale } from "@/lib/types";
 import { CategoryIcon } from "./CategoryIcon";
 import { StatusBadge } from "./StatusBadge";
@@ -35,7 +37,8 @@ export function ItemCard({ item, locale, showCategory = true, index = 0 }: { ite
           )}
           <StatusBadge status={item.status} locale={locale} />
           {sourceUnknown(item.tags) && <SourceUnknownBadge locale={locale} />}
-          <span>{formatDate(item.published_at, locale)}</span>
+          <span>{ago(item.published_at, locale)}</span>
+          <CardMarks slug={item.slug} at={item.published_at} ar={locale === "ar"} />
         </span>
         <span className="block text-[15px] leading-snug font-bold text-fg group-hover:text-accent"><Bidi text={pick(item, "title", locale)} /></span>
         <span className="mt-1 line-clamp-2 block text-[13px] leading-relaxed text-muted">

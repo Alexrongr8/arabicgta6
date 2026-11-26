@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { ArrowRight, ArrowLeft, Play } from "lucide-react";
 import type { Short } from "@/lib/data";
+import { recordShort } from "@/lib/player";
 
 /** Full-screen, swipe-up feed like TikTok/Shorts. Only the video on screen loads a player. */
 export function ShortsFeed({ shorts, start, ar }: { shorts: Short[]; start: string | null; ar: boolean }) {
@@ -19,6 +20,14 @@ export function ShortsFeed({ shorts, start, ar }: { shorts: Short[]; start: stri
     refs.current.forEach((el) => io.observe(el));
     return () => io.disconnect();
   }, [start]);
+
+  // A Short counts as watched (mission progress, a little XP) after four seconds on screen, once each.
+  const watched = useRef(new Set<string>());
+  useEffect(() => {
+    if (!active || watched.current.has(active)) return;
+    const timer = window.setTimeout(() => { watched.current.add(active); recordShort(); }, 4000);
+    return () => window.clearTimeout(timer);
+  }, [active]);
 
   return (
     <div className="fixed inset-0 z-50 bg-black">

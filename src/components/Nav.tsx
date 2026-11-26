@@ -1,21 +1,24 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Clapperboard, Compass, Home, Map, Search, UserRound } from "lucide-react";
+import { Clapperboard, Compass, Gamepad2, Home, Map, Search, UserRound } from "lucide-react";
 
-type Labels = { home: string; explore: string; map: string; shorts: string; search: string; account: string };
+type Labels = { home: string; explore: string; map: string; shorts: string; search: string; account: string; play: string; me: string };
 
 const LINKS = [
   { href: "/", key: "home", Icon: Home },
   { href: "/shorts", key: "shorts", Icon: Clapperboard },
+  { href: "/play", key: "play", Icon: Gamepad2 },
   { href: "/explore", key: "explore", Icon: Compass },
   { href: "/map", key: "map", Icon: Map },
   { href: "/search", key: "search", Icon: Search },
-  { href: "/account", key: "account", Icon: UserRound },
 ] as const;
+/** Phones: search lives in the hero and the explore page, so the sixth slot is the visitor's own page. */
+const BOTTOM = [...LINKS.slice(0, 5), { href: "/me", key: "me", Icon: UserRound }] as const;
 
 function isActive(path: string, href: string) {
   if (href === "/") return path === "/";
+  if (href === "/me") return path.startsWith("/me") || path.startsWith("/account");
   if (href === "/explore") return path.startsWith("/explore") || path.startsWith("/c/") || path.startsWith("/item/");
   return path.startsWith(href);
 }
@@ -26,7 +29,7 @@ export function BottomNav({ labels }: { labels: Labels }) {
   return (
     <nav className="glass pb-safe fixed inset-x-0 bottom-0 z-40 border-t border-line md:hidden">
       <ul className="mx-auto grid max-w-lg grid-cols-6">
-        {LINKS.map(({ href, key, Icon }) => {
+        {BOTTOM.map(({ href, key, Icon }) => {
           const active = isActive(path, href);
           return (
             <li key={href}>
@@ -48,13 +51,13 @@ export function TopLinks({ labels }: { labels: Labels }) {
   const path = usePathname();
   return (
     <ul className="hidden items-center gap-1 md:flex">
-      {LINKS.slice(0, 5).map(({ href, key, Icon }) => {
+      {LINKS.map(({ href, key, Icon }) => {
         const active = isActive(path, href);
         return (
           <li key={href}>
             <Link
               href={href}
-              className={`inline-flex h-9 items-center gap-2 rounded-full px-4 text-sm font-bold transition ${active ? "bg-chip2 text-fg" : "text-muted hover:text-fg"}`}
+              className={`inline-flex h-9 items-center gap-1.5 rounded-full px-3 text-sm font-bold transition lg:gap-2 lg:px-4 ${active ? "bg-chip2 text-fg" : "text-muted hover:text-fg"}`}
             >
               <Icon className="size-4" /> {labels[key]}
             </Link>

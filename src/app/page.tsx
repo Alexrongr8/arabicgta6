@@ -18,6 +18,10 @@ import { CategoryGrid } from "@/components/CategoryGrid";
 import { SignInGate } from "@/components/SignInGate";
 import { Cover } from "@/components/Cover";
 import { StatusBadge } from "@/components/StatusBadge";
+import { LiveDesk } from "@/components/LiveDesk";
+import { PlayerHub } from "@/components/player/PlayerHub";
+import { ago } from "@/lib/ago";
+import { isSpoiler } from "@/lib/spoiler";
 
 export async function generateMetadata() {
   const locale = await getLocale();
@@ -27,23 +31,37 @@ export async function generateMetadata() {
 
 export default async function Home() {
   const [locale, viewer, counts, featured, latest, news, pool, shorts] = await Promise.all([
-    getLocale(), getViewer(), getCounts(), getFeatured(), getLatest(14), getLatest(6, "news"), getDailyPool(),
+    getLocale(), getViewer(), getCounts(), getFeatured(), getLatest(40), getLatest(14, "news"), getDailyPool(),
     getShorts(20).catch(() => [] as Short[]), // the shorts strip must never take the homepage down
   ]);
   const total = Object.values(counts).reduce((a, b) => a + b, 0);
 
   const secret = pickDaily(pool);
   const challenge = weeklyChallenge();
+  // eslint-disable-next-line react-hooks/purity
+  const now = Date.now();
+  const today = latest.filter((i) => now - Date.parse(i.published_at) < 864e5).length;
+  // The front page shows the newest stories of every section; the news column below skips what is already there.
+  const desk = latest.filter((i) => !isSpoiler(i)).slice(0, 6);
+  const onDesk = new Set(desk.map((i) => i.slug));
   return (
     <main>
       <NewsTicker items={latest} locale={locale} />
-      <Hero locale={locale} total={total} />
+      <Hero locale={locale} total={total} live={latest[0] ? { today, last: ago(latest[0].published_at, locale, now), fresh: now - Date.parse(latest[0].published_at) < 12 * 3600e3 } : undefined} />
       <ShortsRail shorts={shorts} locale={locale} />
+      <PlayerHub locale={locale} stamps={latest.map((i) => i.published_at)} />
+
+      <div id="latest" className="scroll-mt-20">
+        <Section title={locale === "ar" ? "الحين في Leonida 🔴" : "Right now in Leonida 🔴"} href="/c/news" linkLabel={locale === "ar" ? "كل الأخبار" : "All news"} locale={locale}>
+          <LiveDesk items={desk} locale={locale} />
+        </Section>
+      </div>
+
       <DailyCards secret={secret} challenge={challenge} locale={locale} />
 
       <Section title={t(locale, "featured")} locale={locale}>
         <div className="no-scrollbar -mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-2">
-          {featured.map((f) => {
+          {featured.map((f, rank) => {
             const c = CATEGORY_MAP[f.category];
             return (
               <Link
@@ -54,6 +72,7 @@ export default async function Home() {
               >
                 <Cover src={thumbFor(f, 640)} fallback={categoryThumb(f.category, 640)} className="absolute inset-0 size-full object-cover" />
                 <span className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-transparent" />
+                <span className="font-display absolute top-2 text-[54px] leading-none text-white/90 drop-shadow-[0_2px_8px_rgba(0,0,0,.7)] ltr:left-3 rtl:right-3" dir="ltr" aria-hidden>{rank + 1}</span>
                 <span className="relative mb-2 flex flex-wrap items-center gap-2">
                   <span className="rounded-full px-2 py-0.5 text-[11px] font-extrabold text-black" style={{ background: c.color }}>
                     {locale === "ar" ? c.ar : c.en}
@@ -93,7 +112,7 @@ export default async function Home() {
         <div>
           <Section title={t(locale, "latestNews")} href="/c/news" linkLabel={locale === "ar" ? "كل الأخبار" : "All news"} locale={locale}>
             <div className="grid gap-3">
-              {news.map((n, i) => (
+              {news.filter((n) => !onDesk.has(n.slug)).slice(0, 6).map((n, i) => (
                 <ItemCard key={n.slug} item={n} locale={locale} showCategory={false} index={i} />
               ))}
             </div>
@@ -102,7 +121,7 @@ export default async function Home() {
         <div>
           <Section title={t(locale, "latest")} locale={locale}>
             <div className="grid gap-3">
-              {latest.filter((l) => l.category !== "news").slice(0, 6).map((n, i) => (
+              {latest.filter((l) => l.category !== "news" && !onDesk.has(l.slug)).slice(0, 6).map((n, i) => (
                 <ItemCard key={n.slug} item={n} locale={locale} index={i} />
               ))}
             </div>

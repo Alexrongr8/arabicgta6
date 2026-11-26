@@ -26,7 +26,7 @@ function harness({configured=true,rows=[],serverCap=500,item=seed,locale='ar',ha
    if(name==='./supabase/server')return {createClient:async()=>client,supabaseConfigured:()=>configured};
    if(name==='./seed')return {SEED:[seed]};
    if(name==='@/lib/session')return {getLocale:async()=>locale,getViewer:async()=>({member:true,signedIn:false})};
-   if(name==='@/lib/data')return {getItem:async()=>item,itemExists:async()=>null,getBySlugs:async()=>[]};
+   if(name==='@/lib/data')return {getItem:async()=>item,itemExists:async()=>null,getBySlugs:async()=>[],getLatest:async()=>[]};
    if(name==='@/lib/community/data')return {getVotes:async()=>({})};
    if(name.startsWith('@/components/'))return new Proxy({},{get:(_t,k)=>k==='__esModule'?true:()=>null});
    if(name==='next/link')return {__esModule:true,default:()=>null};

@@ -2,11 +2,11 @@ import Link from "next/link";
 import { Map, Search } from "lucide-react";
 import type { Locale } from "@/lib/types";
 
-export function Hero({ locale, total, compact }: { locale: Locale; total: number; compact?: boolean }) {
+export function Hero({ locale, total, compact, live }: { locale: Locale; total: number; compact?: boolean; live?: { today: number; last: string; fresh: boolean } }) {
   const ar = locale === "ar";
   return (
     <section className="mx-auto max-w-6xl px-3 pt-3 md:px-4 md:pt-5">
-      <div className={`relative overflow-hidden rounded-[28px] ${compact ? "min-h-[260px]" : "min-h-[440px] md:min-h-[480px]"}`}>
+      <div className={`relative overflow-hidden rounded-[28px] ${compact ? "min-h-[260px]" : "min-h-[330px] md:min-h-[360px]"}`}>
         {/* Official Rockstar screenshot of Vice City */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="/img/thumb/vice-city-1280.webp" alt="" width={1280} height={720} className="absolute inset-0 size-full object-cover" fetchPriority="high" />
@@ -18,7 +18,7 @@ export function Hero({ locale, total, compact }: { locale: Locale; total: number
             <span className="size-2 animate-pulse rounded-full bg-[#f0287a]" />
             {ar ? "موسوعة GTA 6 بالعربي" : "The Arabic GTA 6 encyclopedia"}
           </span>
-          <h1 className={`${compact ? "text-[30px] md:text-5xl" : "text-[40px] md:text-6xl"} leading-[1.15] drop-shadow-[0_3px_16px_rgba(0,0,0,.6)]`}>
+          <h1 className={`${compact ? "text-[30px] md:text-5xl" : "text-[36px] md:text-[56px]"} leading-[1.15] drop-shadow-[0_3px_16px_rgba(0,0,0,.6)]`}>
             {ar ? (
               <>
                 هلا والله بعشّاق <span className="font-display tracking-wide whitespace-nowrap text-[#ffb13d]" dir="ltr">GTA VI</span> 👋
@@ -44,16 +44,23 @@ export function Hero({ locale, total, compact }: { locale: Locale; total: number
               </Link>
             </div>
           )}
-          <p className="mt-4 text-[12px] text-white/75">
-            {ar ? (
-              <>
-                عندنا الحين <b className="text-white">{total}</b> موضوع للاستكشاف 🔥
-              </>
-            ) : (
-              <>
-                <b className="text-white">{total}</b> entries to explore 🔥
-              </>
+          <p className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-1.5 text-[12px] text-white/85">
+            {live && (
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-black/45 px-2.5 py-1 font-bold backdrop-blur">
+                {live.fresh && <span className="live-dot size-2 rounded-full bg-[#22c55e]" />}
+                {live.fresh
+                  ? (ar ? <>الرادار شغّال · آخر خبر {live.last}</> : <>Radar is live · latest story {live.last}</>)
+                  : (ar ? <>آخر خبر {live.last}</> : <>Latest story {live.last}</>)}
+              </span>
             )}
+            {live && live.today > 0 && (
+              <span className="inline-flex items-center gap-1 rounded-full bg-black/45 px-2.5 py-1 font-bold backdrop-blur">
+                ⚡ {ar ? <><b className="text-[#ffd166] tabular-nums">{live.today}</b> جديد آخر 24 ساعة</> : <><b className="text-[#ffd166] tabular-nums">{live.today}</b> new in the last 24 hours</>}
+              </span>
+            )}
+            <span>
+              {ar ? <>عندنا الحين <b className="text-white">{total}</b> موضوع 🔥</> : <><b className="text-white">{total}</b> entries to explore 🔥</>}
+            </span>
           </p>
         </div>
       </div>

@@ -2,22 +2,7 @@ import Link from "next/link";
 import { pick } from "@/lib/i18n";
 import { isSpoiler } from "@/lib/spoiler";
 import type { ItemCard, Locale } from "@/lib/types";
-
-/** Arabic counted noun: 1 دقيقة، 2 دقيقتين، 3-10 دقائق، 11+ دقيقة. */
-function arCount(n: number, one: string, two: string, few: string): string {
-  if (n === 1) return one;
-  if (n === 2) return two;
-  return n <= 10 ? `${n} ${few}` : `${n} ${one}`;
-}
-
-function ago(iso: string, ar: boolean): string {
-  const min = Math.max(1, Math.round((Date.now() - Date.parse(iso)) / 60_000));
-  if (min < 60) return ar ? `قبل ${arCount(min, "دقيقة", "دقيقتين", "دقائق")}` : `${min} min ago`;
-  const h = Math.round(min / 60);
-  if (h < 24) return ar ? `قبل ${arCount(h, "ساعة", "ساعتين", "ساعات")}` : `${h}h ago`;
-  const d = Math.round(h / 24);
-  return ar ? `قبل ${arCount(d, "يوم", "يومين", "أيام")}` : `${d}d ago`;
-}
+import { ago } from "@/lib/ago";
 
 /** "Breaking" strip with the newest headlines, scrolling like a TV news ticker (pure CSS, no JS). */
 export function NewsTicker({ items, locale }: { items: ItemCard[]; locale: Locale }) {
@@ -40,7 +25,7 @@ export function NewsTicker({ items, locale }: { items: ItemCard[]; locale: Local
             <span className="relative flex size-2"><span className="absolute inline-flex size-full animate-ping rounded-full bg-white opacity-75" /><span className="relative inline-flex size-2 rounded-full bg-white" /></span>
             {ar ? "عاجل" : "Live"}
           </span>
-          <span className="text-[10px] opacity-90">{ago(list[0].published_at, ar)}</span>
+          <span className="text-[10px] opacity-90">{ago(list[0].published_at, locale)}</span>
         </div>
         <div className="ticker-mask relative min-w-0 flex-1 overflow-hidden py-2.5">
           <div className="ticker-track flex w-max" style={{ animationDuration: `${Math.max(40, list.length * 7)}s` }}>

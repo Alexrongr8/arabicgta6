@@ -2,6 +2,7 @@
 import { useRef, useState } from "react";
 import { Share2 } from "lucide-react";
 import type { Locale } from "@/lib/types";
+import { recordShare } from "@/lib/player";
 
 export function ShareButton({ title, label, locale }: { title: string; label: string; locale: Locale }) {
   const [busy, setBusy] = useState(false);
@@ -22,6 +23,7 @@ export function ShareButton({ title, label, locale }: { title: string; label: st
       if (navigator.share) {
         try {
           await navigator.share({ title, url });
+          recordShare();
           return;
         } catch (error) {
           if (error && typeof error === "object" && "name" in error && error.name === "AbortError") return;
@@ -31,6 +33,7 @@ export function ShareButton({ title, label, locale }: { title: string; label: st
         if (!navigator.clipboard?.writeText) throw new Error("Clipboard unavailable");
         await navigator.clipboard.writeText(url);
         setCopied(true);
+        recordShare();
       } catch {
         setManualUrl(url);
       }
