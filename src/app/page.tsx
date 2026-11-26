@@ -3,7 +3,8 @@ import Link from "next/link";
 import { categoryThumb, thumbFor } from "@/lib/image";
 import { Bidi } from "@/components/Bidi";
 import { CATEGORY_MAP } from "@/lib/categories";
-import { getCounts, getDailyPool, getFeatured, getLatest, getShorts, type Short } from "@/lib/data";
+import { getCounts, getDailyPool, getFeatured, getLatest, getMapItems, getShorts, type Short } from "@/lib/data";
+import type { ItemCard as MapCard } from "@/lib/types";
 import { ShortsRail } from "@/components/ShortsRail";
 import { NewsTicker } from "@/components/NewsTicker";
 import { pickDaily, weeklyChallenge } from "@/lib/daily";
@@ -20,6 +21,7 @@ import { Cover } from "@/components/Cover";
 import { StatusBadge } from "@/components/StatusBadge";
 import { LiveDesk } from "@/components/LiveDesk";
 import { PlayerHub } from "@/components/player/PlayerHub";
+import { MapSpotlight } from "@/components/MapSpotlight";
 import { ago } from "@/lib/ago";
 import { isSpoiler } from "@/lib/spoiler";
 
@@ -30,9 +32,10 @@ export async function generateMetadata() {
 }
 
 export default async function Home() {
-  const [locale, viewer, counts, featured, latest, news, pool, shorts] = await Promise.all([
+  const [locale, viewer, counts, featured, latest, news, pool, shorts, mapItems] = await Promise.all([
     getLocale(), getViewer(), getCounts(), getFeatured(), getLatest(40), getLatest(14, "news"), getDailyPool(),
     getShorts(20).catch(() => [] as Short[]), // the shorts strip must never take the homepage down
+    getMapItems().catch(() => [] as MapCard[]), // same for the map preview: without pins it still shows the map
   ]);
   const total = Object.values(counts).reduce((a, b) => a + b, 0);
 
@@ -50,6 +53,7 @@ export default async function Home() {
       <Hero locale={locale} total={total} live={latest[0] ? { today, last: ago(latest[0].published_at, locale, now), fresh: now - Date.parse(latest[0].published_at) < 12 * 3600e3 } : undefined} />
       <ShortsRail shorts={shorts} locale={locale} />
       <PlayerHub locale={locale} stamps={latest.map((i) => i.published_at)} />
+      <MapSpotlight items={mapItems} locale={locale} />
 
       <div id="latest" className="scroll-mt-20">
         <Section title={locale === "ar" ? "الحين في Leonida 🔴" : "Right now in Leonida 🔴"} href="/c/news" linkLabel={locale === "ar" ? "كل الأخبار" : "All news"} locale={locale}>

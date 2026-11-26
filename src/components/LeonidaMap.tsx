@@ -119,9 +119,10 @@ function toPins(items: ItemCard[]): Pin[] {
   return pins;
 }
 
-export default function LeonidaMap({ items: cards, locale, focus, spot, labels }: { items: ItemCard[]; locale: Locale; focus?: string; spot?: number; labels: { note: string; open: string; all: string; back: string; legend: string } }) {
+export default function LeonidaMap({ items: cards, locale, focus, spot, cat, labels }: { items: ItemCard[]; locale: Locale; focus?: string; spot?: number; cat?: CategorySlug; labels: { note: string; open: string; all: string; back: string; legend: string } }) {
   const items = useMemo(() => toPins(cards), [cards]);
-  const [active, setActive] = useState<Set<CategorySlug>>(new Set());
+  // A link such as /map?cat=vehicles opens the map already filtered to that category.
+  const [active, setActive] = useState<Set<CategorySlug>>(() => new Set(cat ? [cat] : []));
   const [selected, setSelected] = useState<Pin | null>(
     () => items.find((i) => i.key === (spot !== undefined ? `${focus}#${spot}` : focus)) ?? items.find((i) => i.slug === focus) ?? null,
   );
