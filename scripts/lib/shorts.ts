@@ -45,3 +45,8 @@ export function acceptTitle(title: string): boolean {
   const latinOrArabic = (t.match(/[A-Za-z\u0600-\u06FF]/g) ?? []).length >= t.replace(/\s/g, "").length * 0.5;
   return t.length > 0 && t.length <= 300 && GTA6.test(t) && !BLOCK.test(t) && words(t) >= 3 && latinOrArabic;
 }
+
+/** Videos with a clean title but an unsuitable picture or content, found by eye. They are never collected again. */
+export const BLOCKED_IDS = new Set<string>(["JgSHlRp_ZLQ"]);
+/** The full check for one video: not blocked by hand, and the title passes. */
+export const acceptShort = (id: string, title: string) => !BLOCKED_IDS.has(id) && acceptTitle(title);

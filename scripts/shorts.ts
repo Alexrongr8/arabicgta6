@@ -1,7 +1,7 @@
 /** Collects new GTA 6 YouTube Shorts. Free: public feeds/pages + oEmbed, no API key, no paid AI. */
 import "./lib/env";
 import { db } from "./lib/db";
-import { SHORTS_CHANNELS, SHORTS_PAGES, shortsFeed, extractIds, acceptTitle } from "./lib/shorts";
+import { SHORTS_CHANNELS, SHORTS_PAGES, shortsFeed, extractIds, acceptShort, BLOCKED_IDS } from "./lib/shorts";
 
 const UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130 Safari/537.36";
 const MAX_NEW = Number(process.env.SHORTS_MAX_NEW ?? 25);
@@ -44,9 +44,9 @@ async function main() {
   const known = new Set((existing ?? []).map((r) => r.video_id));
   const rows = [];
   for (const id of ids) {
-    if (known.has(id) || rows.length >= MAX_NEW) continue;
+    if (known.has(id) || BLOCKED_IDS.has(id) || rows.length >= MAX_NEW) continue;
     const info = await oembed(id);
-    if (!info || !acceptTitle(info.title) || !(await isShort(id))) continue;
+    if (!info || !acceptShort(id, info.title) || !(await isShort(id))) continue;
     rows.push({ video_id: id, title: info.title, channel: info.channel || null, source: candidates.get(id)!, added_at: new Date(Date.now() - rows.length * 1000).toISOString() });
   }
   if (rows.length) {

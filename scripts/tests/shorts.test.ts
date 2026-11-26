@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { acceptTitle, extractIds, shortsFeed } from "../lib/shorts";
+import { acceptShort, acceptTitle, BLOCKED_IDS, extractIds, shortsFeed } from "../lib/shorts";
 
 test("GTA 6 titles in English and Arabic are accepted", () => {
   for (const t of ["GTA 6 Gun Stores Have a Hidden Secret...", "أسرار رهيبة في لعبة قراند 6 🔥", "Grand Theft Auto VI Launch Trailer", "Airports in GTA 6 are Insane"]) assert.ok(acceptTitle(t), t);
@@ -12,4 +12,10 @@ test("search pages yield only /shorts/ ids; feeds yield entries", () => {
   assert.deepEqual(extractIds('"videoId":"aaaaaaaaaaa" href="/shorts/bbbbbbbbbbb" "/shorts/bbbbbbbbbbb"', true), ["bbbbbbbbbbb"]);
   assert.deepEqual(extractIds("<yt:videoId>ccccccccccc</yt:videoId>"), ["ccccccccccc"]);
   assert.equal(shortsFeed("UC6VcWc1rAoWdBCM0JxrRQ3A"), "https://www.youtube.com/feeds/videos.xml?playlist_id=UUSH6VcWc1rAoWdBCM0JxrRQ3A");
+});
+test("a video blocked by hand stays out even with a clean title", () => {
+  const [blocked] = [...BLOCKED_IDS];
+  assert.ok(blocked);
+  assert.ok(!acceptShort(blocked, "Everything You Can Do on Your Phone in GTA 6!"));
+  assert.ok(acceptShort("aaaaaaaaaaa", "Everything You Can Do on Your Phone in GTA 6!"));
 });
