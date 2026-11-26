@@ -150,6 +150,8 @@ export function numberTokens(s: string): string[] {
   return [...new Set(text.match(/\d+(?:[.,:/-]\d+)*(?:%|٪)?/g) ?? [])].map((n) => n.replace(/,/g, "").replace(/٪/g, "%"));
 }
 export type SourceReader = (url: string) => Promise<SafeResult | null>;
+/** Answers that mean "this site refuses automated readers", not "this page does not exist". */
+const WALLED = new Set([401, 403, 406, 429, 451, 503]);
 export type GateResult = { decision: "publish" | "review"; gates: string[]; item: AiItem; sourceChecks: { url: string; finalUrl: string; tier: string; status: number }[] };
 /** Structural proof gates, not a claim of automatic semantic/video verification. Uncertain cases are held. */
 /** Share of letters that are Arabic (names in Latin script are expected, so thresholds are low). */
@@ -237,14 +239,19 @@ export async function verifyDraft(draft: Draft, retrieved: string[], read: Sourc
   if (!citations.length) gates.push("1:no-retrieved-source");
   const fetched = new Map<string, { text: string; tier: string }>();
   const sourceChecks: GateResult["sourceChecks"] = [];
+  // A page the search tool opened but our own reader could not (bot wall, time-out, oversized page) is a real,
+  // known source: its link stays on the article so readers can check it. Nothing from it counts as verified,
+  // so it can never lift the status. A page that answers "not found" is dropped as before.
+  const unread = new Set<string>();
   for (const s of citations) {
     const r = await read(s.url);
-    if (!r || r.status !== 200) continue;
+    if (!r || WALLED.has(r.status)) { unread.add(urlKey(s.url)); sourceChecks.push({ url: s.url, finalUrl: s.url, tier: "unread", status: r?.status ?? 0 }); continue; }
+    if (r.status !== 200) continue;
     const t = tier(r.finalUrl);
     sourceChecks.push({ url: s.url, finalUrl: r.finalUrl, tier: t, status: r.status });
     fetched.set(urlKey(s.url), { text: /(?:html|text\/plain)/i.test(r.contentType) ? normalized(plainText(r.body.toString("utf8"))) : "", tier: t });
   }
-  item.sources = citations.filter((s) => fetched.has(urlKey(s.url)));
+  item.sources = citations.filter((s) => fetched.has(urlKey(s.url)) || unread.has(urlKey(s.url)));
   if (!item.sources.length) gates.push("2:no-reachable-source");
   const proof = draft.proof;
   if (!proof?.in_scope) gates.push("scope:review-required");

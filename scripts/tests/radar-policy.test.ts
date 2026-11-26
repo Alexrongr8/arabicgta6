@@ -179,3 +179,10 @@ test("a published article takes the source page's own picture when one is found"
   const h = harness(); h.deps.findImage = async () => "https://cdn.example.com/cover.jpg"; await runRadar(h.deps); assert.equal(h.rows[0].image, "https://cdn.example.com/cover.jpg");
   const g = harness(); g.deps.findImage = async () => { throw new Error("offline"); }; await runRadar(g.deps); assert.equal(g.rows[0].image, null);
 });
+test("a source behind a bot wall keeps its link but never lifts the status", async () => {
+  for (const blocked of [async () => response("Forbidden", URL, 403), async () => null]) {
+    const g = await verifyDraft(draft(), [URL], blocked);
+    assert.equal(g.decision, "publish"); assert.equal(g.item.status, "rumor");
+    assert.equal(g.item.sources.length, 1); assert.ok(!g.item.tags.includes("source-unknown"));
+  }
+});

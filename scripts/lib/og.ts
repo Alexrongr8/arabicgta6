@@ -2,14 +2,14 @@ import { checkPublicHttpsUrl, safeGet } from "../../src/lib/safe-fetch";
 
 /**
  * Fetches a page and returns its og:image / twitter:image URL (absolute, public HTTPS), or null.
- * Uses the SSRF-safe fetcher: one 9 s deadline for the whole exchange, 1.5 MB body cap,
+ * Uses the SSRF-safe fetcher: one 9 s deadline for the whole exchange, 4 MB body cap (big news pages pass 2 MB),
  * manual redirect validation and no private/loopback destinations.
  */
 export async function findImage(url: string): Promise<string | null> {
   try {
     const res = await safeGet(url, {
       timeoutMs: 9000,
-      maxBytes: 1_500_000,
+      maxBytes: 4_000_000,
       accept: "text/html",
       userAgent: "Mozilla/5.0 (compatible; ArabicGTA6Bot/1.0; +https://arabicgta6.com)",
     });

@@ -8,25 +8,38 @@ export function imageCredit(src: string): string {
   }
 }
 
-/** Official Rockstar Games media used when an article has no picture of its own, so every card has an image. */
-const FALLBACK: Record<string, string> = {
-  news: "/img/vice-city.webp",
-  secrets: "/img/lucia.webp",
-  money: "/img/jason-lucia.webp",
-  weapons: "/img/revolvers.webp",
-  places: "/img/vice-city.webp",
-  characters: "/img/jason-lucia.webp",
-  vehicles: "/img/cheetah.webp",
-  glitches: "/img/lucia.webp",
-  strange: "/img/vintage.webp",
-  funny: "/img/jason-lucia.webp",
-  choices: "/img/lucia.webp",
-  streamers: "/img/cheetah.webp",
-  tips: "/img/ultimate.webp",
+/**
+ * Official Rockstar Games media used when an article has no picture of its own, so every card has an image.
+ * The first picture of each category is its neutral one (spoiler cards, failed loads). The others add variety,
+ * so a run of stories without their own picture does not repeat one image down the page.
+ */
+const FALLBACK: Record<string, string[]> = {
+  news: ["vice-city", "out-now", "ultimate", "cheetah"],
+  secrets: ["lucia", "vice-city", "vintage"],
+  money: ["jason-lucia", "ultimate", "cheetah"],
+  weapons: ["revolvers", "lucia", "out-now"],
+  places: ["vice-city", "cheetah", "ultimate"],
+  characters: ["jason-lucia", "out-now", "vintage", "lucia"],
+  vehicles: ["cheetah", "ultimate"],
+  glitches: ["lucia", "vice-city", "revolvers"],
+  strange: ["vintage", "vice-city", "lucia"],
+  funny: ["jason-lucia", "ultimate", "vintage"],
+  choices: ["lucia", "rooftop"],
+  streamers: ["cheetah", "out-now", "vice-city"],
+  tips: ["ultimate", "rooftop", "vice-city"],
 };
 
-export function imageOf(i: { image?: string | null; category: string }): string {
-  return i.image || FALLBACK[i.category] || "/img/vice-city.webp";
+/** Stable small hash, so one article always gets the same fallback picture. */
+function hash(text: string): number {
+  let h = 2166136261;
+  for (let i = 0; i < text.length; i++) h = Math.imul(h ^ text.charCodeAt(i), 16777619);
+  return h >>> 0;
+}
+
+export function imageOf(i: { image?: string | null; category: string; slug?: string }): string {
+  if (i.image) return i.image;
+  const pool = FALLBACK[i.category] ?? FALLBACK.news;
+  return `/img/${pool[i.slug ? hash(i.slug) % pool.length : 0]}.webp`;
 }
 
 export const THUMB_WIDTHS = [228, 640, 1280] as const;

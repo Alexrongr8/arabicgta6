@@ -80,7 +80,7 @@ async function main() {
     for (const k of ["title_ar", "title_en", "summary_ar", "summary_en", "body_ar", "body_en"] as const) if (item[k] !== row[k] && item[k].trim().length > 20) patch[k] = item[k];
     if (JSON.stringify(item.facts) !== JSON.stringify(row.facts)) patch.facts = item.facts;
     if (Object.keys(patch).length) summary.cleaned++;
-    if (TITLE_AR[key]) { patch.title_ar = TITLE_AR[key]; summary.titles++; }
+    if (TITLE_AR[key] && TITLE_AR[key] !== row.title_ar) { patch.title_ar = TITLE_AR[key]; summary.titles++; }
     if (CATEGORY[key] && CATEGORY[key] !== row.category) { patch.category = CATEGORY[key]; summary.category++; }
 
     const unknown = (row.tags ?? []).includes("source-unknown");
