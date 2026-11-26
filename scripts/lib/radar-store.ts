@@ -13,6 +13,8 @@ export async function readState(database: Database): Promise<State> {
     || (s.pending && (!BEAMS.some((b) => b.id === s.pending!.beam) || typeof s.pending.lead?.url !== "string" || typeof s.pending.lead.headline !== "string" || typeof s.pending.lead.gist !== "string" || !Array.isArray(s.pending.retrievedUrls) || s.pending.retrievedUrls.length > 100 || s.pending.retrievedUrls.some((u) => typeof u !== "string") || !Number.isFinite(Date.parse(s.pending.discoveredAt)) || !Number.isInteger(s.pending.attempts) || s.pending.attempts < 0 || s.pending.attempts > 3))) {
     throw new Error("Invalid durable radar state; refusing to reset windows or lose pending work.");
   }
+  // The lead queue is a convenience, never a reason to stop the radar: malformed entries are dropped.
+  s.queue = (Array.isArray(s.queue) ? s.queue : []).filter((q) => q && BEAMS.some((b) => b.id === q.beam) && typeof q.lead?.url === "string" && typeof q.lead.headline === "string" && typeof q.lead.gist === "string" && Number.isFinite(Date.parse(q.discoveredAt))).slice(-12);
   return s;
 }
 export async function writeRecord(database: Database, kind: "radar_state" | "radar_review" | "update" | "update_partial" | "radar_spend", value: unknown, added = 0) {

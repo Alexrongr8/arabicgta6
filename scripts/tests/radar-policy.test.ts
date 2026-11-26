@@ -127,3 +127,55 @@ test("an article whose Arabic body is not Arabic is held, never published", asyn
   const d = draft(); d.item.body_ar = "Ceci est un article en français. ".repeat(20);
   assert.equal((await verifyDraft(d, [URL], async () => response())).decision, "review");
 });
+
+// --- Second round (26 Nov 2026): readable articles, honest badges, no repeats, no filler stories ---
+import { cleanProse, cleanTitle, sameStory, acceptableLead, significantNumbers } from "../lib/radar-policy";
+test("production notes, citations and pasted button hints never reach the reader", () => {
+  const body = "## وش السالفة\nانتشرت صورة مزيفة. اضغط L3 + R3 / LS + RS. المقال يلخص الجوائز. ([levelup.com](https://www.levelup.com/x))\n\n## متطلبات وزرّات الكنترول\nملاحظة تحكّم طبقاً للسياسة: L3 + R3 / LS + RS.\n\n## الخلاصة\nالنصوص المقتبسة أسفل تدعم الحقول الوقائعية. الخبر غير مؤكد.";
+  const out = cleanProse(body, { dropPadButtons: true });
+  assert.equal(out, "## وش السالفة\nانتشرت صورة مزيفة. المقال يلخص الجوائز.\n\n## الخلاصة\nالخبر غير مؤكد.");
+  assert.equal(cleanProse("اسبح أسرع بـ L3 / LS. اضغط L3 + R3 / LS + RS للتصوير.", {}), "اسبح أسرع بـ L3 / LS. اضغط L3 + R3 / LS + RS للتصوير.");
+  assert.equal(cleanTitle("قائمة المتجر تشير إلى بث سحابي (مُبلّغ عنه)"), "قائمة المتجر تشير إلى بث سحابي");
+});
+test("a summary that was only a pasted excerpt is rebuilt from the article", async () => {
+  const d = draft(); d.item.summary_ar = 'المقتطف الحرفي الداعم: "جملة منقولة" — مأخوذ من صفحة.';
+  const g = await verifyDraft(d, [URL], async () => response());
+  assert.ok(!g.item.summary_ar.includes("المقتطف")); assert.ok(g.item.summary_ar.length > 40);
+});
+test("dates and small counts do not turn an official story into a rumor", async () => {
+  const d = draft(); d.item.summary_en += " Released on 23 November 2026 for 2 consoles.";
+  assert.equal((await verifyDraft(d, [URL], async () => response())).item.status, "official");
+  assert.deepEqual(significantNumbers("19 نوفمبر 2026، 39 مليون، 3.79 مليار، 01.002.002، 500$، 60fps"), ["3.79", "01.002.002", "500"]);
+});
+test("a figure that the press source really contains keeps the story confirmed", async () => {
+  const d = draft(); const url = "https://www.famitsu.com/article/1"; d.item.status = "confirmed"; d.item.sources = [{ title: "Press", url }]; d.proof.support = [];
+  d.item.summary_en += " It sold 3.79 billion."; const page = `<html><body>${"Long article text. ".repeat(20)} Sales reached $3.79 billion.</body></html>`;
+  assert.equal((await verifyDraft(d, [url], async () => response(page, url))).item.status, "confirmed");
+  const e = draft(); e.item.status = "confirmed"; e.item.sources = [{ title: "Press", url }]; e.proof.support = []; e.item.summary_en += " It sold 9.99 billion.";
+  assert.equal((await verifyDraft(e, [url], async () => response(page, url))).item.status, "rumor");
+});
+test("the same patch or the same leak is recognised as one story", () => {
+  assert.ok(sameStory("GTA VI update 01.002.002 fixes crashes", "Small GTA VI patch (01.002.002) lands on consoles"));
+  assert.ok(sameStory("Rockstar disrupts unofficial PC port after CyberLeek leak", "CyberLeek leak: unofficial PC port project shut down"));
+  assert.ok(!sameStory("Sony says GTA VI is the biggest PlayStation launch", "Players find a giant egg near Pelican Valley"));
+});
+test("filler leads are dropped, the best lead is written and the rest wait in the queue", async () => {
+  const h = harness();
+  const heads = ["", "Magazine prints special issue", "Minor forum chatter today", "Players find giant egg near Pelican Valley", "Second title update fixes autosave crashes"];
+  const mk = (n: number, extra: Partial<Lead>) => ({ ...lead, headline: heads[n], url: `${URL}/${n}`, ...extra });
+  h.deps.discover = async () => research({ leads: [mk(1, { interest: 5, kind: "outlet-promo" }), mk(2, { interest: 2, kind: "game-news" }), mk(3, { interest: 3, kind: "game-news" }), mk(4, { interest: 5, kind: "patch" })] }, [1, 2, 3, 4].map((n) => `${URL}/${n}`));
+  assert.ok(!acceptableLead(mk(1, { interest: 5, kind: "contest" })));
+  const result = await runRadar(h.deps);
+  assert.equal(result.added, 1); assert.ok(String(h.rows[0].slug).startsWith("second-title-update"));
+  const after = h.saved.at(-1)!; assert.equal(after.queue?.length, 1); assert.ok(after.queue![0].lead.url.endsWith("/3")); assert.equal(after.nextBeam, 1);
+  // Next slot: the queued lead is written with one paid request and the topic rotation does not move.
+  const h2 = harness(after); h2.deps.useQueue = true; h2.deps.known = [{ slug: String(h.rows[0].slug), title_en: String(h.rows[0].title_en), sources: [{ url: `${URL}/4` }] }];
+  h2.deps.edit = async () => { h2.calls.push("edit"); const d = draft(); d.item.title_en = "Another separate headline"; d.item.title_ar = "عنوان ثاني مختلف تماماً"; return research(d); };
+  const second = await runRadar(h2.deps);
+  assert.deepEqual(second, { added: 1, requests: 1, held: false }); assert.deepEqual(h2.calls.filter((c) => c !== "source"), ["edit"]);
+  assert.equal(h2.saved.at(-1)?.nextBeam, 1); assert.equal(h2.saved.at(-1)?.queue?.length, 0); assert.equal(h2.saved.at(-1)?.pending, null);
+});
+test("a published article takes the source page's own picture when one is found", async () => {
+  const h = harness(); h.deps.findImage = async () => "https://cdn.example.com/cover.jpg"; await runRadar(h.deps); assert.equal(h.rows[0].image, "https://cdn.example.com/cover.jpg");
+  const g = harness(); g.deps.findImage = async () => { throw new Error("offline"); }; await runRadar(g.deps); assert.equal(g.rows[0].image, null);
+});

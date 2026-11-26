@@ -37,7 +37,7 @@ export function extractIds(html: string, shortsOnly = false): string[] {
 const GTA6 = /\b(gta\s*(6|vi)|gta6|gtavi|grand theft auto\s*(6|vi))\b|قراند\s*6|قراند6|جي\s*تي\s*اي\s*6|leonida|ليونيدا/i;
 /** A title needs real words, not just hashtags. */
 const words = (t: string) => t.replace(/#[^\s#]+/g, " ").replace(/[^\p{L}\p{N}]+/gu, " ").trim().split(" ").filter((w) => w.length > 1).length;
-const BLOCK = /🔴|🔞|\blive\b|مباشر|mod\s*menu|download|free\s*(money|robux|vbucks)|apk|hack|cheat\s*engine|giveaway|leak(ed)?\s*(build|download)|\b18\+|nsfw/i;
+const BLOCK = /🔴|🔞|\blive\b|مباشر|mod\s*menu|download|free\s*(money|robux|vbucks)|apk|hack|cheat\s*engine|giveaway|leak(ed)?\s*(build|download)|\b18\+|nsfw|porn|\bsex|\bnude|naked|onlyfans|strip\s*club|stripper|happy\s*ending|hot\s*scene|shower\s*scene|bath\s*scene|\bdate\s+\w+\s+in\b|مشهد\s*(حمام|ساخن)|حمام\s*لوسيا|إباحي|عاري|indian\s*version/i;
 
 /** Keep only Shorts clearly about GTA 6 and drop spam/cheat bait. */
 export function acceptTitle(title: string): boolean {

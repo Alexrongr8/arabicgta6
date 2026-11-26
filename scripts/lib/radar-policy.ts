@@ -25,13 +25,20 @@ export const BEAMS = [
   { id: "world-places", focus: "Leonida locations, landmarks, real-life places they are based on, wildlife, vehicles and weapons newly documented by players or press." },
 ] as const;
 export type BeamId = typeof BEAMS[number]["id"];
-export type Lead = { headline: string; gist: string; url: string; category: string; confidence: "high" | "medium" | "low"; entity_name: string | null };
+export type Lead = { headline: string; gist: string; url: string; category: string; confidence: "high" | "medium" | "low"; entity_name: string | null; interest?: number; kind?: string };
 export type Usage = { requests: number; inputTokens: number; outputTokens: number; searchCalls: number };
 export type Research<T> = { data: T; retrievedUrls: string[]; responseId: string; usage: Usage; completedSearches: number };
 export type Support = { url: string; quote: string; fields: string[] };
 export type Draft = { item: AiItem; proof: { support: Support[]; story_spoilers: boolean; game_build: string | null; in_scope: boolean } };
-export type Pending = { lead: Lead; beam: BeamId; discoveredAt: string; retrievedUrls: string[]; responseId: string; attempts: number };
-export type State = { version: 1; nextBeam: number; windows: Partial<Record<BeamId, string>>; pending: Pending | null; reviewedKeys: string[] };
+export type Pending = { lead: Lead; beam: BeamId; discoveredAt: string; retrievedUrls: string[]; responseId: string; attempts: number; queued?: boolean };
+/** Extra fresh leads from a discovery wait here, so a later slot can write them without paying for another search. */
+export type Queued = { lead: Lead; beam: BeamId; discoveredAt: string; responseId: string };
+export type State = { version: 1; nextBeam: number; windows: Partial<Record<BeamId, string>>; pending: Pending | null; reviewedKeys: string[]; queue?: Queued[] };
+export const QUEUE_MAX = 12;
+export const QUEUE_TTL_MS = 36 * 3600e3;
+/** Leads that are not news about the game: an outlet promoting itself, contests, expired events. */
+export const BORING_KINDS = ["outlet-promo", "contest", "stats-page", "expired"];
+export const acceptableLead = (l: Lead) => (l.interest === undefined || l.interest >= 3) && !BORING_KINDS.includes(l.kind ?? "");
 export type Known = { slug: string; title_en: string; title_ar?: string; published_at?: string; sources: { url: string }[]; videos?: string[] };
 export const emptyState = (): State => ({ version: 1, nextBeam: 0, windows: {}, pending: null, reviewedKeys: [] });
 const normalized = (s: string) => s.normalize("NFKC").toLowerCase().replace(/\s+/g, " ").trim();
@@ -61,10 +68,30 @@ export function finishState(state: State, beam: BeamId, at: string, reviewKey?: 
     windows: { ...state.windows, [beam]: at }, pending: null,
     reviewedKeys: [...new Set([...(reviewKey ? [reviewKey] : []), ...state.reviewedKeys])].slice(0, 100) };
 }
+const COMMON_WORDS = new Set("gta grand theft auto rockstar games take two playstation xbox series sony microsoft nintendo online leonida vice city jason lucia update patch notes trailer launch reddit youtube tiktok twitch kick report reports reportedly says said new official officially players player mission story mode game gaming news leak leaked leaks rumor rumour release date fans first after before with from that this will could would have here what when where which their they your about into over more most best guide found find finds discover discovered secret secrets hidden glitch money method early claims claim confirms confirmed reveals revealed shows adds fixes million billion sales record records week day days arabic english november december".split(" "));
+/** Distinctive words of a headline: version/large numbers and capitalised names that are not everyday GTA vocabulary. */
+export function keyTokens(title: string): Set<string> {
+  const out = new Set<string>();
+  const text = title.normalize("NFKC");
+  for (const m of text.matchAll(/\d+(?:[.,]\d+)+|\b\d{3,}\b/g)) { const n = m[0].replace(/,/g, ""); if (!/^20\d\d$/.test(n)) out.add(n); }
+  for (const m of text.matchAll(/\b[A-Z][A-Za-z0-9]{3,}\b/g)) { const w = m[0].toLowerCase(); if (!COMMON_WORDS.has(w)) out.add(w); }
+  return out;
+}
+/** Same event told again (a follow-up of a story from the last five days): same version number, or the same distinctive names. */
+export function sameStory(knownTitle: string, title: string): boolean {
+  const a = keyTokens(knownTitle), b = keyTokens(title);
+  if (!a.size || !b.size) return false;
+  const shared = [...a].filter((w) => b.has(w));
+  if (shared.some((w) => /^\d+(?:\.\d+){2,}$/.test(w))) return true; // build/version numbers such as 01.002.002
+  if (shared.length >= 2 && shared.length / Math.min(a.size, b.size) >= 0.5) return true;
+  return shared.length >= 1 && similar(knownTitle, title) >= 0.34; // one rare name plus overlapping wording
+}
 /** Same story already published? Stricter for the last 3 days, and Arabic titles are compared too. */
 export function isDuplicateOf(known: Known, titleEn: string, titleAr: string | undefined, now: Date): boolean {
-  const recent = known.published_at ? now.getTime() - Date.parse(known.published_at) < 72 * 3600e3 : false;
+  const age = known.published_at ? now.getTime() - Date.parse(known.published_at) : Infinity;
+  const recent = age < 72 * 3600e3;
   if (similar(known.title_en, titleEn) >= (recent ? 0.5 : 0.75)) return true;
+  if (age < 120 * 3600e3 && sameStory(known.title_en, titleEn)) return true;
   return Boolean(titleAr && known.title_ar && similar(known.title_ar, titleAr) >= (recent ? 0.5 : 0.7));
 }
 export function knownKeys(rows: Known[]): Set<string> {
@@ -75,18 +102,36 @@ export function existingEntity(lead: Lead, names: string[]): boolean {
   return names.some((n) => normalized(n) === entity || normalized(n) === normalized(lead.headline));
 }
 export const POLICY_PROMPT = `Follow docs/RADAR-POLICY: no personal information, piracy/online-cheating tools, gossip, unreleased-content claims or link spam. Sources must be actually retrieved. Wikis alone never establish a fact. Do not infer gameplay from trailer reactions. For every factual field, supply a short verbatim supporting excerpt and its retrieved URL. Do not invent numbers. Do not claim official/confirmed certainty without the right source. Negated wording (not confirmed / غير مؤكد) is legitimate and must not be changed into certainty. Story outcomes require spoiler handling. Leave image selection to the server; do not suggest generated or guessed pictures.`;
-export const leadSchema = { type: "object", additionalProperties: false, required: ["leads"], properties: { leads: { type: "array", maxItems: 1, items: { type: "object", additionalProperties: false,
-  required: ["headline", "gist", "url", "category", "confidence", "entity_name"], properties: {
+export const LEAD_KINDS = ["game-news", "patch", "discovery", "guide", "leak", "sales", "community", "viral", "outlet-promo", "contest", "stats-page", "expired", "other"];
+export const leadSchema = { type: "object", additionalProperties: false, required: ["leads"], properties: { leads: { type: "array", maxItems: 3, items: { type: "object", additionalProperties: false,
+  required: ["headline", "gist", "url", "category", "confidence", "entity_name", "interest", "kind"], properties: {
     headline: { type: "string" }, gist: { type: "string" }, url: { type: "string" }, category: { type: "string" },
     confidence: { type: "string", enum: ["high", "medium", "low"] }, entity_name: { type: ["string", "null"] },
+    interest: { type: "integer", enum: [1, 2, 3, 4, 5] }, kind: { type: "string", enum: LEAD_KINDS },
   } } } } };
+/** What counts as a story worth a player's click. Shared by discovery and the editor. */
+export const INTEREST_PROMPT = `Only stories a GTA VI player would actually click: what is new in the game, what players found, what Rockstar/Take-Two/Sony/Microsoft did or said, money methods, secrets, glitches, patches, records, viral moments, credible leaks.
+NOT a story (kind outlet-promo / contest / stats-page / expired, interest 1): a magazine, website or channel announcing its own issue, review video, livestream, marathon, podcast or guide page; giveaways, contests and bounties; a page of statistics about a streamer; a fan site saying it updated its database; anything whose deadline already passed; a generic aggregator page.
+interest: 5 = everyone will talk about it, 4 = most players care, 3 = useful to some players, 2 = weak, 1 = not a story.
+The same event must not be reported twice: if the list of covered titles already has this event (same patch number, same leak, same sales figure, same glitch), skip it unless there is a major new development, and then the headline must say what is new.`;
 export function draftSchema(item: Record<string, unknown>) {
   return { type: "object", additionalProperties: false, required: ["item", "proof"], properties: { item, proof: { type: "object", additionalProperties: false,
     required: ["support", "story_spoilers", "game_build", "in_scope"], properties: { story_spoilers: { type: "boolean" }, game_build: { type: ["string", "null"] }, in_scope: { type: "boolean" },
       support: { type: "array", items: { type: "object", additionalProperties: false, required: ["url", "quote", "fields"], properties: { url: { type: "string" }, quote: { type: "string" }, fields: { type: "array", items: { type: "string" } } } } },
     } } } };
 }
-const PRESS = ["ign.com", "gamespot.com", "eurogamer.net", "polygon.com", "pcgamer.com", "videogameschronicle.com", "gamesradar.com", "pushsquare.com", "purexbox.com", "rockpapershotgun.com", "kotaku.com", "theverge.com", "true-gaming.net", "saudigamer.com"];
+/** Established press. A story reported by one of these is not a rumor; it publishes as confirmed (never official). */
+const PRESS = ["ign.com", "gamespot.com", "eurogamer.net", "polygon.com", "pcgamer.com", "videogameschronicle.com", "gamesradar.com", "pushsquare.com", "purexbox.com", "rockpapershotgun.com", "kotaku.com", "theverge.com", "true-gaming.net", "saudigamer.com",
+  // English-language press and business/tech desks
+  "dexerto.com", "insider-gaming.com", "thegamer.com", "gamerant.com", "vg247.com", "destructoid.com", "techradar.com", "engadget.com", "gamesindustry.biz", "gamedeveloper.com", "pcgamesn.com", "gematsu.com", "windowscentral.com", "tomshardware.com", "digitaltrends.com", "forbes.com", "bloomberg.com", "reuters.com", "bbc.com", "bbc.co.uk", "theguardian.com", "variety.com", "hollywoodreporter.com", "cnbc.com", "ft.com", "wsj.com", "nytimes.com", "apnews.com", "gameinformer.com", "nme.com", "pcmag.com", "cnet.com", "arstechnica.com", "wccftech.com", "videogamer.com", "gamingbolt.com", "twistedvoxel.com", "mp1st.com", "comicbook.com",
+  // Arabic
+  "arabhardware.net", "vga4a.com", "skynewsarabia.com", "aljazeera.net", "alarabiya.net", "aawsat.com", "ign.me", "tech-wd.com", "aitnews.com",
+  // Europe
+  "gamestar.de", "pcgames.de", "pcgameshardware.de", "4players.de", "golem.de", "heise.de", "jeuxvideo.com", "gamekult.com", "millenium.org", "jvfrance.com", "vandal.elespanol.com", "3djuegos.com", "as.com", "hobbyconsolas.com", "multiplayer.it", "everyeye.it", "eurogamer.de", "eurogamer.es", "eurogamer.it", "eurogamer.pt", "eurogamer.pl", "eurogamer.nl", "gry-online.pl", "ppe.pl", "dtf.ru", "igromania.ru",
+  // Asia
+  "famitsu.com", "4gamer.net", "automaton-media.com", "impress.co.jp", "inven.co.kr", "ruliweb.com", "gamersky.com", "3dmgame.com", "gamer.com.tw", "ign.com.cn", "indiatimes.com", "hindustantimes.com",
+  // Latin America
+  "levelup.com", "tecmundo.com.br", "theenemy.com.br", "atomix.vg", "uol.com.br", "globo.com", "infobae.com"];
 const domainIs = (host: string, domain: string) => host === domain || host.endsWith("." + domain);
 export function tier(raw: string): "A" | "C" | "review" {
   const u = checkPublicHttpsUrl(raw); if (!u) return "review";
@@ -121,10 +166,63 @@ export function summaryFromBody(body: string): string {
   const end = Math.max(cut.lastIndexOf("."), cut.lastIndexOf("؟"), cut.lastIndexOf("!"), cut.lastIndexOf("،"));
   return (end > 80 ? cut.slice(0, end + 1) : cut.slice(0, cut.lastIndexOf(" ")) + "…").trim();
 }
+/** Numbers worth checking against the source: versions, decimals, percentages and figures of 100+ (not days, small counts or years). */
+export function significantNumbers(s: string): string[] {
+  return numberTokens(s).filter((n) => !/[:/-]/.test(n) && (/[.%]/.test(n) || (Number(n) >= 100 && !/^20\d\d$/.test(n))));
+}
+/** Phrases that describe how the article was produced. A reader must never see them. */
+const META = /المقتطف الحرفي|مقتطف حرفي|م[ُ]?ختصر حرفي|مقتبس[ةً]* حرفي|النصوص المقتبسة|المقتطف الداعم|الحقول الوقائعية|قسم (?:ال)?proof|طبق[اً]+ للسياسة|حسب السياسة|وفق السياسة|ملاحظة تحكّ?م|verbatim (?:excerpt|quote|summary)|supporting excerpt|proof section|factual fields|per (?:the )?policy|as per policy|RADAR-POLICY/i;
+const PAD_BUTTONS = /L3\s*\+\s*R3\s*\/\s*LS\s*\+\s*RS/;
+/**
+ * Removes production artefacts from generated text: inline citations and URLs, sentences that talk
+ * about excerpts/proof/policy, and the "L3 + R3 / LS + RS" example that the model pasted into news.
+ */
+export function cleanProse(text: string, opts: { dropPadButtons?: boolean } = {}): string {
+  const lines = String(text ?? "").replace(/\r/g, "").split("\n").map((line) => {
+    const unlinked = line
+      .replace(/\s*[(（]\s*\[[^\]]*\]\(https?:\/\/[^)\s]+\)\s*[)）]/g, "")
+      .replace(/\[([^\]]+)\]\(https?:\/\/[^)\s]+\)/g, "$1")
+      .replace(/\s*[(（]\s*https?:\/\/[^)\s]+\s*[)）]/g, "")
+      .replace(/https?:\/\/\S+/g, "")
+      .replace(/\*\*([^*]+)\*\*/g, "$1");
+    if (/^#{2,3} /.test(unlinked)) return META.test(unlinked) || (opts.dropPadButtons && /كنترول|controller|buttons|أزرار|زرّات/i.test(unlinked)) ? null : unlinked.trimEnd();
+    const kept = unlinked.split(/(?<=[.!?؟。])\s+/).filter((sentence) => !META.test(sentence) && !(opts.dropPadButtons && PAD_BUTTONS.test(sentence)));
+    return kept.join(" ").replace(/[ \t]{2,}/g, " ").replace(/\s+([.,،؛:!?؟])/g, "$1").trim();
+  });
+  const out: string[] = [];
+  for (const line of lines) {
+    if (line === null) continue;
+    if (line === "" && (out.length === 0 || out[out.length - 1] === "")) continue;
+    out.push(line);
+  }
+  // A heading left without any text under it is removed as well.
+  return out.filter((line, i) => !(/^#{2,3} /.test(line) && (i === out.length - 1 || out.slice(i + 1).find((next) => next !== "") === undefined || /^#{2,3} /.test(out.slice(i + 1).find((next) => next !== "") ?? "")))).join("\n").trim();
+}
+/** Headlines: no "(reported)" suffixes, no stray label prefixes, no trailing punctuation. */
+export function cleanTitle(title: string): string {
+  return String(title ?? "").replace(/\s*[(（]\s*(?:مُ?بل[َّ]*غ عنه|حسب تقارير|reported|reportedly|unconfirmed|غير مؤكد)\s*[)）]\s*$/i, "").replace(/^(?:تبرير|توضيح)\s*:\s*/, "").replace(/\s+/g, " ").replace(/[.،؛:\s]+$/, "").trim();
+}
+/** Applies the text clean-up to every reader-facing field of a draft, in place. */
+export function cleanItem(item: AiItem): string[] {
+  const notes: string[] = [];
+  const news = item.category === "news" || item.category === "streamers";
+  for (const key of ["body_ar", "body_en", "summary_ar", "summary_en"] as const) {
+    const before = item[key];
+    if (typeof before !== "string") continue;
+    const after = cleanProse(before, { dropPadButtons: news });
+    if (after !== before.trim()) { item[key] = after; notes.push(`clean:${key}`); }
+  }
+  for (const key of ["title_ar", "title_en"] as const) if (typeof item[key] === "string") item[key] = cleanTitle(item[key]);
+  if (typeof item.body_ar === "string" && typeof item.summary_ar === "string" && item.summary_ar.replace(/\s/g, "").length < 40 && item.body_ar.length > 200) { item.summary_ar = summaryFromBody(item.body_ar); notes.push("clean:summary_ar-rebuilt"); }
+  if (typeof item.body_en === "string" && typeof item.summary_en === "string" && item.summary_en.replace(/\s/g, "").length < 30 && item.body_en.length > 200) { item.summary_en = summaryFromBody(item.body_en); notes.push("clean:summary_en-rebuilt"); }
+  if (Array.isArray(item.facts)) item.facts = item.facts.filter((f) => f && ![f.k_ar, f.k_en, f.v_ar, f.v_en].some((v) => typeof v !== "string" || META.test(v) || /^(?:unknown|غير معروف|n\/a)$/i.test(v.trim())));
+  return notes;
+}
 export async function verifyDraft(draft: Draft, retrieved: string[], read: SourceReader): Promise<GateResult> {
   const item = draft.item;
   const gates: string[] = [];
   const fields = ["title_ar", "title_en", "summary_ar", "summary_en", "body_ar", "body_en"] as const;
+  if (item) gates.push(...cleanItem(item));
   const texts = fields.map((k) => item?.[k]);
   // Arabic fields must really be Arabic (foreign-press beams sometimes leave them in the source
   // language). A non-Arabic summary is rebuilt from the Arabic body; a non-Arabic body is held.
@@ -165,8 +263,11 @@ export async function verifyDraft(draft: Draft, retrieved: string[], read: Sourc
   }
   if ([...required].some((f) => !supported.has(f))) gates.push("4:missing-retrieved-support");
   const claims = [...texts, ...(item.facts ?? []).flatMap((f) => [f.k_en, f.k_ar, f.v_en, f.v_ar]), item.event_date ?? ""].join(" ");
-  const sourceNumbers = new Set(numberTokens(quotes.join(" ")));
-  if (numberTokens(claims).some((n) => !sourceNumbers.has(n))) gates.push("7:unsupported-number");
+  // Figures are checked against the full text of the fetched sources (not only the short excerpts),
+  // and only when that text could be read: a page that renders with JavaScript cannot disprove a number.
+  const sourceText = [...fetched.values()].map((f) => f.text).join(" ");
+  const sourceNumbers = new Set(numberTokens(`${sourceText} ${quotes.join(" ")}`));
+  if (sourceText.length >= 200 || quotes.length ? significantNumbers(claims).some((n) => !sourceNumbers.has(n)) : false) gates.push("7:unsupported-number");
   if (item.category === "glitches" && !proof?.game_build) gates.push("7:missing-tested-build-or-unknown");
   // Owner decision 2026-11-22: publish automatically, but keep the status badge honest.
   // Only missing/unreachable sources, out-of-scope or incomplete text are held (never published).
@@ -181,7 +282,9 @@ export async function verifyDraft(draft: Draft, retrieved: string[], read: Sourc
   } else if (!hard) {
     const tiers = [...fetched.values()].map((f) => f.tier);
     const unsupportedNumbers = gates.includes("7:unsupported-number");
-    const fullySupported = !gates.includes("4:missing-retrieved-support") && !unsupportedNumbers;
+    // Official needs a verified excerpt from the publisher's own page for the headline and for the text.
+    const has = (...names: string[]) => names.some((n) => supported.has(n));
+    const fullySupported = !unsupportedNumbers && has("title_ar", "title_en") && has("body_ar", "body_en", "summary_ar", "summary_en");
     const honest: AiItem["status"] =
       item.status === "official" && tiers.includes("A") && fullySupported ? "official"
       : item.status === "leak" ? "leak"

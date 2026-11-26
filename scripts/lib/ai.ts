@@ -50,11 +50,18 @@ export const MAP_HINT = `Map coordinates are pixels on Rockstar's official Leoni
 
 /** Writing rules shared by the radar and the enricher, so every page reads the same. */
 export const STYLE_GUIDE = `Writing style:
-- Arabic first: clear, warm Gulf-gamer tone (like a knowledgeable friend), easy to read on a phone. Keep in-game proper names (places, weapons, vehicles, characters, missions) in English Latin script inside the Arabic text.
-- English version: same content, natural tone.
-- body must be DEEP and satisfying: 5-9 short paragraphs (roughly 250-450 words per language). Cover: what it is, where/when/how (step by step when relevant), exact locations/requirements/prices/buttons if known, tips and common mistakes, why it matters, and what is still unconfirmed.
-- You may use "## " subheadings (2-4 per article) and lines starting with "- " for lists. No links, no markdown bold, no tables in the body.
-- Controller instructions always give PlayStation AND Xbox buttons (e.g. L3 + R3 / LS + RS).
+- You are a Gulf Arab gamer writing for friends who play GTA VI. Arabic first: short lively sentences in a friendly Gulf tone (وش السالفة، ليش يهمك، الخلاصة), never stiff or machine-translated. Keep in-game proper names (places, weapons, vehicles, characters, missions) in English Latin script inside the Arabic text.
+- English version: same content, natural gaming-site tone.
+- Start with the most exciting fact in the very first sentence. No introductions about websites, articles or coverage.
+- Shape follows the type of article:
+  - News: what happened, the details that matter, why a player should care, what comes next or is still unknown.
+  - Secret / money method / glitch / guide: what it is, exactly where and how step by step, the reward, tips and common mistakes.
+- Length follows the source: 4-7 short paragraphs per language when the source has that much; shorter is fine. Never pad, never repeat the same sentence in other words, never add sections that have nothing to say.
+- You may use "## " subheadings (2-4, short and catchy, different in every article) and lines starting with "- " for lists. No links, no URLs, no citation brackets, no markdown bold, no tables in the body.
+- Name the source naturally inside a sentence ("حسب IGN", "according to IGN"). Never write about excerpts, quotes being verbatim, proof, policy, retrieved pages, fields, or how this article was produced.
+- Controller buttons appear only when the article teaches an in-game action, and then give PlayStation AND Xbox buttons. A news story never contains button hints.
+- summary is one or two punchy sentences that tell the story and make the reader want to open it. It never starts with a source name and a colon and is never a pasted quote.
+- Arabic gaming vocabulary: glitch = قلتش, patch/update = تحديث, modders = المودرز, debunked = طلعت كذبة, walkthrough = شرح المهمة, leak = تسريب, red barn = الحظيرة الحمراء, stuttering = تقطيع, port = نسخة.
 - Never invent facts. If sources disagree, say so. Mark speculation clearly.`;
 
 export const itemSchema = {

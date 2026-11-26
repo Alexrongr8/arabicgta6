@@ -1,0 +1,46 @@
+name: Maintenance (manual)
+
+# Run by hand only. Dry run by default: prints what would change. Tick "apply" to write.
+on:
+  workflow_dispatch:
+    inputs:
+      task:
+        description: "Which maintenance script to run"
+        type: choice
+        options: [round2-cleanup, radar-report]
+        default: radar-report
+      apply:
+        description: "Write the changes (unticked = dry run)"
+        type: boolean
+        default: false
+
+concurrency:
+  group: content-update
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - id: modules
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: modules-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+      - if: steps.modules.outputs.cache-hit != 'true'
+        run: npm ci --ignore-scripts
+      - name: Run maintenance script
+        run: npx tsx "scripts/maintenance/${TASK}.ts" ${{ inputs.apply && '--apply' || '' }}
+        env:
+          TASK: ${{ inputs.task }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
