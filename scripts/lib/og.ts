@@ -20,7 +20,8 @@ export async function findImage(url: string): Promise<string | null> {
       html.match(/<meta[^>]+content=["']([^"']+)["'][^>]*(?:property|name)=["'](?:og:image|twitter:image)["']/i);
     if (!m) return null;
     const img = new URL(m[1].replace(/&amp;/g, "&"), res.finalUrl).toString();
-    if (!checkPublicHttpsUrl(img) || /logo|favicon|default|placeholder/i.test(img)) return null;
+    // Site logos and generated share cards (a title printed on another site's branding) are not article pictures.
+    if (!checkPublicHttpsUrl(img) || /logo|favicon|default|placeholder|\/api\/og|opengraph-image|og[-_]?image|[?&]title=|\/og[/?.]|\/share\//i.test(img)) return null;
     return img;
   } catch {
     return null;
